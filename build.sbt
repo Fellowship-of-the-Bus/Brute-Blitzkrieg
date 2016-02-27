@@ -67,7 +67,7 @@ libraryDependencies ++= Seq(
 )
 
 updateCheck in Android := {} // disable update check
-proguardCache in Android ++= Seq("org.scaloid")
+proguardCache in Android := Nil// ++= Seq("org.scaloid")
 
 proguardOptions in Android ++= Seq(
   "-dontobfuscate",
