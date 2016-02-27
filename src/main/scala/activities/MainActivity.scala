@@ -1,4 +1,7 @@
-package com.github.fellowship_of_the_bus.draconia
+package com.github.fellowship_of_the_bus.bruteb
+
+import models._
+
 
 // import android.app.Activity
 import org.scaloid.common._
