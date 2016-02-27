@@ -4,10 +4,10 @@
   android:versionName="1.0">
   <application
     android:icon="@drawable/ahmed"
-    android:label="Draconia"
+    android:label="BruteBlitzkrieg"
     android:hardwareAccelerated="false">
 
-    <activity android:label="Draconia" android:name="MainActivity" android:screenOrientation="landscape">
+    <activity android:label="BruteBlitzkrieg" android:name="MainActivity" android:screenOrientation="landscape">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
