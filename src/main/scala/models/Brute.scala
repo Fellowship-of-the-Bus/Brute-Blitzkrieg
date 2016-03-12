@@ -10,7 +10,8 @@ import lib.game.{IDMap, IDFactory}
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
-case class Coordinate(x: Float, y: Float)
+
+case class Coordinate(var x: Float, var y: Float)
 case class BruteAttributes(
   maxHP: Int,
   moveSpeed: Float, //tiles/tick I guess
@@ -18,8 +19,8 @@ case class BruteAttributes(
   height: Float,    //fraction of a tile
   flying: Boolean,  
   regen: Float,     //life regen per tick?
-  coord: Coordinate,//location of the brute
-  radius: Float     //radius of any aura abilities (heal/draw lightning)
+  radius: Float,    //radius of any aura abilities (heal/draw lightning)
+  auraRegen: Float  //Amount of regen of the aura
   )
 
 trait BruteID
@@ -34,7 +35,7 @@ case object TrollID extends BruteID
 
 object BruteID {
   implicit object Factory extends IDFactory[BruteID] {
-    val ids = Vector(OgreID, GoblinID, VampireBatID)
+    val ids = Vector(OgreID, GoblinID, VampireBatID, GoblinShamanID, SpiderID, FlameImpID, CageGoblinID, TrollID)
     implicit lazy val extractor =
       Json.extractor[String].map(Factory.fromString(_))
   }
@@ -43,58 +44,99 @@ object BruteID {
 case object BruteAttributeMap extends IDMap[BruteID, BruteAttributes]("data/brutes.json")
 
 
-class BaseBrute (val id: BruteID) {
+class BaseBrute (val id: BruteID, val coord: Coordinate) {
   //grab stuff from IDMap
   val attr = BruteAttributeMap(id) //= new BruteAttributes(10, 0.3, 0.5, 0.5, false, 1)
   def width = attr.width
   def height = attr.height
   var hp:Float  = attr.maxHP
-  def hit(source: Unit, damage: Float) = {
-    hp -= damage
-  }
-  def regenerate() = {
-    hp += attr.regen
-    hp = math.min(hp, attr.maxHP)
-  }
-  def isFlying = attr.flying
-  var inAura: Set[BaseBrute] = Set[BaseBrute]()
-  def getAuraEffectedBrutes() = {
-    if (attr.radius == 0) {
-      inAura.clear()
+
+  def isAlive = hp > 0
+  
+  def hit(source: Unit, damage: Float) : Unit= {
+    //check source has lightning and effected by cage..
+    if ( false && (buffs contains CageGoblinID)) {
+      return
     }
-  }
-}
-
-class Ogre extends BaseBrute(OgreID) {
-}
-
-class Goblin extends BaseBrute(GoblinID){
-}
-
-class VampireBat extends BaseBrute(VampireBatID){
-}
-
-class GoblinShaman extends BaseBrute(GoblinShamanID){
-}
-
-class Spider extends BaseBrute(SpiderID) {
-}
-
-class FlameImp extends BaseBrute(FlameImpID) {
-  override def hit(source: Unit, damage: Float) = {
-    //if source was fire take no damage, otherwise take full damage
+    //check if source can hit flying
     if (false) {
-      hp -= damage
+      return
+    }
+    hp -= damage
+    ()
+  }
+
+  def regenerate(): Unit = {
+    if (! isAlive) return
+    hp += attr.regen
+    if (buffs contains GoblinShamanID) {
+      hp += BruteAttributeMap(GoblinShamanID).auraRegen
+    }
+    hp = math.min(hp, attr.maxHP)
+    ()
+  }
+  
+  def isFlying = attr.flying
+  def applyAura(brutes: List[BaseBrute]) = {
+    val inRadius = brutes.filter(brute => distance(brute) <= attr.radius * attr.radius)
+    inRadius.map(brute => brute.buffs += id)
+  }
+  var buffs = Set[BruteID]()
+  
+  def distance(otherBrute: BaseBrute): Float = {
+    val dx = otherBrute.coord.x - coord.x
+    val dy = otherBrute.coord.y - coord.y
+    dx*dx + dy*dy
+  }
+
+  def move() = {
+    coord.x = coord.x + attr.moveSpeed
+  }
+}
+
+class Ogre(bCoord: Coordinate) extends BaseBrute(OgreID, bCoord) {
+}
+
+class Goblin(bCoord: Coordinate) extends BaseBrute(GoblinID, bCoord){
+}
+
+class VampireBat(bCoord: Coordinate) extends BaseBrute(VampireBatID, bCoord){
+}
+
+class GoblinShaman(bCoord: Coordinate) extends BaseBrute(GoblinShamanID, bCoord){
+}
+
+class Spider(bCoord: Coordinate) extends BaseBrute(SpiderID, bCoord) {
+}
+
+class FlameImp(bCoord: Coordinate) extends BaseBrute(FlameImpID, bCoord) {
+  override def hit(source: Unit, damage: Float) = {
+    //if source was fire take no damage, otherwise do normal damage calculation
+    if (false) {
+      super.hit(source, damage)
     }
   }
+}
+
+class CageGoblin(bCoord: Coordinate) extends BaseBrute(CageGoblinID, bCoord) {
+}
+
+class Troll(bCoord: Coordinate) extends BaseBrute(TrollID, bCoord){
 }
 
 //factory for brutes
 object Brute {
-  def apply(id: BruteID) = {
+  def apply(id: BruteID, coord: Coordinate) = {
     id match {
-      case OgreID => new Ogre
-      case _ => throw new Exception("1")
+      case OgreID => new Ogre(coord)
+      case GoblinID => new Goblin(coord)
+      case VampireBatID => new VampireBat(coord)
+      case GoblinShamanID => new GoblinShaman(coord)
+      case SpiderID => new Spider(coord)
+      case FlameImpID => new FlameImp(coord)
+      case CageGoblinID => new CageGoblin(coord)
+      case TrollID => new Troll(coord)
+      case _ => throw new Exception("Unrecognized Brute Type")
     }
   }
 }

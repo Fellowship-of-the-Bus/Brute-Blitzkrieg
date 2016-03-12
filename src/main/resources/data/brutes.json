@@ -1,0 +1,12 @@
+{
+  "OgreID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1
+  }
+}

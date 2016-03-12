@@ -29,10 +29,6 @@ case class MapInfo(
   startTileCoord: Coordinate, //(Int, Int),
   endTileCoord: Coordinate) //(Int, Int))
 
-class Map(num : Int) {
-  val brute = Brute(OgreID)
-}
-
 sealed trait MapID
 case object Level1 extends MapID
 
@@ -47,21 +43,21 @@ object MapID {
 case object maps extends IDMap[MapID, MapInfo]("data/maps.json")
 
 // tiles have coordinates with bottom left = (0,0)
-class LevelMap() {
-  def apply(num: Int) = levelMap(num)
-  val levelMap = collection.immutable.HashMap(1 ->
-  MapInfo(List(List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0)),
-               List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0))
-               ),
-          Coordinate(0,4), Coordinate(1,4)
-          )
-  )
-}
+// class LevelMap() {
+//   def apply(num: Int) = levelMap(num)
+//   val levelMap = collection.immutable.HashMap(1 ->
+//   MapInfo(List(List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0)),
+//                List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0))
+//                ),
+//           Coordinate(0,4), Coordinate(1,4)
+//           )
+//   )
+// }
 
-class GameMap(num : Int) {
-  val brute = Brute(OgreID)
-  val m = new LevelMap()
-  val tiles = m(num).tiles
-  val startTileCoord = m(num).startTileCoord
-  val endTileCoord = m(num).endTileCoord
+class GameMap(num : MapID) {
+  val brute = Brute(OgreID, Coordinate(0,0))
+  val info = maps(num)
+  val tiles = info.tiles
+  val startTileCoord = info.startTileCoord
+  val endTileCoord = info.endTileCoord
 }

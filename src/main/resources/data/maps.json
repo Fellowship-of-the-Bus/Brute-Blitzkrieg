@@ -11,7 +11,7 @@
         { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
       ]
     ],
-    "startTileCoord": [ 0, 0 ],
-    "endTileCoord": [ 2, 2 ]
+    "startTileCoord": {"x": 0, "y":0},
+    "endTileCoord": {"x": 0, "y":0}
   }
 }
