@@ -10,25 +10,27 @@ import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
 case class Tile(val floorTrapID: Int, val wallTrapID: Int) {
-  val bruteList: Set[Brute] = Set[Brute]()
+  val bruteList: Set[BaseBrute] = Set[BaseBrute]()
 
-  def register(e: Brute): Unit = {
-        bruteList += e
-    }
+  def register(e: BaseBrute): Unit = {
+    bruteList += e
+    ()
+  }
 
-  def deregister(e: Brute): Unit = {
-      bruteList -= e
+  def deregister(e: BaseBrute): Unit = {
+    bruteList -= e
+    ()
   }
 }
 
 
 case class MapInfo(
   tiles: List[List[Tile]],
-  startTileCoord: Int, //(Int, Int),
-  endTileCoord: Int) //(Int, Int))
+  startTileCoord: Coordinate, //(Int, Int),
+  endTileCoord: Coordinate) //(Int, Int))
 
 class Map(num : Int) {
-  val brute = new Brute()
+  val brute = Brute(OgreID)
 }
 
 sealed trait MapID
@@ -51,13 +53,13 @@ class LevelMap() {
   MapInfo(List(List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0)),
                List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0))
                ),
-          (0,4), (1,4)
+          Coordinate(0,4), Coordinate(1,4)
           )
   )
 }
 
 class GameMap(num : Int) {
-  val brute = new Brute()
+  val brute = Brute(OgreID)
   val m = new LevelMap()
   val tiles = m(num).tiles
   val startTileCoord = m(num).startTileCoord
