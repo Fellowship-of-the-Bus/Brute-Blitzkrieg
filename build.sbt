@@ -25,7 +25,7 @@ javacOptions ++= Seq(
   "-target", "1.7",
   "-Xlint"
 )
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 scalacOptions in Compile ++= Seq(
   "-unchecked",
   "-deprecation",
@@ -57,7 +57,8 @@ libraryDependencies ++= Seq(
   "junit" % "junit" % "4.12" % "test",
   "com.propensive" %% "rapture-json-jackson" % "2.0.0-M5",
   // "com.github.pathikrit" %% "better-files" % "2.14.0",
-  "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-lib" % "0.3-SNAPSHOT" changing(),
+  "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-lib" % "0.4-SNAPSHOT" changing(),
+  "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-android-lib" % "0.1-SNAPSHOT" changing(),
 
   // Tests //////////////////////////////
   "org.scaloid" %% "scaloid" % "4.1",
