@@ -60,4 +60,8 @@ class GameMap(num : MapID) {
   val tiles = info.tiles
   val startTileCoord = info.startTileCoord
   val endTileCoord = info.endTileCoord
+
+  def getTile(coord: Coordinate) = {
+    tiles(coord.y.toInt)(coord.x.toInt)
+  }
 }

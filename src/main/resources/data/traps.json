@@ -1,0 +1,7 @@
+{
+  "ArrowID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "true"
+    }
+}
