@@ -1,4 +1,4 @@
-package com.github.fellowship_of_the_bus.draconia
+package com.github.fellowship_of_the_bus.bruteb
 
 object Mode {
   val MenuID = 0
