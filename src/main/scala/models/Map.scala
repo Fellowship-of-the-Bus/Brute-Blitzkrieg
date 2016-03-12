@@ -10,14 +10,14 @@ import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
 case class Tile(val floorTrapID: Int, val wallTrapID: Int) {
-	val bruteList: Set[Brute] = Set[Brute]()
+  val bruteList: Set[Brute] = Set[Brute]()
 
-	def register(e: Brute) = {
-    bruteList += e
-  }
+  def register(e: Brute): Unit = {
+        bruteList += e
+    }
 
-  def deregister(e: Brute) = {
-    bruteList -= e
+  def deregister(e: Brute): Unit = {
+      bruteList -= e
   }
 }
 
@@ -43,3 +43,23 @@ object MapID {
 }
 
 case object maps extends IDMap[MapID, MapInfo]("data/maps.json")
+
+// tiles have coordinates with bottom left = (0,0)
+class LevelMap() {
+  def apply(num: Int) = levelMap(num)
+  val levelMap = collection.immutable.HashMap(1 ->
+  MapInfo(List(List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0)),
+               List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0))
+               ),
+          (0,4), (1,4)
+          )
+  )
+}
+
+class GameMap(num : Int) {
+  val brute = new Brute()
+  val m = new LevelMap()
+  val tiles = m(num).tiles
+  val startTileCoord = m(num).startTileCoord
+  val endTileCoord = m(num).endTileCoord
+}
