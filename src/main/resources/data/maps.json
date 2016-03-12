@@ -1,0 +1,17 @@
+{
+  "Level1": {
+    "tiles": [
+      [
+        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+      ],
+      [
+        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+      ],
+      [
+        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+      ]
+    ],
+    "startTileCoord": [ 0, 0 ],
+    "endTileCoord": [ 2, 2 ]
+  }
+}
