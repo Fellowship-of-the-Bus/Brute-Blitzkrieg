@@ -7,6 +7,84 @@
     "flying": "false",  
     "regen": 0.3,
     "radius": 2,
-    "auraRegen": 0.1
+    "auraRegen": 0.1,
+    "description": "Shrek"
+  },
+  "GoblinID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0,
+    "radius": 0,
+    "auraRegen": 0.1,
+    "description": "Small fast, likes shiny things"
+  },
+  "VampireBatID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "true",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "Probably a vampire transformed into a bat"
+  },
+  "GoblinShamanID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "Come get healed"
+  },
+  "SpiderID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "Do you have arachnophobia."
+  },
+  "FlameImpID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "A lesser demon from hell"
+  },
+  "CageGoblinID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "They have this technology?"
+  },
+  "TrollID": {
+    "maxHP": 100,
+    "moveSpeed": 0.3,
+    "width": 0.5,
+    "height": 0.5,
+    "flying": "false",  
+    "regen": 0.3,
+    "radius": 2,
+    "auraRegen": 0.1,
+    "description": "A larger Shrek"
   }
 }

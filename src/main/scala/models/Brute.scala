@@ -20,7 +20,8 @@ case class BruteAttributes(
   flying: Boolean,  
   regen: Float,     //life regen per tick?
   radius: Float,    //radius of any aura abilities (heal/draw lightning)
-  auraRegen: Float  //Amount of regen of the aura
+  auraRegen: Float,  //Amount of regen of the aura
+  description: String // A brief description of the brute
   )
 
 trait BruteID
@@ -49,19 +50,16 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   val attr = BruteAttributeMap(id) //= new BruteAttributes(10, 0.3, 0.5, 0.5, false, 1)
   def width = attr.width
   def height = attr.height
-  var hp:Float  = attr.maxHP
+  var hp: Float  = attr.maxHP
 
   def isAlive = hp > 0
   
-  def hit(source: BaseTrap, damage: Float) : Unit= {
+  def hit(source: BaseTrap, damage: Float) : Unit = {
     //check source has lightning and effected by cage..
-    if ( false && (buffs contains CageGoblinID)) {
+    if ( source.isInstanceOf[Lightning] && (buffs contains CageGoblinID)) {
       return
     }
-    //check if source can hit flying
-    if (false) {
-      return
-    }
+
     hp -= damage
     ()
   }
@@ -78,22 +76,31 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   
   def isFlying = attr.flying
   def applyAura(brutes: List[BaseBrute]) = {
-    val inRadius = brutes.filter(brute => distance(brute) <= attr.radius * attr.radius)
+    val inRadius = brutes.filter(brute => distance(brute) <= attr.radius)
     inRadius.map(brute => brute.buffs += id)
   }
   var buffs = Set[BruteID]()
+  var debuffs = Set[TrapID]()
   
-  def distance(otherBrute: BaseBrute): Float = {
-    val dx = otherBrute.x - x
-    val dy = otherBrute.y - y
-    dx*dx + dy*dy
-  }
+
 
   def move() = {
-    coord.x = coord.x + attr.moveSpeed
+    //probably do some check on which floor you are on and decide whether to move left, right or clime ladder
+    if (debuffs contains TarID) {
+      coord.x = coord.x + attr.moveSpeed * 0.5f    
+    } else {
+      coord.x = coord.x + attr.moveSpeed
+    }
   }
   override def x = coord.x
   override def y = coord.y
+
+  //clear buffs every ~ 1/2 second to reapply them
+  def clearBuffs() = {
+    buffs.clear
+    debuffs.clear
+  }
+
 }
 
 class Ogre(bCoord: Coordinate) extends BaseBrute(OgreID, bCoord) {
@@ -114,7 +121,7 @@ class Spider(bCoord: Coordinate) extends BaseBrute(SpiderID, bCoord) {
 class FlameImp(bCoord: Coordinate) extends BaseBrute(FlameImpID, bCoord) {
   override def hit(source: BaseTrap, damage: Float) = {
     //if source was fire take no damage, otherwise do normal damage calculation
-    if (false) {
+    if (!source.isInstanceOf[FlameVent]) {
       super.hit(source, damage)
     }
   }

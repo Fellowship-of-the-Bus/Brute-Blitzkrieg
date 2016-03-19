@@ -34,8 +34,6 @@ class MainActivity extends SActivity {
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg main activity started")
     super.onCreate(savedState)
-    val prefs = Preferences()
-    viewSeq.set(0)
     setContentView(
 
       new SLinearLayout {
@@ -76,9 +74,9 @@ class MainActivity extends SActivity {
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
         new SRelativeLayout {
-          SButton("Minions", switchScreen(classOf[Encyclopedia])).<<.wrap.alignParentTop.>>
-          SButton("Traps").<<.wrap.centerVertical.>>
-          SButton("Quit", finish()).<<.wrap.alignParentBottom.>>
+          SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia])).<<.wrap.alignParentTop.>>
+          SButton(R.string.TrapButton, switchScreen(classOf[TrapEncyclopedia])).<<.wrap.centerVertical.>>
+          SButton(R.string.QuitButton, finish()).<<.wrap.alignParentBottom.>>
         }.<<.fw.>>.gravity(Gravity.RIGHT).here
       }
     )

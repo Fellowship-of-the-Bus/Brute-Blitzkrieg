@@ -1,7 +1,50 @@
 {
+  "TrapDoorID": {
+    "damage": 0,
+    "shotInterval": 20,
+    "targetFlying": "false",
+    "description": "Have a Fall"
+  },
+  "ReuseTrapDoorID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "false",
+    "description": "Feeling Lucky?"
+  },
+  "TarID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "false",
+    "description": "Run"
+  },
+  "PoisonID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "true",
+    "description": "Suffocate"
+  },
   "ArrowID": {
     "damage": 5,
     "shotInterval": 20,
-    "targetFlying": "true"
-    }
+    "targetFlying": "true",
+    "description": "Shoots arrows at things"
+  },
+  "LightningID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "true",
+    "description": "You'll be Shocked"
+  },
+  "FlameVent": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "true",
+    "description": "Hot enough to melt steel"
+  },
+  "HighBladeID": {
+    "damage": 5,
+    "shotInterval": 20,
+    "targetFlying": "false",
+    "description": "Where's Your Head?"
+  }
 }

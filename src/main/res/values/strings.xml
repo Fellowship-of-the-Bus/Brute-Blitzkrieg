@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="MinionButton">Minions</string>
+    <string name="TrapButton">Traps</string>
+    <string name="QuitButton">Quit</string>
+
+    <string name="Ogre">Ogre</string>
+    <string name="Goblin">Goblin</string>
+    <string name="VampireBat">Vampire Bat</string>
+    <string name="GoblinShaman">Goblin Shaman</string>
+    <string name="Spider">Spider</string>
+    <string name="FlameImp">Flame Imp</string>
+    <string name="CageGoblin">Cage Goblin</string>
+    <string name="Troll">Troll</string>
+
+    <string name="Trapdoor">Trapdoor</string>
+    <string name="ReusableTrapdoor">Reusable Trapdoor</string>
+    <string name="Tar">Tar</string>
+    <string name="Poison">Poison</string>
+    <string name="Arrow">Arrow</string>
+    <string name="Lightning">Lightning</string>
+    <string name="FlameVent">Flame Vent</string>
+    <string name="HighBlade">High Blade</string>
+</resources>

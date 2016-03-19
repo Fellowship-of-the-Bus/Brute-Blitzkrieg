@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
-class Encyclopedia extends SActivity {
+class TrapEncyclopedia extends SActivity {
   override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     val txt = new STextView {
@@ -34,14 +34,14 @@ class Encyclopedia extends SActivity {
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Ogre, {txt.text = "a"}).<<.fw.>>
-            SButton(R.string.Goblin, {txt.text = "b"}).<<.fw.>>
-            SButton(R.string.VampireBat, {txt.text = "c"}).<<.fw.>>
-            SButton(R.string.GoblinShaman, {txt.text = "d"}).<<.fw.>>
-            SButton(R.string.Spider, {txt.text = "e"}).<<.fw.>>
-            SButton(R.string.FlameImp, {txt.text = "f"}).<<.fw.>>
-            SButton(R.string.CageGoblin, {txt.text = "g"}).<<.fw.>>
-            SButton(R.string.Troll, {txt.text = "h"}).<<.fw.>>
+            SButton(R.string.Trapdoor, {txt.text = "a"}).<<.fw.>>
+            SButton(R.string.ReusableTrapdoor, {txt.text = "b"}).<<.fw.>>
+            SButton(R.string.Tar, {txt.text = "c"}).<<.fw.>>
+            SButton(R.string.Poison, {txt.text = "d"}).<<.fw.>>
+            SButton(R.string.Arrow, {txt.text = "e"}).<<.fw.>>
+            SButton(R.string.Lightning, {txt.text = "f"}).<<.fw.>>
+            SButton(R.string.FlameVent, {txt.text = "g"}).<<.fw.>>
+            SButton(R.string.HighBlade, {txt.text = "h"}).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }

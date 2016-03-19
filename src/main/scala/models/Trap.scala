@@ -13,7 +13,8 @@ import rapture.json.jsonBackends.jackson._
 case class TrapAttributes(
   damage: Float,   //damage of the trap
   shotInterval: Int, // number of ticks per shot
-  targetFlying: Boolean // can target flying units
+  targetFlying: Boolean, // can target flying units
+  description: String
   )
 
 trait TrapID
@@ -65,8 +66,11 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
   
   var isOpen = false
   var isBlockedByWeb = false  
-  //no damage, drop the brutes down to a lower level
+  //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
+    if (isBlockedByWeb) {
+      return None
+    }
     None
   }
 }
@@ -105,9 +109,9 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
   override def attack() : Option[BaseProjectile]= {
     curTarget match {
       case Some(brute) => {
-        val dx = x - brute.x
+        val dy = y - brute.y
         //still on the same floor
-        if (dx < 0.1) {
+        if (dy < 0.1) {
           return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
         }
       }
