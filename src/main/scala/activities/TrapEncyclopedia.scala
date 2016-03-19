@@ -34,14 +34,14 @@ class TrapEncyclopedia extends SActivity {
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Trapdoor, {txt.text = "a"}).<<.fw.>>
-            SButton(R.string.ReusableTrapdoor, {txt.text = "b"}).<<.fw.>>
-            SButton(R.string.Tar, {txt.text = "c"}).<<.fw.>>
-            SButton(R.string.Poison, {txt.text = "d"}).<<.fw.>>
-            SButton(R.string.Arrow, {txt.text = "e"}).<<.fw.>>
-            SButton(R.string.Lightning, {txt.text = "f"}).<<.fw.>>
-            SButton(R.string.FlameVent, {txt.text = "g"}).<<.fw.>>
-            SButton(R.string.HighBlade, {txt.text = "h"}).<<.fw.>>
+            SButton(R.string.Trapdoor, {txt.text = s"${TrapAttributeMap(TrapDoorID).description}"}).<<.fw.>>
+            SButton(R.string.ReusableTrapdoor, {txt.text = s"${TrapAttributeMap(ReuseTrapDoorID).description}"}).<<.fw.>>
+            SButton(R.string.Tar, {txt.text = s"${TrapAttributeMap(TarID).description}"}).<<.fw.>>
+            SButton(R.string.Poison, {txt.text = s"${TrapAttributeMap(PoisonID).description}"}).<<.fw.>>
+            SButton(R.string.Arrow, {txt.text = s"${TrapAttributeMap(ArrowID).description}"}).<<.fw.>>
+            SButton(R.string.Lightning, {txt.text = s"${TrapAttributeMap(LightningID).description}"}).<<.fw.>>
+            SButton(R.string.FlameVent, {txt.text = s"${TrapAttributeMap(FlameVentID).description}"}).<<.fw.>>
+            SButton(R.string.HighBlade, {txt.text = s"${TrapAttributeMap(HighBladeID).description}"}).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }

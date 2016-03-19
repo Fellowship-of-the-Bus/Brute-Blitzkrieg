@@ -34,14 +34,14 @@ class Encyclopedia extends SActivity {
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Ogre, {txt.text = "a"}).<<.fw.>>
-            SButton(R.string.Goblin, {txt.text = "b"}).<<.fw.>>
-            SButton(R.string.VampireBat, {txt.text = "c"}).<<.fw.>>
-            SButton(R.string.GoblinShaman, {txt.text = "d"}).<<.fw.>>
-            SButton(R.string.Spider, {txt.text = "e"}).<<.fw.>>
-            SButton(R.string.FlameImp, {txt.text = "f"}).<<.fw.>>
-            SButton(R.string.CageGoblin, {txt.text = "g"}).<<.fw.>>
-            SButton(R.string.Troll, {txt.text = "h"}).<<.fw.>>
+            SButton(R.string.Ogre, {txt.text = s"${BruteAttributeMap(OgreID).description}"}).<<.fw.>>
+            SButton(R.string.Goblin, {txt.text = s"${BruteAttributeMap(GoblinID).description}"}).<<.fw.>>
+            SButton(R.string.VampireBat, {txt.text = s"${BruteAttributeMap(VampireBatID).description}"}).<<.fw.>>
+            SButton(R.string.GoblinShaman, {txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"}).<<.fw.>>
+            SButton(R.string.Spider, {txt.text = s"${BruteAttributeMap(SpiderID).description}"}).<<.fw.>>
+            SButton(R.string.FlameImp, {txt.text = s"${BruteAttributeMap(FlameImpID).description}"}).<<.fw.>>
+            SButton(R.string.CageGoblin, {txt.text = s"${BruteAttributeMap(CageGoblinID).description}"}).<<.fw.>>
+            SButton(R.string.Troll, {txt.text = s"${BruteAttributeMap(TrollID).description}"}).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }
