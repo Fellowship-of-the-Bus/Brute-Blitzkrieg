@@ -13,6 +13,9 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
+    <activity android:label="BruteBlitzkrieg" android:name="Encyclopedia" android:screenOrientation="landscape">
+    </activity>
   </application>
 
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>

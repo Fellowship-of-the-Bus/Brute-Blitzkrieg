@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
 import android.widget.GridView
+import android.content.Intent
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
@@ -16,6 +17,7 @@ class MainActivity extends SActivity {
   val viewSeq = new AtomicInteger(0)
 
   override def onCreate(savedState: Bundle) {
+    android.util.Log.e("bruteb", "Brute Blitzkrieg main acitivity started")
     super.onCreate(savedState)
     val prefs = Preferences()
     viewSeq.set(0)
@@ -59,9 +61,15 @@ class MainActivity extends SActivity {
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
         new SRelativeLayout {
-          SButton("Minions").<<.wrap.alignParentTop.>>
+          SButton("Minions", {
+            android.util.Log.e("bruteb", "Trying to switch to Encyclopedia")
+            val intent = new Intent(MainActivity.this, classOf[Encyclopedia])
+            startActivity(intent)
+            }).<<.wrap.alignParentTop.>>
           SButton("Traps").<<.wrap.centerVertical.>>
-          SButton("Quit").<<.wrap.alignParentBottom.>>
+          SButton("Quit", {
+            finish()
+            }).<<.wrap.alignParentBottom.>>
         }.<<.fw.>>.gravity(Gravity.RIGHT).here
       }
     )
