@@ -5,13 +5,13 @@ package models
 import scala.collection.mutable.Set
 
 
-import lib.game.{IDMap, IDFactory}
+import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
+case class Coordinate(var x: Float, var y:Float)
 
-case class Coordinate(var x: Float, var y: Float)
 case class BruteAttributes(
   maxHP: Int,
   moveSpeed: Float, //tiles/tick I guess
@@ -44,7 +44,7 @@ object BruteID {
 case object BruteAttributeMap extends IDMap[BruteID, BruteAttributes]("data/brutes.json")
 
 
-class BaseBrute (val id: BruteID, val coord: Coordinate) {
+class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordinates {
   //grab stuff from IDMap
   val attr = BruteAttributeMap(id) //= new BruteAttributes(10, 0.3, 0.5, 0.5, false, 1)
   def width = attr.width
@@ -53,7 +53,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) {
 
   def isAlive = hp > 0
   
-  def hit(source: Unit, damage: Float) : Unit= {
+  def hit(source: BaseTrap, damage: Float) : Unit= {
     //check source has lightning and effected by cage..
     if ( false && (buffs contains CageGoblinID)) {
       return
@@ -84,14 +84,16 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) {
   var buffs = Set[BruteID]()
   
   def distance(otherBrute: BaseBrute): Float = {
-    val dx = otherBrute.coord.x - coord.x
-    val dy = otherBrute.coord.y - coord.y
+    val dx = otherBrute.x - x
+    val dy = otherBrute.y - y
     dx*dx + dy*dy
   }
 
   def move() = {
     coord.x = coord.x + attr.moveSpeed
   }
+  override def x = coord.x
+  override def y = coord.y
 }
 
 class Ogre(bCoord: Coordinate) extends BaseBrute(OgreID, bCoord) {
@@ -110,7 +112,7 @@ class Spider(bCoord: Coordinate) extends BaseBrute(SpiderID, bCoord) {
 }
 
 class FlameImp(bCoord: Coordinate) extends BaseBrute(FlameImpID, bCoord) {
-  override def hit(source: Unit, damage: Float) = {
+  override def hit(source: BaseTrap, damage: Float) = {
     //if source was fire take no damage, otherwise do normal damage calculation
     if (false) {
       super.hit(source, damage)
@@ -126,7 +128,7 @@ class Troll(bCoord: Coordinate) extends BaseBrute(TrollID, bCoord){
 
 //factory for brutes
 object Brute {
-  def apply(id: BruteID, coord: Coordinate) = {
+  def apply(id: BruteID, coord: Coordinate): BaseBrute = {
     id match {
       case OgreID => new Ogre(coord)
       case GoblinID => new Goblin(coord)

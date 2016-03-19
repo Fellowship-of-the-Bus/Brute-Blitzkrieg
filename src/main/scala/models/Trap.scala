@@ -5,7 +5,7 @@ package models
 import scala.collection.mutable.Set
 
 
-import lib.game.{IDMap, IDFactory}
+import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
@@ -41,7 +41,7 @@ object TrapID {
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
 
 
-class BaseTrap (val id: TrapID, val coord: Coordinate) {
+class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinates{
   //grab stuff from IDMap
   val attr = TrapAttributeMap(id)
 
@@ -49,9 +49,15 @@ class BaseTrap (val id: TrapID, val coord: Coordinate) {
   def getInRangeBrutes: List[BaseBrute] = {
     List[BaseBrute]()
   }
-  def attack() = {
-
+  def attack(): Option[BaseProjectile] = {
+    None
   }
+
+  override def x = coord.x
+  override def y = coord.y
+
+  override def height = 1
+  override def width = 1
 
 }
 
@@ -60,8 +66,8 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
   var isOpen = false
   var isBlockedByWeb = false  
   //no damage, drop the brutes down to a lower level
-  override def attack( ) = {
-
+  override def attack(): Option[BaseProjectile] = {
+    None
   }
 }
 
@@ -69,20 +75,22 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
   var isOpen = false
   var isBlockedByWeb = false
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
-  override def attack() = {
-
+  override def attack(): Option[BaseProjectile] = {
+    None
   }
 }
 
 class Tar(tCoord: Coordinate) extends BaseTrap(TarID, tCoord) {
-  override def attack() = {
+  override def attack(): Option[BaseProjectile] = {
     //probably apply a debuff on each enemy
+    None
   }
 }
 
 class Poison(tCoord: Coordinate) extends BaseTrap(PoisonID, tCoord) {
-  override def attack() = {
+  override def attack(): Option[BaseProjectile] = {
     //either straight up deal damage or apply a debuff
+    None
   }
 }
 
@@ -94,26 +102,55 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
     List[BaseBrute]()
   }
 
-  override def attack() = {
-    //launch projectile
+  override def attack() : Option[BaseProjectile]= {
+    curTarget match {
+      case Some(brute) => {
+        val dx = x - brute.x
+        //still on the same floor
+        if (dx < 0.1) {
+          return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
+        }
+      }
+      case _ => ()
+    }
+    val target = getNewTarget()
+    target match {
+      case Some(brute) => {
+        curTarget = Some(brute)
+        return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
+      }
+      case None => None
+    }
+  }
+
+  def getNewTarget(): Option[BaseBrute] = {
+    val listOfBrutes = getInRangeBrutes
+      if (listOfBrutes.length == 0) {
+        return None
+      } else {
+        // some targeting heuristic
+        None
+      }
   }
 }
 
 class Lightning(tCoord: Coordinate) extends BaseTrap(LightningID, tCoord) {
-  override def attack() = {
+  override def attack(): Option[BaseProjectile] = {
     //attack all in range
+    None
   }
 }
 
 class FlameVent(tCoord: Coordinate) extends BaseTrap(FlameVentID, tCoord) {
-  override def attack() = {
+  override def attack(): Option[BaseProjectile] = {
     // attack all in range
+    None
   }
 }
 
 class HighBlade(tCoord: Coordinate) extends BaseTrap(HighBladeID, tCoord) {
-  override def attack() = {
-
+  override def attack(): Option[BaseProjectile] = {
+    None
   }
 }
 
