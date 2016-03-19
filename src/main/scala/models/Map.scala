@@ -38,6 +38,7 @@ object MapID {
     implicit lazy val extractor =
       Json.extractor[String].map(Factory.fromString(_))
   }
+  def fromInt(i: Int) = Factory.ids(i-1)
 }
 
 case object maps extends IDMap[MapID, MapInfo]("data/maps.json")

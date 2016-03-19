@@ -14,10 +14,25 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class MainActivity extends SActivity {
+  override implicit val loggerTag = new LoggerTag("bruteb")
+
   val viewSeq = new AtomicInteger(0)
 
+  def switchScreen[T](`class`: Class[T]) = {
+    android.util.Log.e("bruteb", s"Trying to switch to ${`class`}")
+    val intent = new Intent(this, `class`)
+    startActivity(intent)
+  }
+
+  def switchScreen(id: Int) = {
+    android.util.Log.e("bruteb", s"Trying to switch to BattleActivity")
+    val intent = new Intent(this, classOf[BattleActivity])
+    intent.putExtra("level", id)
+    startActivity(intent)
+  }
+
   override def onCreate(savedState: Bundle) {
-    android.util.Log.e("bruteb", "Brute Blitzkrieg main acitivity started")
+    android.util.Log.e("bruteb", "Brute Blitzkrieg main activity started")
     super.onCreate(savedState)
     val prefs = Preferences()
     viewSeq.set(0)
@@ -26,7 +41,7 @@ class MainActivity extends SActivity {
       new SLinearLayout {
         new STableLayout {
           this += new STableRow {
-            SButton("Level One").<<.wrap.>>
+            SButton("Level One", switchScreen(1)).<<.wrap.>>
             SButton("Level Two").<<.wrap.>>
             SButton("Level Three").<<.wrap.>>
           }
@@ -61,15 +76,9 @@ class MainActivity extends SActivity {
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
         new SRelativeLayout {
-          SButton("Minions", {
-            android.util.Log.e("bruteb", "Trying to switch to Encyclopedia")
-            val intent = new Intent(MainActivity.this, classOf[Encyclopedia])
-            startActivity(intent)
-            }).<<.wrap.alignParentTop.>>
+          SButton("Minions", switchScreen(classOf[Encyclopedia])).<<.wrap.alignParentTop.>>
           SButton("Traps").<<.wrap.centerVertical.>>
-          SButton("Quit", {
-            finish()
-            }).<<.wrap.alignParentBottom.>>
+          SButton("Quit", finish()).<<.wrap.alignParentBottom.>>
         }.<<.fw.>>.gravity(Gravity.RIGHT).here
       }
     )
