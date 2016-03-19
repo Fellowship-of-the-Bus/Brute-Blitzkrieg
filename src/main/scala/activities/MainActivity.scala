@@ -14,13 +14,9 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class MainActivity extends SActivity {
-  val viewSeq = new AtomicInteger(0)
-
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg main acitivity started")
     super.onCreate(savedState)
-    val prefs = Preferences()
-    viewSeq.set(0)
     setContentView(
 
       new SLinearLayout {
@@ -61,13 +57,15 @@ class MainActivity extends SActivity {
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
         new SRelativeLayout {
-          SButton("Minions", {
-            android.util.Log.e("bruteb", "Trying to switch to Encyclopedia")
+          SButton(R.string.MinionButton, {
             val intent = new Intent(MainActivity.this, classOf[Encyclopedia])
             startActivity(intent)
             }).<<.wrap.alignParentTop.>>
-          SButton("Traps").<<.wrap.centerVertical.>>
-          SButton("Quit", {
+          SButton(R.string.TrapButton, {
+            val intent = new Intent(MainActivity.this, classOf[TrapEncyclopedia])
+            startActivity(intent)
+            }).<<.wrap.centerVertical.>>
+          SButton(R.string.QuitButton, {
             finish()
             }).<<.wrap.alignParentBottom.>>
         }.<<.fw.>>.gravity(Gravity.RIGHT).here
