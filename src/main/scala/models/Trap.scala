@@ -105,9 +105,9 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
   override def attack() : Option[BaseProjectile]= {
     curTarget match {
       case Some(brute) => {
-        val dx = x - brute.x
+        val dy = y - brute.y
         //still on the same floor
-        if (dx < 0.1) {
+        if (dy < 0.1) {
           return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
         }
       }
