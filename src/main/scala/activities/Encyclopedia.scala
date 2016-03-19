@@ -7,7 +7,7 @@ import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
-import android.widget.GridView
+import android.widget.ImageView
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
@@ -21,20 +21,22 @@ class Encyclopedia extends SActivity {
     }
     val img = new SImageView {
       background=R.drawable.ahmed
-    }
+    }.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
     setContentView(
 
       new SLinearLayout {
         new SScrollView {
           new SVerticalLayout {
-            img.<<.wrap.>>.here
+            img.<<(MATCH_PARENT, 200).>>.here
             txt.<<.wrap.>>.here
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Ogre, {txt.text = s"${BruteAttributeMap(OgreID).description}"}).<<.fw.>>
+            SButton(R.string.Ogre, {
+              txt.text = s"${BruteAttributeMap(OgreID).description}"
+              img.background = R.drawable.ogre1}).<<.fw.>>
             SButton(R.string.Goblin, {txt.text = s"${BruteAttributeMap(GoblinID).description}"}).<<.fw.>>
             SButton(R.string.VampireBat, {txt.text = s"${BruteAttributeMap(VampireBatID).description}"}).<<.fw.>>
             SButton(R.string.GoblinShaman, {txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"}).<<.fw.>>
