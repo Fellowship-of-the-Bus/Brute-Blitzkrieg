@@ -20,23 +20,32 @@ class Encyclopedia extends SActivity {
     val prefs = Preferences()
     viewSeq.set(0)
     val txt = new STextView {
-      text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum."
+      text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum."
       textSize = 16 dip
+    }
+    val img = new SImageView {
+      background=R.drawable.ahmed
     }
     setContentView(
 
       new SLinearLayout {
-        txt.<<(0,WRAP_CONTENT).Weight(4).>>.here
+        new SScrollView {
+          new SVerticalLayout {
+            img.<<.wrap.>>.here
+            txt.<<.wrap.>>.here
+          }.<<.wrap.>>.here
+        }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
         new SScrollView {
           new SVerticalLayout {
-            SButton("one", {txt.text = "a"}).<<.wrap.>>
-            SButton("one", {txt.text = "b"}).<<.wrap.>>
-            SButton("one", {txt.text = "c"}).<<.wrap.>>
-            SButton("one", {txt.text = "d"}).<<.wrap.>>
-            SButton("one", {txt.text = "e"}).<<.wrap.>>
-            SButton("one", {txt.text = "f"}).<<.wrap.>>
-            SButton("one", {txt.text = "g"}).<<.wrap.>>
+            SButton("Ogre", {txt.text = "a"}).<<.fw.>>
+            SButton("Goblin", {txt.text = "b"}).<<.fw.>>
+            SButton("Vampire Bat", {txt.text = "c"}).<<.fw.>>
+            SButton("Goblin Shaman", {txt.text = "d"}).<<.fw.>>
+            SButton("Spider", {txt.text = "e"}).<<.fw.>>
+            SButton("Flame Imp", {txt.text = "f"}).<<.fw.>>
+            SButton("Cage Goblin", {txt.text = "g"}).<<.fw.>>
+            SButton("Troll", {txt.text = "h"}).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }
