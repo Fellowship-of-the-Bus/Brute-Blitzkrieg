@@ -36,35 +36,35 @@ class Encyclopedia extends SActivity {
           new SVerticalLayout {
             SButton(R.string.Ogre, {
               txt.text = s"${BruteAttributeMap(OgreID).description}"
-              img.imageResource = R.drawable.ogre1
+              img.imageResource = OgreID.image
               }).<<.fw.>>
             SButton(R.string.Goblin, {
               txt.text = s"${BruteAttributeMap(GoblinID).description}"
-              img.imageResource = R.drawable.goblin1
+              img.imageResource = GoblinID.image
               }).<<.fw.>>
             SButton(R.string.VampireBat, {
               txt.text = s"${BruteAttributeMap(VampireBatID).description}"
-              img.imageResource = R.drawable.bat
+              img.imageResource = VampireBatID.image
               }).<<.fw.>>
             SButton(R.string.GoblinShaman, {
               txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"
-              img.imageResource = R.drawable.goblinshaman1
+              img.imageResource = GoblinShamanID.image
               }).<<.fw.>>
             SButton(R.string.Spider, {
               txt.text = s"${BruteAttributeMap(SpiderID).description}"
-              //img.imageResource = R.drawable.spider1
+              img.imageResource = SpiderID.image
               }).<<.fw.>>
             SButton(R.string.FlameImp, {
               txt.text = s"${BruteAttributeMap(FlameImpID).description}"
-              //img.imageResource = R.drawable.flameimp1
+              img.imageResource = FlameImpID.image
               }).<<.fw.>>
             SButton(R.string.CageGoblin, {
               txt.text = s"${BruteAttributeMap(CageGoblinID).description}"
-              //img.imageResource = R.drawable.cagegoblin1
+              img.imageResource = CageGoblinID.image
               }).<<.fw.>>
             SButton(R.string.Troll, {
               txt.text = s"${BruteAttributeMap(TrollID).description}"
-              //img.imageResource = R.drawable.troll1
+              img.imageResource = TrollID.image
               }).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here

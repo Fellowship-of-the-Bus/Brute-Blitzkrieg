@@ -36,35 +36,35 @@ class TrapEncyclopedia extends SActivity {
           new SVerticalLayout {
             SButton(R.string.Trapdoor, {
               txt.text = s"${TrapAttributeMap(TrapDoorID).description}"
-              //img.imageResource = R.drawable.trapdoor
+              img.imageResource = TrapDoorID.image
               }).<<.fw.>>
             SButton(R.string.ReusableTrapdoor, {
               txt.text = s"${TrapAttributeMap(ReuseTrapDoorID).description}"
-              //img.imageResource = R.drawable.reusetrapdoor
+              img.imageResource = ReuseTrapDoorID.image
               }).<<.fw.>>
             SButton(R.string.Tar, {
               txt.text = s"${TrapAttributeMap(TarID).description}"
-              //img.imageResource = R.drawable.tartrap
+              img.imageResource = TarID.image
               }).<<.fw.>>
             SButton(R.string.Poison, {
               txt.text = s"${TrapAttributeMap(PoisonID).description}"
-              //img.imageResource = R.drawable.poisontrap
+              img.imageResource = PoisonID.image
               }).<<.fw.>>
             SButton(R.string.Arrow, {
               txt.text = s"${TrapAttributeMap(ArrowID).description}"
-              img.imageResource = R.drawable.arrowtrap
+              img.imageResource = ArrowID.image
               }).<<.fw.>>
             SButton(R.string.Lightning, {
               txt.text = s"${TrapAttributeMap(LightningID).description}"
-              img.imageResource = R.drawable.lightningtrap
+              img.imageResource = LightningID.image
               }).<<.fw.>>
             SButton(R.string.FlameVent, {
               txt.text = s"${TrapAttributeMap(FlameVentID).description}"
-              //img.imageResource = R.drawable.flameventtrap
+              img.imageResource = FlameVentID.image
               }).<<.fw.>>
             SButton(R.string.HighBlade, {
               txt.text = s"${TrapAttributeMap(HighBladeID).description}"
-              //img.imageResource = R.drawable.highbladetrap
+              img.imageResource = HighBladeID.image
               }).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
