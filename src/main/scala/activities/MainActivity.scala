@@ -38,25 +38,12 @@ class MainActivity extends SActivity {
 
       new SLinearLayout {
         new STableLayout {
-          this += new STableRow {
-            SButton("Level One", switchScreen(1)).<<.wrap.>>
-            SButton("Level Two").<<.wrap.>>
-            SButton("Level Three").<<.wrap.>>
-          }
-          this += new STableRow {
-            SButton("Level Four").<<.wrap.>>
-            SButton("Level Five").<<.wrap.>>
-            SButton("Level Six").<<.wrap.>>
-          }
-          this += new STableRow {
-            SButton("Level Seven").<<.wrap.>>
-            SButton("Level Eight").<<.wrap.>>
-            SButton("Level Nine").<<.wrap.>>
-          }
-          this += new STableRow {
-            SButton("Level Ten").<<.wrap.>>
-            SButton("Level Eleven").<<.wrap.>>
-            SButton("Level Twelve").<<.wrap.>>
+          for (range <- 1 to 12 grouped 3) {
+            this += new STableRow {
+              for (i <- range) {
+                SButton(s"Level $i", switchScreen(i)).<<.wrap.>>
+              }
+            }
           }
         }.<<.wrap.>>.here//.stretchColumns("*")
         /*var grid = new SGridLayout {

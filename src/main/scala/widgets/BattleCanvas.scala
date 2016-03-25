@@ -11,7 +11,9 @@ import android.view.View;
 
 import org.scaloid.common._
 
-class BattleCanvas(implicit context: Context) extends SView {
+import models.MapInfo
+
+class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
   override def onDraw(canvas: Canvas) = {
     super.onDraw(canvas)
     val x = getWidth();

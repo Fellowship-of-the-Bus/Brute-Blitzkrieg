@@ -21,16 +21,12 @@ class BattleActivity extends SActivity {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)
 
-    val img = new SImageView {
-      background=R.drawable.ahmed
-    }
-
-    val id = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    error(s"got level id $id")
+    val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
+    error(s"got level id $mapId")
 
     setContentView(
       new SLinearLayout {
-        (new BattleCanvas).<<(0,MATCH_PARENT).Weight(3).>>.here
+        (new BattleCanvas(maps(mapId))).<<(0,MATCH_PARENT).Weight(3).>>.here
 
         new SRelativeLayout {
           SButton("Pick Minions", {
