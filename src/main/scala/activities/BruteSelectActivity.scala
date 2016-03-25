@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
-class BruteSelectActivity extends SActivity {
+class BruteSelectActivity extends BaseActivity {
   import BruteID.Factory.{ids => bruteIDs}
   case class Selection(val button: SImageButton, var brute: BruteID)
 

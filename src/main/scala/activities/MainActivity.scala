@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
-class MainActivity extends SActivity {
+class MainActivity extends BaseActivity {
   override implicit val loggerTag = new LoggerTag("bruteb")
 
   val viewSeq = new AtomicInteger(0)

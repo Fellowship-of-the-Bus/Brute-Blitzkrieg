@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
-class BattleActivity extends SActivity {
+class BattleActivity extends BaseActivity {
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)

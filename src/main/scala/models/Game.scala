@@ -16,6 +16,10 @@ class Game(val map: MapInfo) {
   val msPerTick = 50          //20 ticks/sec
   val msPerCleanup = 2000     //cleanup every 2 secs
   val msAuraStickiness = 500  //update auras every 1/2 sec
+  var bruteList: List[BaseBrute] = List[BaseBrute]()
+  var trapList: List[BaseTrap] = List[BaseTrap]()
+  var projList: List[BaseProjectile] = List[BaseProjectile]()
+
   val timer: Timer = new Timer()
   timer.scheduleAtFixedRate(new TimerTask() {
     override def run() = {
@@ -32,10 +36,6 @@ class Game(val map: MapInfo) {
       updateAuras()
     }
   }, 0, msAuraStickiness)
-
-  var bruteList: List[BaseBrute] = List[BaseBrute]()
-  var trapList: List[BaseTrap] = List[BaseTrap]()
-  var projList: List[BaseProjectile] = List[BaseProjectile]()
 
   //make the towers that the map needs
   for (y <- 0 until map.height) {

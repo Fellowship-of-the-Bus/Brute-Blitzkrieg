@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
-class Encyclopedia extends SActivity {
+class Encyclopedia extends BaseActivity {
   import BruteID.Factory.{ids => bruteIDs}
   import TrapID.Factory.{ids => trapIDs}
 
