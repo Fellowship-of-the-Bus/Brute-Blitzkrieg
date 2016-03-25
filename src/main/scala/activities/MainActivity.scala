@@ -18,9 +18,10 @@ class MainActivity extends SActivity {
 
   val viewSeq = new AtomicInteger(0)
 
-  def switchScreen[T](`class`: Class[T]) = {
+  def switchScreen[T](`class`: Class[T], b : Boolean) = {
     android.util.Log.e("bruteb", s"Trying to switch to ${`class`}")
     val intent = new Intent(this, `class`)
+    intent.putExtra("brute",b)
     startActivity(intent)
   }
 
@@ -61,8 +62,8 @@ class MainActivity extends SActivity {
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
         new SRelativeLayout {
-          SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia])).<<.wrap.alignParentTop.>>
-          SButton(R.string.TrapButton, switchScreen(classOf[TrapEncyclopedia])).<<.wrap.centerVertical.>>
+          SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.wrap.alignParentTop.>>
+          SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.wrap.centerVertical.>>
           SButton(R.string.QuitButton, finish()).<<.wrap.alignParentBottom.>>
         }.<<.fw.>>.gravity(Gravity.RIGHT).here
       }

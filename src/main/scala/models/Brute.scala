@@ -26,30 +26,39 @@ case class BruteAttributes(
 
 sealed trait BruteID {
   def image: Int
+  def name : Int
 }
 case object OgreID extends BruteID {
   def image = R.drawable.ogre1
+  def name = R.string.Ogre
 }
 case object GoblinID extends BruteID {
   def image = R.drawable.goblin1
+  def name = R.string.Goblin
 }
 case object VampireBatID extends BruteID {
   def image = R.drawable.bat
+  def name = R.string.VampireBat
 }
 case object GoblinShamanID extends BruteID {
   def image = R.drawable.goblinshaman1
+  def name = R.string.GoblinShaman
 }
 case object SpiderID extends BruteID {
   def image = R.drawable.ogre1
+  def name = R.string.Spider
 }
 case object FlameImpID extends BruteID {
   def image = R.drawable.ogre1
+  def name = R.string.FlameImp
 }
 case object CageGoblinID extends BruteID {
   def image = R.drawable.ogre1
+  def name = R.string.CageGoblin
 }
 case object TrollID extends BruteID {
   def image = R.drawable.ogre1
+  def name = R.string.Troll
 }
 
 object BruteID {

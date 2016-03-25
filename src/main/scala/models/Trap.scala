@@ -18,34 +18,45 @@ case class TrapAttributes(
   description: String
   )
 
-trait TrapID
+sealed trait TrapID {
+  def image: Int
+  def name: Int
+}
 trait FloorTrapID extends TrapID
 trait WallTrapID extends TrapID
 
 case object TrapDoorID extends FloorTrapID {
   def image = R.drawable.ahmed2
+  def name = R.string.Trapdoor
 }
 case object ReuseTrapDoorID extends FloorTrapID {
   def image = R.drawable.ahmed2
+  def name = R.string.ReusableTrapdoor
 }
 case object TarID extends FloorTrapID {
   def image = R.drawable.ahmed2
+  def name = R.string.Tar
 }
 
 case object PoisonID extends WallTrapID {
   def image = R.drawable.poison_vent
+  def name = R.string.Poison
 }
 case object ArrowID extends WallTrapID {
   def image = R.drawable.arrowtrap
+  def name = R.string.Arrow
 }
 case object LightningID extends WallTrapID {
   def image = R.drawable.lightningtrap
+  def name = R.string.Lightning
 }
 case object FlameVentID extends WallTrapID {
   def image = R.drawable.flame_vent
+  def name = R.string.FlameVent
 }
 case object HighBladeID extends WallTrapID {
   def image = R.drawable.high_blade1
+  def name = R.string.HighBlade
 }
 
 object TrapID {

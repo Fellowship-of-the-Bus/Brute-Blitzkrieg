@@ -13,6 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class Encyclopedia extends SActivity {
+  import BruteID.Factory.{ids => bruteIDs}
+  import TrapID.Factory.{ids => trapIDs}
+
   override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     val txt = new STextView {
@@ -22,6 +25,8 @@ class Encyclopedia extends SActivity {
     val img = new SImageView {
       imageResource=R.drawable.ahmed
     }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
+    val doBrute = getIntent().getBooleanExtra("brute", true)
+    val ids = if (doBrute) bruteIDs else trapIDs
     setContentView(
 
       new SLinearLayout {
@@ -34,38 +39,15 @@ class Encyclopedia extends SActivity {
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Ogre, {
-              txt.text = s"${BruteAttributeMap(OgreID).description}"
-              img.imageResource = OgreID.image
-              }).<<.fw.>>
-            SButton(R.string.Goblin, {
-              txt.text = s"${BruteAttributeMap(GoblinID).description}"
-              img.imageResource = GoblinID.image
-              }).<<.fw.>>
-            SButton(R.string.VampireBat, {
-              txt.text = s"${BruteAttributeMap(VampireBatID).description}"
-              img.imageResource = VampireBatID.image
-              }).<<.fw.>>
-            SButton(R.string.GoblinShaman, {
-              txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"
-              img.imageResource = GoblinShamanID.image
-              }).<<.fw.>>
-            SButton(R.string.Spider, {
-              txt.text = s"${BruteAttributeMap(SpiderID).description}"
-              img.imageResource = SpiderID.image
-              }).<<.fw.>>
-            SButton(R.string.FlameImp, {
-              txt.text = s"${BruteAttributeMap(FlameImpID).description}"
-              img.imageResource = FlameImpID.image
-              }).<<.fw.>>
-            SButton(R.string.CageGoblin, {
-              txt.text = s"${BruteAttributeMap(CageGoblinID).description}"
-              img.imageResource = CageGoblinID.image
-              }).<<.fw.>>
-            SButton(R.string.Troll, {
-              txt.text = s"${BruteAttributeMap(TrollID).description}"
-              img.imageResource = TrollID.image
-              }).<<.fw.>>
+            for(i <- 0 until ids.length) {
+              val image = if (doBrute) bruteIDs(i).image else trapIDs(i).image
+              val name = if (doBrute) bruteIDs(i).name else trapIDs(i).name
+              val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
+              SButton(name, {
+                txt.text = s"${description}"
+                img.imageResource = image
+              })
+            }
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }
