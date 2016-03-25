@@ -2,13 +2,19 @@
   "Level1": {
     "tiles": [
       [
-        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
       ],
       [
-        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" },
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
       ],
       [
-        { "floorTrapID": 1, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 1 }, { "floorTrapID": 0, "wallTrapID": 0 }
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
       ]
     ],
     "startTileCoord": {"x": 0, "y":0},

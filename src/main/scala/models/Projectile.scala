@@ -20,7 +20,7 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
   var active = true
   def speed() : Float
   def direction(): (Float, Float) // Direction that the projectile should move in
-  def isActive() = active
+  def isActive = active
   def move() = {
     val (dx, dy) = direction()
     coord.x += dx * speed()
