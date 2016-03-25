@@ -9,7 +9,7 @@ import lib.game.{IDMap, IDFactory}
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
-case class Tile(val floorTrapID: Int, val wallTrapID: Int) {
+case class Tile(val floorTrapID: TrapID, val wallTrapID: TrapID) {
   val bruteList: Set[BaseBrute] = Set[BaseBrute]()
 
   def register(e: BaseBrute): Unit = {
@@ -43,9 +43,10 @@ case object Level1 extends MapID
 object MapID {
   implicit object Factory extends IDFactory[MapID] {
     val ids = Vector(Level1)
-    implicit lazy val extractor =
-      Json.extractor[String].map(Factory.fromString(_))
   }
+  implicit lazy val extractor =
+      Json.extractor[String].map(Factory.fromString(_))
+  
   def fromInt(i: Int): MapID = Factory.ids(i-1)
 }
 

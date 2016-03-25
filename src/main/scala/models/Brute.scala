@@ -37,9 +37,9 @@ case object TrollID extends BruteID
 object BruteID {
   implicit object Factory extends IDFactory[BruteID] {
     val ids = Vector(OgreID, GoblinID, VampireBatID, GoblinShamanID, SpiderID, FlameImpID, CageGoblinID, TrollID)
-    implicit lazy val extractor =
-      Json.extractor[String].map(Factory.fromString(_))
   }
+  implicit lazy val extractor =
+      Json.extractor[String].map(Factory.fromString(_))
 }
 
 case object BruteAttributeMap extends IDMap[BruteID, BruteAttributes]("data/brutes.json")
@@ -95,7 +95,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       //done climbing stairs
       if (stairProgress > 1) {
         Game.game.map.getTile(coord).deregister(this)
-        coord.y = coord.y + 1
+        coord.y = coord.y - 1
         Game.game.map.getTile(coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
@@ -109,12 +109,12 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       speed = attr.moveSpeed
     }
     
-    //even levels move left, odd levels move right. 
+    //even levels move right, odd levels move left. 
     var newX: Float = 0
     if (y%2 == 0) {
-      newX = coord.x - speed
-    } else {
       newX = coord.x + speed
+    } else {
+      newX = coord.x - speed
     }
     //check for map bounds
     if (newX < 0) {
@@ -182,7 +182,7 @@ class Troll(bCoord: Coordinate) extends BaseBrute(TrollID, bCoord){
 //factory for brutes
 object Brute {
   def apply(id: BruteID, coord: Coordinate): BaseBrute = {
-    id match {
+    val brute = id match {
       case OgreID => new Ogre(coord)
       case GoblinID => new Goblin(coord)
       case VampireBatID => new VampireBat(coord)
@@ -193,5 +193,7 @@ object Brute {
       case TrollID => new Troll(coord)
       case _ => throw new Exception("Unrecognized Brute Type")
     }
+    brute.coord.y -= (1-brute.height)
+    brute
   }
 }
