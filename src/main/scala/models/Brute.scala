@@ -51,6 +51,8 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def width = attr.width
   def height = attr.height
   var hp: Float  = attr.maxHP
+  var isClimbingStairs = false
+  var stairProgress = 0f
 
   def isAlive = hp > 0
   
@@ -84,18 +86,62 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   
 
 
-  def move() = {
-    //probably do some check on which floor you are on and decide whether to move left, right or clime ladder
-    if (debuffs contains TarID) {
-      coord.x = coord.x + attr.moveSpeed * 0.5f    
-    } else {
-      coord.x = coord.x + attr.moveSpeed
+  def move(map: GameMap): Unit = {
+    //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
+    //tar slows speed
+    if (isClimbingStairs) {
+      val progressPerTick = 0.02f
+      stairProgress += progressPerTick
+      //done climbing stairs
+      if (stairProgress > 1) {
+        map.getTile(coord).deregister(this)
+        coord.y = coord.y + 1
+        map.getTile(coord).register(this)
+        isClimbingStairs = false
+        stairProgress = 0
+      }
+      return
     }
+    var speed: Float = 0
+    if (debuffs contains TarID) {
+      speed = attr.moveSpeed * 0.5f
+    } else {
+      speed = attr.moveSpeed
+    }
+    
+    //even levels move left, odd levels move right. 
+    var newX: Float = 0
+    if (y%2 == 0) {
+      newX = coord.x - speed
+    } else {
+      newX = coord.x + speed
+    }
+    //check for map bounds
+    if (newX < 0) {
+      newX = 0
+      isClimbingStairs = true
+      stairProgress = 0
+    }
+    val sizeOfMap = 6
+    if (newX > sizeOfMap) {
+      newX = sizeOfMap
+      isClimbingStairs = true
+      stairProgress = 0
+    }
+    //changed tiles, register/deregister
+    if (coord.x.toInt != newX.toInt) {
+      map.getTile(coord).deregister(this)
+      coord.x = newX
+      map.getTile(coord).register(this)
+    } else {
+      coord.x = newX
+    }
+    ()
   }
   override def x = coord.x
   override def y = coord.y
 
-  //clear buffs every ~ 1/2 second to reapply them
+  //clear buffs every ~ 1/2 second then reapply them
   def clearBuffs() = {
     buffs.clear
     debuffs.clear
