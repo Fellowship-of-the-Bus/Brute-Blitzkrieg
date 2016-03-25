@@ -7,7 +7,7 @@ import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
-import android.widget.GridView
+import android.widget.ImageView
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
@@ -20,8 +20,8 @@ class TrapEncyclopedia extends SActivity {
       textSize = 16 dip
     }
     val img = new SImageView {
-      background=R.drawable.ahmed
-    }
+      imageResource=R.drawable.ahmed
+    }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
     setContentView(
 
       new SLinearLayout {
@@ -34,14 +34,38 @@ class TrapEncyclopedia extends SActivity {
 
         new SScrollView {
           new SVerticalLayout {
-            SButton(R.string.Trapdoor, {txt.text = s"${TrapAttributeMap(TrapDoorID).description}"}).<<.fw.>>
-            SButton(R.string.ReusableTrapdoor, {txt.text = s"${TrapAttributeMap(ReuseTrapDoorID).description}"}).<<.fw.>>
-            SButton(R.string.Tar, {txt.text = s"${TrapAttributeMap(TarID).description}"}).<<.fw.>>
-            SButton(R.string.Poison, {txt.text = s"${TrapAttributeMap(PoisonID).description}"}).<<.fw.>>
-            SButton(R.string.Arrow, {txt.text = s"${TrapAttributeMap(ArrowID).description}"}).<<.fw.>>
-            SButton(R.string.Lightning, {txt.text = s"${TrapAttributeMap(LightningID).description}"}).<<.fw.>>
-            SButton(R.string.FlameVent, {txt.text = s"${TrapAttributeMap(FlameVentID).description}"}).<<.fw.>>
-            SButton(R.string.HighBlade, {txt.text = s"${TrapAttributeMap(HighBladeID).description}"}).<<.fw.>>
+            SButton(R.string.Trapdoor, {
+              txt.text = s"${TrapAttributeMap(TrapDoorID).description}"
+              //img.imageResource = R.drawable.trapdoor
+              }).<<.fw.>>
+            SButton(R.string.ReusableTrapdoor, {
+              txt.text = s"${TrapAttributeMap(ReuseTrapDoorID).description}"
+              //img.imageResource = R.drawable.reusetrapdoor
+              }).<<.fw.>>
+            SButton(R.string.Tar, {
+              txt.text = s"${TrapAttributeMap(TarID).description}"
+              //img.imageResource = R.drawable.tartrap
+              }).<<.fw.>>
+            SButton(R.string.Poison, {
+              txt.text = s"${TrapAttributeMap(PoisonID).description}"
+              //img.imageResource = R.drawable.poisontrap
+              }).<<.fw.>>
+            SButton(R.string.Arrow, {
+              txt.text = s"${TrapAttributeMap(ArrowID).description}"
+              img.imageResource = R.drawable.arrowtrap
+              }).<<.fw.>>
+            SButton(R.string.Lightning, {
+              txt.text = s"${TrapAttributeMap(LightningID).description}"
+              img.imageResource = R.drawable.lightningtrap
+              }).<<.fw.>>
+            SButton(R.string.FlameVent, {
+              txt.text = s"${TrapAttributeMap(FlameVentID).description}"
+              //img.imageResource = R.drawable.flameventtrap
+              }).<<.fw.>>
+            SButton(R.string.HighBlade, {
+              txt.text = s"${TrapAttributeMap(HighBladeID).description}"
+              //img.imageResource = R.drawable.highbladetrap
+              }).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }
