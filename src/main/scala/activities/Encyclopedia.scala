@@ -20,14 +20,14 @@ class Encyclopedia extends SActivity {
       textSize = 16 dip
     }
     val img = new SImageView {
-      background=R.drawable.ahmed
-    }.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+      imageResource=R.drawable.ahmed
+    }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
     setContentView(
 
       new SLinearLayout {
         new SScrollView {
           new SVerticalLayout {
-            img.<<(MATCH_PARENT, 200).>>.here
+            img.<<.wrap.>>.here
             txt.<<.wrap.>>.here
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
@@ -36,14 +36,36 @@ class Encyclopedia extends SActivity {
           new SVerticalLayout {
             SButton(R.string.Ogre, {
               txt.text = s"${BruteAttributeMap(OgreID).description}"
-              img.background = R.drawable.ogre1}).<<.fw.>>
-            SButton(R.string.Goblin, {txt.text = s"${BruteAttributeMap(GoblinID).description}"}).<<.fw.>>
-            SButton(R.string.VampireBat, {txt.text = s"${BruteAttributeMap(VampireBatID).description}"}).<<.fw.>>
-            SButton(R.string.GoblinShaman, {txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"}).<<.fw.>>
-            SButton(R.string.Spider, {txt.text = s"${BruteAttributeMap(SpiderID).description}"}).<<.fw.>>
-            SButton(R.string.FlameImp, {txt.text = s"${BruteAttributeMap(FlameImpID).description}"}).<<.fw.>>
-            SButton(R.string.CageGoblin, {txt.text = s"${BruteAttributeMap(CageGoblinID).description}"}).<<.fw.>>
-            SButton(R.string.Troll, {txt.text = s"${BruteAttributeMap(TrollID).description}"}).<<.fw.>>
+              img.imageResource = R.drawable.ogre1
+              }).<<.fw.>>
+            SButton(R.string.Goblin, {
+              txt.text = s"${BruteAttributeMap(GoblinID).description}"
+              img.imageResource = R.drawable.goblin1
+              }).<<.fw.>>
+            SButton(R.string.VampireBat, {
+              txt.text = s"${BruteAttributeMap(VampireBatID).description}"
+              img.imageResource = R.drawable.bat
+              }).<<.fw.>>
+            SButton(R.string.GoblinShaman, {
+              txt.text = s"${BruteAttributeMap(GoblinShamanID).description}"
+              img.imageResource = R.drawable.goblinshaman1
+              }).<<.fw.>>
+            SButton(R.string.Spider, {
+              txt.text = s"${BruteAttributeMap(SpiderID).description}"
+              //img.imageResource = R.drawable.spider1
+              }).<<.fw.>>
+            SButton(R.string.FlameImp, {
+              txt.text = s"${BruteAttributeMap(FlameImpID).description}"
+              //img.imageResource = R.drawable.flameimp1
+              }).<<.fw.>>
+            SButton(R.string.CageGoblin, {
+              txt.text = s"${BruteAttributeMap(CageGoblinID).description}"
+              //img.imageResource = R.drawable.cagegoblin1
+              }).<<.fw.>>
+            SButton(R.string.Troll, {
+              txt.text = s"${BruteAttributeMap(TrollID).description}"
+              //img.imageResource = R.drawable.troll1
+              }).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(1).>>.here
       }
