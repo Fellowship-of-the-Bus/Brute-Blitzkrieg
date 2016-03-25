@@ -26,8 +26,14 @@ case class Tile(val floorTrapID: Int, val wallTrapID: Int) {
 
 case class MapInfo(
   tiles: List[List[Tile]],
-  startTileCoord: Coordinate, //(Int, Int),
-  endTileCoord: Coordinate) //(Int, Int))
+  startTileCoord: Coordinate, 
+  endTileCoord: Coordinate) {
+  
+  def getTile(coord: Coordinate) = {
+    tiles(coord.y.toInt)(coord.x.toInt)
+  }
+}
+
 
 sealed trait MapID
 case object Level1 extends MapID

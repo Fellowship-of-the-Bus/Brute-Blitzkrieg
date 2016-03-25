@@ -6,6 +6,7 @@ import scala.collection.mutable.Set
 
 
 import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
+import lib.util._
 
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
@@ -42,16 +43,41 @@ object TrapID {
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
 
 
-class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinates{
+class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinates with TimerListener{
   //grab stuff from IDMap
   val attr = TrapAttributeMap(id)
 
+  var canAttack = true
   //getThe right tile, and then try to damage each brute there
   def getInRangeBrutes: List[BaseBrute] = {
-    List[BaseBrute]()
+    Game.map.getTile(coord).bruteList.toList
+    //List[BaseBrute]()
   }
   def attack(): Option[BaseProjectile] = {
+    tickOnce()
+    //get brutes in range
+    val listOfBrutes = getInRangeBrutes
+    if (canAttack && listOfBrutes.length != 0) {
+
+      //for each in range, attack
+      listOfBrutes.map(brute => {
+          // don't attack if target is flying but trap cannot target flying things
+          if (attr.targetFlying || !brute.attr.flying) brute.hit(this, attr.damage)
+        })
+      setCooldown()
+    }
     None
+  }
+  def setCooldown() = {
+    canAttack = false
+    add(new TickTimer(attr.shotInterval, () => canAttack = true))
+  }
+  def tickOnce() = {
+    if (ticking()) {
+      tick(1)
+    } else {
+      cancelAll()
+    }
   }
 
   override def x = coord.x
@@ -65,18 +91,31 @@ class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
 class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
   
   var isOpen = false
-  var isBlockedByWeb = false  
+  var isBlockedByWeb = false 
+  canAttack = true 
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
     if (isBlockedByWeb) {
       return None
     } else {
       val listOfBrutes = getInRangeBrutes
+      //check if any is in range. If so, open the trap
+      if (listOfBrutes.length != 0) {
+        if (isOpen == false) {
+          isOpen = true
+        }
+      } else {
+        return None
+      }
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
         isBlockedByWeb = true
       } else {
         listOfBrutes.map(brute => brute.coord.y -= 1)
         //merge brute sets from our tile into the tile below us 
+        val curTile = Game.map.getTile(coord)
+        val tileBelow = Game.map.getTile(Coordinate(coord.x, coord.y-1))
+        tileBelow.bruteList ++= curTile.bruteList
+        curTile.bruteList.clear
       }
     }
     None
@@ -88,22 +127,59 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
   var isBlockedByWeb = false
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
   override def attack(): Option[BaseProjectile] = {
+    //check if we can attack
+    tickOnce()
+    if (!canAttack && !isOpen) {
+      return None
+    }
+    if (isBlockedByWeb) {
+      return None
+    } else {
+      val listOfBrutes = getInRangeBrutes
+      if (listOfBrutes.length == 0){
+        return None
+      }
+      isOpen = true
+      // add a timer to close the trap after some number of ticks
+      add(new TickTimer(10, () => isOpen = false))
+      //check for spider
+      if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
+        isBlockedByWeb = true
+      } else {
+        listOfBrutes.map(brute => brute.coord.y -= 1)
+        //merge brute sets from our tile into the tile below us 
+        val curTile = Game.map.getTile(coord)
+        val tileBelow = Game.map.getTile(Coordinate(coord.x, coord.y-1))
+        tileBelow.bruteList ++= curTile.bruteList
+        curTile.bruteList.clear
+      }
+      //set the cooldown timer if we havent yet
+      if (canAttack) setCooldown()
+    }
     None
   }
 }
 
 class Tar(tCoord: Coordinate) extends BaseTrap(TarID, tCoord) {
   override def attack(): Option[BaseProjectile] = {
-    //probably apply a debuff on each enemy
+    tickOnce()
+    //probably apply a debuff on each 
+    val listOfBrutes = getInRangeBrutes
+    if (canAttack && listOfBrutes.length != 0) {
+
+      //for each in range, attack
+      listOfBrutes.map(brute => brute.debuffs += this.id)
+      setCooldown()
+    }
     None
   }
 }
 
 class Poison(tCoord: Coordinate) extends BaseTrap(PoisonID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
-    //either straight up deal damage or apply a debuff
-    None
-  }
+  // override def attack(): Option[BaseProjectile] = {
+  //   //either straight up deal damage or apply a debuff
+  //   None
+  // }
 }
 
 class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
@@ -115,11 +191,14 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
   }
 
   override def attack() : Option[BaseProjectile]= {
+    tickOnce()
+    if (!canAttack) return None 
     curTarget match {
       case Some(brute) => {
-        val dy = y - brute.y
-        //still on the same floor
-        if (dy < 0.1) {
+        val dy = y.toInt - brute.y.toInt
+        //check not climbing stairs and on same floor
+        if (!brute.isClimbingStairs && dy < 0.5) {
+          setCooldown()
           return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
         }
       }
@@ -129,6 +208,7 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
     target match {
       case Some(brute) => {
         curTarget = Some(brute)
+        setCooldown()
         return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
       }
       case None => None
@@ -147,23 +227,23 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
 }
 
 class Lightning(tCoord: Coordinate) extends BaseTrap(LightningID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
-    //attack all in range
-    None
-  }
+  // override def attack(): Option[BaseProjectile] = {
+  //   //attack all in range
+  //   None
+  // }
 }
 
 class FlameVent(tCoord: Coordinate) extends BaseTrap(FlameVentID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
-    // attack all in range
-    None
-  }
+  // override def attack(): Option[BaseProjectile] = {
+  //   // attack all in range
+  //   None
+  // }
 }
 
 class HighBlade(tCoord: Coordinate) extends BaseTrap(HighBladeID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
-    None
-  }
+  // override def attack(): Option[BaseProjectile] = {
+  //   None
+  // }
 }
 
 object Trap {
