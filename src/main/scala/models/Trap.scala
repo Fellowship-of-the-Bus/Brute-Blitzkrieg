@@ -18,25 +18,55 @@ case class TrapAttributes(
   description: String
   )
 
-trait TrapID
+sealed trait TrapID {
+  def image: Int
+  def name: Int
+}
 trait FloorTrapID extends TrapID
 trait WallTrapID extends TrapID
 
-case object TrapDoorID extends FloorTrapID
-case object ReuseTrapDoorID extends FloorTrapID
-case object TarID extends FloorTrapID
+case object TrapDoorID extends FloorTrapID {
+  def image = R.drawable.ahmed2
+  def name = R.string.Trapdoor
+}
+case object ReuseTrapDoorID extends FloorTrapID {
+  def image = R.drawable.ahmed2
+  def name = R.string.ReusableTrapdoor
+}
+case object TarID extends FloorTrapID {
+  def image = R.drawable.ahmed2
+  def name = R.string.Tar
+}
 
-case object PoisonID extends WallTrapID
-case object ArrowID extends WallTrapID
-case object LightningID extends WallTrapID
-case object FlameVentID extends WallTrapID
-case object HighBladeID extends WallTrapID
+case object PoisonID extends WallTrapID {
+  def image = R.drawable.poison_vent
+  def name = R.string.Poison
+}
+case object ArrowID extends WallTrapID {
+  def image = R.drawable.arrowtrap
+  def name = R.string.Arrow
+}
+case object LightningID extends WallTrapID {
+  def image = R.drawable.lightningtrap
+  def name = R.string.Lightning
+}
+case object FlameVentID extends WallTrapID {
+  def image = R.drawable.flame_vent
+  def name = R.string.FlameVent
+}
+case object HighBladeID extends WallTrapID {
+  def image = R.drawable.high_blade1
+  def name = R.string.HighBlade
+}
 
-case object NoTrapID extends TrapID
+case object NoTrapID extends TrapID {
+  def image = 0
+  def name = 0
+}
 
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
-    val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID, NoTrapID)
+    val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
   }
   implicit lazy val extractor = Json.extractor[String].map(Factory.fromString(_))
   
@@ -91,10 +121,10 @@ class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
 }
 
 class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
-  
+
   var isOpen = false
-  var isBlockedByWeb = false 
-  canAttack = true 
+  var isBlockedByWeb = false
+  canAttack = true
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
     if (isBlockedByWeb) {
@@ -114,8 +144,9 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
       } else {
         listOfBrutes.map(brute => brute.coord.y += 1)
         //merge brute sets from our tile into the tile below us 
+
         val curTile = Game.game.map.getTile(coord)
-        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y-1))
+        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
         tileBelow.bruteList ++= curTile.bruteList
         curTile.bruteList.clear
       }
@@ -150,8 +181,9 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
       } else {
         listOfBrutes.map(brute => brute.coord.y += 1)
         //merge brute sets from our tile into the tile below us 
+
         val curTile = Game.game.map.getTile(coord)
-        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y-1))
+        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
         tileBelow.bruteList ++= curTile.bruteList
         curTile.bruteList.clear
       }
@@ -165,7 +197,7 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
 class Tar(tCoord: Coordinate) extends BaseTrap(TarID, tCoord) {
   override def attack(): Option[BaseProjectile] = {
     tickOnce()
-    //probably apply a debuff on each 
+    //probably apply a debuff on each
     val listOfBrutes = getInRangeBrutes
     if (canAttack && listOfBrutes.length != 0) {
 
@@ -196,7 +228,7 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
 
   override def attack() : Option[BaseProjectile]= {
     tickOnce()
-    if (!canAttack) return None 
+    if (!canAttack) return None
     curTarget match {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt

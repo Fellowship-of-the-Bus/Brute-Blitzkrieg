@@ -17,22 +17,49 @@ case class BruteAttributes(
   moveSpeed: Float, //tiles/tick I guess
   width: Float,     //fraction of a tile
   height: Float,    //fraction of a tile
-  flying: Boolean,  
+  flying: Boolean,
   regen: Float,     //life regen per tick?
   radius: Float,    //radius of any aura abilities (heal/draw lightning)
   auraRegen: Float,  //Amount of regen of the aura
   description: String // A brief description of the brute
   )
 
-trait BruteID
-case object OgreID extends BruteID
-case object GoblinID extends BruteID
-case object VampireBatID extends BruteID
-case object GoblinShamanID extends BruteID
-case object SpiderID extends BruteID
-case object FlameImpID extends BruteID
-case object CageGoblinID extends BruteID
-case object TrollID extends BruteID
+sealed trait BruteID {
+  def image: Int
+  def name : Int
+}
+case object OgreID extends BruteID {
+  def image = R.drawable.ogre1
+  def name = R.string.Ogre
+}
+case object GoblinID extends BruteID {
+  def image = R.drawable.goblin1
+  def name = R.string.Goblin
+}
+case object VampireBatID extends BruteID {
+  def image = R.drawable.bat
+  def name = R.string.VampireBat
+}
+case object GoblinShamanID extends BruteID {
+  def image = R.drawable.goblinshaman1
+  def name = R.string.GoblinShaman
+}
+case object SpiderID extends BruteID {
+  def image = R.drawable.ogre1
+  def name = R.string.Spider
+}
+case object FlameImpID extends BruteID {
+  def image = R.drawable.ogre1
+  def name = R.string.FlameImp
+}
+case object CageGoblinID extends BruteID {
+  def image = R.drawable.ogre1
+  def name = R.string.CageGoblin
+}
+case object TrollID extends BruteID {
+  def image = R.drawable.ogre1
+  def name = R.string.Troll
+}
 
 object BruteID {
   implicit object Factory extends IDFactory[BruteID] {
@@ -55,7 +82,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var stairProgress = 0f
 
   def isAlive = hp > 0
-  
+
   def hit(source: BaseTrap, damage: Float) : Unit = {
     //check source has lightning and effected by cage..
     if ( source.isInstanceOf[Lightning] && (buffs contains CageGoblinID)) {
@@ -75,7 +102,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     hp = math.min(hp, attr.maxHP)
     ()
   }
-  
+
   def isFlying = attr.flying
   def applyAura(brutes: List[BaseBrute]) = {
     val inRadius = brutes.filter(brute => distance(brute) <= attr.radius)
@@ -83,7 +110,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   }
   var buffs = Set[BruteID]()
   var debuffs = Set[TrapID]()
-  
+
 
 
   def move(): Unit = {
@@ -108,7 +135,6 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     } else {
       speed = attr.moveSpeed
     }
-    
     //even levels move right, odd levels move left. 
     var newX: Float = 0
     if (y%2 == 0) {

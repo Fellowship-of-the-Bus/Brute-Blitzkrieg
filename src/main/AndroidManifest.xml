@@ -20,7 +20,7 @@
     <activity android:label="BruteBlitzkrieg" android:name="BattleActivity" android:screenOrientation="landscape">
     </activity>
 
-    <activity android:label="BruteBlitzkrieg" android:name="TrapEncyclopedia" android:screenOrientation="landscape">
+    <activity android:label="BruteBlitzkrieg" android:name="BruteSelectActivity" android:screenOrientation="landscape">
     </activity>
   </application>
 
