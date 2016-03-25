@@ -57,7 +57,7 @@ case object CageGoblinID extends BruteID {
   def name = R.string.CageGoblin
 }
 case object TrollID extends BruteID {
-  def image = R.drawable.ogre1
+  def image = R.drawable.troll1
   def name = R.string.Troll
 }
 
@@ -135,7 +135,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     } else {
       speed = attr.moveSpeed
     }
-    //even levels move right, odd levels move left. 
+    //even levels move right, odd levels move left.
     var newX: Float = 0
     if (y%2 == 0) {
       newX = coord.x + speed

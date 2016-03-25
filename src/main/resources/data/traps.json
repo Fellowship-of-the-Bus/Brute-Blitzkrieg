@@ -46,11 +46,5 @@
     "shotInterval": 20,
     "targetFlying": false,
     "description": "Where's Your Head?"
-  },
-  "NoTrapID": {
-    "damage": 5,
-    "shotInterval": 20,
-    "targetFlying": false,
-    "description": "Where's Your Head?"
   }
 }

@@ -34,7 +34,7 @@ case object ReuseTrapDoorID extends FloorTrapID {
   def name = R.string.ReusableTrapdoor
 }
 case object TarID extends FloorTrapID {
-  def image = R.drawable.ahmed2
+  def image = R.drawable.tar
   def name = R.string.Tar
 }
 
@@ -69,7 +69,7 @@ object TrapID {
     val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
   }
   implicit lazy val extractor = Json.extractor[String].map(Factory.fromString(_))
-  
+
 }
 
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
@@ -143,7 +143,7 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
         isBlockedByWeb = true
       } else {
         listOfBrutes.map(brute => brute.coord.y += 1)
-        //merge brute sets from our tile into the tile below us 
+        //merge brute sets from our tile into the tile below us
 
         val curTile = Game.game.map.getTile(coord)
         val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
@@ -180,7 +180,7 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
         isBlockedByWeb = true
       } else {
         listOfBrutes.map(brute => brute.coord.y += 1)
-        //merge brute sets from our tile into the tile below us 
+        //merge brute sets from our tile into the tile below us
 
         val curTile = Game.game.map.getTile(coord)
         val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
