@@ -50,7 +50,7 @@ class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
   var canAttack = true
   //getThe right tile, and then try to damage each brute there
   def getInRangeBrutes: List[BaseBrute] = {
-    Game.map.getTile(coord).bruteList.toList
+    Game.game.map.getTile(coord).bruteList.toList
     //List[BaseBrute]()
   }
   def attack(): Option[BaseProjectile] = {
@@ -112,8 +112,8 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
       } else {
         listOfBrutes.map(brute => brute.coord.y -= 1)
         //merge brute sets from our tile into the tile below us 
-        val curTile = Game.map.getTile(coord)
-        val tileBelow = Game.map.getTile(Coordinate(coord.x, coord.y-1))
+        val curTile = Game.game.map.getTile(coord)
+        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y-1))
         tileBelow.bruteList ++= curTile.bruteList
         curTile.bruteList.clear
       }
@@ -148,8 +148,8 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
       } else {
         listOfBrutes.map(brute => brute.coord.y -= 1)
         //merge brute sets from our tile into the tile below us 
-        val curTile = Game.map.getTile(coord)
-        val tileBelow = Game.map.getTile(Coordinate(coord.x, coord.y-1))
+        val curTile = Game.game.map.getTile(coord)
+        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y-1))
         tileBelow.bruteList ++= curTile.bruteList
         curTile.bruteList.clear
       }
@@ -185,9 +185,11 @@ class Poison(tCoord: Coordinate) extends BaseTrap(PoisonID, tCoord) {
 class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
   //if cur target is None, then get a target, then fire a projectile
   var curTarget: Option[BaseBrute] = None
-  override def getInRangeBrutes = {
+  override def getInRangeBrutes: List[BaseBrute] = {
     //get a list of all brutes in the current floor (same y-value)
-    List[BaseBrute]()
+    val setOfBrutes: Set[BaseBrute] = Set[BaseBrute]()
+    Game.game.map.tiles(y.toInt).map(tile => setOfBrutes ++= tile.bruteList)
+    setOfBrutes.toList
   }
 
   override def attack() : Option[BaseProjectile]= {

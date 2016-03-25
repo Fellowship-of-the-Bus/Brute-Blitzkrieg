@@ -94,9 +94,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       stairProgress += progressPerTick
       //done climbing stairs
       if (stairProgress > 1) {
-        Game.map.getTile(coord).deregister(this)
+        Game.game.map.getTile(coord).deregister(this)
         coord.y = coord.y + 1
-        Game.map.getTile(coord).register(this)
+        Game.game.map.getTile(coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
       }
@@ -130,9 +130,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     }
     //changed tiles, register/deregister
     if (coord.x.toInt != newX.toInt) {
-      Game.map.getTile(coord).deregister(this)
+      Game.game.map.getTile(coord).deregister(this)
       coord.x = newX
-      Game.map.getTile(coord).register(this)
+      Game.game.map.getTile(coord).register(this)
     } else {
       coord.x = newX
     }

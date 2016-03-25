@@ -29,6 +29,8 @@ case class MapInfo(
   startTileCoord: Coordinate, 
   endTileCoord: Coordinate) {
   
+  def height = tiles.length
+  def width = tiles(0).length
   def getTile(coord: Coordinate) = {
     tiles(coord.y.toInt)(coord.x.toInt)
   }
