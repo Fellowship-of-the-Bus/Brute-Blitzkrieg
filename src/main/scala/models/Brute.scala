@@ -104,7 +104,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
 
 
 
-  def move(map: GameMap): Unit = {
+  def move(): Unit = {
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
     if (isClimbingStairs) {
@@ -112,9 +112,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       stairProgress += progressPerTick
       //done climbing stairs
       if (stairProgress > 1) {
-        map.getTile(coord).deregister(this)
+        Game.game.map.getTile(coord).deregister(this)
         coord.y = coord.y + 1
-        map.getTile(coord).register(this)
+        Game.game.map.getTile(coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
       }
@@ -148,9 +148,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     }
     //changed tiles, register/deregister
     if (coord.x.toInt != newX.toInt) {
-      map.getTile(coord).deregister(this)
+      Game.game.map.getTile(coord).deregister(this)
       coord.x = newX
-      map.getTile(coord).register(this)
+      Game.game.map.getTile(coord).register(this)
     } else {
       coord.x = newX
     }
