@@ -40,10 +40,10 @@ case object GoblinShamanID extends BruteID {
   def image = R.drawable.goblinshaman1
 }
 case object SpiderID extends BruteID {
-  def image = R.drawable.ogre1
+  def image = R.drawable.spider1
 }
 case object FlameImpID extends BruteID {
-  def image = R.drawable.ogre1
+  def image = R.drawable.flame_imp1
 }
 case object CageGoblinID extends BruteID {
   def image = R.drawable.ogre1

@@ -7,5 +7,5 @@ object Game {
 }
 
 class Game(val map: MapInfo) {
-
+  var brutes = Vector[BruteID]()
 }

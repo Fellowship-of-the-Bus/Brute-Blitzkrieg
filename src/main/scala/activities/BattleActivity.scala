@@ -33,7 +33,7 @@ class BattleActivity extends SActivity {
           SButton("Pick Minions", {
             val intent = new Intent(BattleActivity.this, classOf[BruteSelectActivity])
             startActivity(intent)
-            }).<<.wrap.alignParentTop.>>
+          }).<<.wrap.alignParentTop.>>
           SButton("Start Level").<<.wrap.centerVertical.>>
           SButton("Menu", {
             finish()
