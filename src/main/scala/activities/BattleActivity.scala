@@ -31,8 +31,7 @@ class BattleActivity extends SActivity {
 
         new SRelativeLayout {
           SButton("Pick Minions", {
-            android.util.Log.e("bruteb", "Trying to switch to Encyclopedia")
-            val intent = new Intent(BattleActivity.this, classOf[Encyclopedia])
+            val intent = new Intent(BattleActivity.this, classOf[BruteSelectActivity])
             startActivity(intent)
             }).<<.wrap.alignParentTop.>>
           SButton("Start Level").<<.wrap.centerVertical.>>
