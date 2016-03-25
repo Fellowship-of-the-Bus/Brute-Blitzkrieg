@@ -70,6 +70,14 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
   override def attack(): Option[BaseProjectile] = {
     if (isBlockedByWeb) {
       return None
+    } else {
+      val listOfBrutes = getInRangeBrutes
+      if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
+        isBlockedByWeb = true
+      } else {
+        listOfBrutes.map(brute => brute.coord.y -= 1)
+        //merge brute sets from our tile into the tile below us 
+      }
     }
     None
   }
