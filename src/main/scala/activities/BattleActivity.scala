@@ -22,12 +22,12 @@ class BattleActivity extends SActivity {
     super.onCreate(savedState)
 
     val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    Game.map = maps(mapId)
+    Game.game = new Game(maps(mapId))
     error(s"got level id $mapId")
 
     setContentView(
       new SLinearLayout {
-        (new BattleCanvas(Game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
+        (new BattleCanvas(Game.game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
 
         new SRelativeLayout {
           SButton("Pick Minions", {

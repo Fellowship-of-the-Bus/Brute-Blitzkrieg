@@ -3,5 +3,9 @@ package bruteb
 package models
 
 object Game {
-  var map: MapInfo = null
+  var game: Game = null
+}
+
+class Game(val map: MapInfo) {
+
 }
