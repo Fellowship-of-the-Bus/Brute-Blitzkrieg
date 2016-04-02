@@ -77,7 +77,7 @@ object TrapID {
     val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
     val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID)
   }
-  implicit lazy val extractor = Json.extractor[String].map(Factory.fromString(_))
+  implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
 
 }
 
@@ -161,7 +161,11 @@ class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
         isBlockedByWeb = true
       } else {
-        listOfBrutes.map(brute => brute.coord.y += 1)
+        listOfBrutes.map(brute => {
+          Game.game.map.getTile(brute.coord).deregister(brute)
+          brute.coord.y += 1
+          Game.game.map.getTile(brute.coord).register(brute)
+        })
         //merge brute sets from our tile into the tile below us
 
         val curTile = Game.game.map.getTile(coord)

@@ -2,22 +2,48 @@
   "Level1": {
     "tiles": [
       [
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
+
       ],
       [
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" },
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ],
       [
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }, 
-        { "floorTrapID": "TrapDoorID", "wallTrapID": "PoisonID" }
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
+      ],
+      [
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ]
     ],
-    "startTileCoord": {"x": 0, "y":0},
-    "endTileCoord": {"x": 0, "y":2}
+    "startTileCoord": {"x": 3, "y":7},
+    "endTileCoord": {"x": 0, "y":7}
   }
 }

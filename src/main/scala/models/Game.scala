@@ -13,7 +13,7 @@ class Game(val map: MapInfo) {
   // brutes that can be selected
   var brutes = Vector[BruteID](null, null, null, null)
 
-  val msPerTick = 1000          //20 ticks/sec
+  val msPerTick = 50          //20 ticks/sec
   val msPerCleanup = 2000     //cleanup every 2 secs
   val msAuraStickiness = 500  //update auras every 1/2 sec
   var bruteList: List[BaseBrute] = List[BaseBrute]()
