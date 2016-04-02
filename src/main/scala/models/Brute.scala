@@ -111,7 +111,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var buffs = Set[BruteID]()
   var debuffs = Set[TrapID]()
 
-  def movingRight = y.toInt % 2 == 0
+  def movingRight = (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0
 
   def move(): Unit = {
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
@@ -121,21 +121,22 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     if (isClimbingStairs) {
       val progressPerTick = 0.02f
       stairProgress += progressPerTick
-      var climbingSpeed = 2 * progressPerTick 
-      if ((movingRight && (stairProgress > 0.5)) ||
-          !movingRight && (stairProgress < 0.5)) {
+      var climbingSpeed = 1.95f * progressPerTick
+      if ((movingRight && (stairProgress > 0.54)) ||
+          !movingRight && (stairProgress < 0.54)) {
         climbingSpeed = -climbingSpeed
       }
       coord.x += climbingSpeed
-      coord.y += progressPerTick
+      coord.y -= progressPerTick
 
       //done climbing stairs
       if (stairProgress >= 1) {
-        Game.game.map.getTile(coord).deregister(this)
-        coord.y = coord.y - 1
+        Game.game.map.getTile(Coordinate(coord.x, coord.y+1)).deregister(this)
+
         Game.game.map.getTile(coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
+        coord.y = (coord.y).toInt + 0.75f - height
       }
       return
     }
@@ -158,7 +159,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       stairProgress = 0
     }
     val sizeOfMap = 8
-    if (newX > sizeOfMap - 1 && movingRight) {
+    if ((newX + width) > sizeOfMap - 1 && movingRight && coord.y.toInt != 0) {
       isClimbingStairs = true
       stairProgress = 0
     }

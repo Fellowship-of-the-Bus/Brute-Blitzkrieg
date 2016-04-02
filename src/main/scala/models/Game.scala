@@ -52,10 +52,10 @@ class Game(val map: MapInfo) {
     //regenerate brutes
     //move projectiles
     //fire towers
-    for (brute <- bruteList){//.filter(_.isAlive)) {
+    for (brute <- bruteList.filter(_.isAlive)) {
       brute.move()
       //if brute reached end
-      if (map.getTile(brute.coord) == map.getTile(map.endTileCoord)) {
+      if (map.getTile(brute.coord) eq map.getTile(map.endTileCoord)) {
         //just kill for now do something more sophiscated later
         brute.hp = -1
       }

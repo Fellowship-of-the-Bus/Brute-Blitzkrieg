@@ -26,12 +26,13 @@ case class Tile(val floorTrapID: TrapID, val wallTrapID: TrapID) {
 
 case class MapInfo(
   tiles: List[List[Tile]],
-  startTileCoord: Coordinate, 
+  startTileCoord: Coordinate,
   endTileCoord: Coordinate) {
-  
+
   def height = tiles.length
   def width = tiles(0).length
   def getTile(coord: Coordinate) = {
+    android.util.Log.e("bruteb", s"${coord.y}, ${coord.x}, $height, $width")
     tiles(coord.y.toInt)(coord.x.toInt)
   }
 }
@@ -46,7 +47,7 @@ object MapID {
   }
   implicit lazy val extractor =
       Json.extractor[String].map(Factory.fromString(_))
-  
+
   def fromInt(i: Int): MapID = Factory.ids(i-1)
 }
 

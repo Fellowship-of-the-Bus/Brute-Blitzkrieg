@@ -66,7 +66,7 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       val image = trapImages(trap.id)
       drawPositioned(image, trap)
     }
-    for (brute <- Game.game.bruteList){//.filter(_.isAlive)) {
+    for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
       val image = bruteImages(brute.id)
       android.util.Log.e("bruteb", "Draw brute at " + brute.x.toString + " " + brute.y.toString)

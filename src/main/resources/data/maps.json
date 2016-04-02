@@ -2,19 +2,8 @@
   "Level1": {
     "tiles": [
       [
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
-
-      ],
-      [
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
@@ -23,8 +12,8 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ],
       [
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
@@ -33,8 +22,18 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ],
       [
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }, 
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
+      ],
+      [
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
@@ -43,7 +42,7 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ]
     ],
-    "startTileCoord": {"x": 3, "y":7},
-    "endTileCoord": {"x": 0, "y":7}
+    "startTileCoord": {"x": 7, "y":3},
+    "endTileCoord": {"x": 7, "y":0}
   }
 }
