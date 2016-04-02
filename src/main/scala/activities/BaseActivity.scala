@@ -14,8 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class BaseActivity extends SActivity {
+  override implicit val loggerTag = new LoggerTag("bruteb")
+
 	override def onCreate(savedState: Bundle) {
-	    super.onCreate(savedState)
-	    getActionBar().hide()
+    super.onCreate(savedState)
+    getActionBar().hide()
 	}
 }

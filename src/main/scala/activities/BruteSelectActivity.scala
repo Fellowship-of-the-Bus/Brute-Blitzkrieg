@@ -21,13 +21,25 @@ class BruteSelectActivity extends BaseActivity {
 
   val viewSeq = new AtomicInteger(0)
 
-  override def onCreate(savedState: Bundle) {
-    var currentButton: Option[Selection] = None
-    var selections = Vector[Selection]()
-    var bruteButtons = Vector[SImageButton]()
-    var confirmButton: SButton = null
+  var confirmButton: SButton = null
+  var selections = Vector[Selection]()
+  var bruteButtons = Vector[SImageButton]()
 
-    android.util.Log.e("bruteb", "Brute Blitzkrieg brute select activity started")
+  def enableButtons(): Unit = {
+    // must make a selection in each button before confirming
+    confirmButton.enabled = selections.forall(_.brute != null)
+    for (i <- 0 until bruteIDs.length) {
+      val button = bruteButtons(i)
+      val brute = bruteIDs(i)
+      button.enabled = selections.forall(_.brute != brute)
+    }
+  }
+
+  override def onCreate(savedState: Bundle) {
+    import Game.game
+    var currentButton: Option[Selection] = None
+
+    error("Brute Blitzkrieg brute select activity started")
     super.onCreate(savedState)
     setContentView(
       new SLinearLayout {
@@ -40,13 +52,7 @@ class BruteSelectActivity extends BaseActivity {
                     sel.brute = bruteIDs(i)
                     sel.button.imageResource = sel.brute.image
                   }
-                  for (i <- 0 until bruteIDs.length) {
-                    val button = bruteButtons(i)
-                    val brute = bruteIDs(i)
-                    button.enabled = selections.forall(_.brute != brute)
-                  }
-                  // must make a selection in each button before confirming
-                  confirmButton.enabled = selections.forall(_.brute != null)
+                  enableButtons()
                 }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).adjustViewBounds(true)
                 bruteButtons = bruteButtons :+ newButton
               }
@@ -58,15 +64,26 @@ class BruteSelectActivity extends BaseActivity {
             val newButton = SImageButton(R.drawable.ahmed2, {
               currentButton = Some(selections(i))
             }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
-            selections = selections :+ Selection(newButton, null)
+            selections = selections :+ Selection(newButton, game.brutes(i))
           }
           confirmButton = SButton("Confirm", {
-            Game.game.brutes = selections.map(_.brute)
+            game.brutes = selections.map(_.brute)
             finish()
           }).enabled = false
         }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )
+  }
+
+  override def onResume(): Unit = {
+    super.onResume()
+    enableButtons()
+    for (i <- 0 until 4) {
+      if (selections(i).brute != null) {
+        selections(i).button.imageResource = selections(i).brute.image
+      }
+    }
+    error(s"${bruteButtons.length}")
   }
 }
 

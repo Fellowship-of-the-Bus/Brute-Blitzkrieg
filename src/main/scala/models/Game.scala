@@ -11,7 +11,7 @@ object Game {
 
 class Game(val map: MapInfo) {
   // brutes that can be selected
-  var brutes = Vector[BruteID]()
+  var brutes = Vector[BruteID](null, null, null, null)
 
   val msPerTick = 50          //20 ticks/sec
   val msPerCleanup = 2000     //cleanup every 2 secs
@@ -21,7 +21,7 @@ class Game(val map: MapInfo) {
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
   val timer: Timer = new Timer()
-  
+
   //make the towers that the map needs
   for (y <- 0 until map.height) {
     for (x <- 0 until map.width ) {
