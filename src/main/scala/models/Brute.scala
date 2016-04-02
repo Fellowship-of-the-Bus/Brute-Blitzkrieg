@@ -37,7 +37,7 @@ case object GoblinID extends BruteID {
   def name = R.string.Goblin
 }
 case object VampireBatID extends BruteID {
-  def image = R.drawable.bat
+  def image = R.drawable.bat1
   def name = R.string.VampireBat
 }
 case object GoblinShamanID extends BruteID {
