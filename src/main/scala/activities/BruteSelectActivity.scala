@@ -46,7 +46,8 @@ class BruteSelectActivity extends BaseActivity {
             this += new STableRow {
               for (i <- range) {
                 val newButton = SImageButton(bruteIDs(i).image, {
-                  for (sel <- currentButton) {
+                  val cur = if (currentButton.isEmpty) selections.find(_.brute == null) else currentButton
+                  for (sel <- cur) {
                     sel.brute = bruteIDs(i)
                     sel.button.imageResource = sel.brute.image
                   }
