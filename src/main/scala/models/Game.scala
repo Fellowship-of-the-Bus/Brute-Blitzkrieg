@@ -21,22 +21,7 @@ class Game(val map: MapInfo) {
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
   val timer: Timer = new Timer()
-  timer.scheduleAtFixedRate(new TimerTask() {
-    override def run() = {
-      tick()
-    }
-  }, 0, msPerTick)
-  timer.scheduleAtFixedRate(new TimerTask() {
-    override def run() = {
-      cleanup()
-    }
-  }, 0, msPerCleanup)
-  timer.scheduleAtFixedRate(new TimerTask() {
-    override def run() = {
-      updateAuras()
-    }
-  }, 0, msAuraStickiness)
-
+  
   //make the towers that the map needs
   for (y <- 0 until map.height) {
     for (x <- 0 until map.width ) {
@@ -99,5 +84,28 @@ class Game(val map: MapInfo) {
     for (brute <- bruteList.filter(_.isAlive)) {
       brute.applyAura(bruteList.filter(_.isAlive))
     }
+  }
+
+  //start timers also call for resume
+  def startGame () = {
+    timer.scheduleAtFixedRate(new TimerTask() {
+      override def run() = {
+        tick()
+      }
+    }, 0, msPerTick)
+    timer.scheduleAtFixedRate(new TimerTask() {
+      override def run() = {
+        cleanup()
+      }
+    }, 0, msPerCleanup)
+    timer.scheduleAtFixedRate(new TimerTask() {
+      override def run() = {
+        updateAuras()
+      }
+    }, 0, msAuraStickiness)
+  }
+
+  def pauseGame() = {
+    timer.cancel()
   }
 }
