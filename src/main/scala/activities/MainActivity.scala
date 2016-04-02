@@ -14,8 +14,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class MainActivity extends BaseActivity {
-  val viewSeq = new AtomicInteger(0)
-
   def switchScreen[T](`class`: Class[T], b : Boolean) = {
     android.util.Log.e("bruteb", s"Trying to switch to ${`class`}")
     val intent = new Intent(this, `class`)
