@@ -111,16 +111,26 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var buffs = Set[BruteID]()
   var debuffs = Set[TrapID]()
 
-
+  def movingRight = y.toInt % 2 == 0
 
   def move(): Unit = {
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
+    android.util.Log.e("bruteb", "moving brute at "+ x.toString +" " + y.toString)
+
     if (isClimbingStairs) {
       val progressPerTick = 0.02f
       stairProgress += progressPerTick
+      var climbingSpeed = 2 * progressPerTick 
+      if ((movingRight && (stairProgress > 0.5)) ||
+          !movingRight && (stairProgress < 0.5)) {
+        climbingSpeed = -climbingSpeed
+      }
+      coord.x += climbingSpeed
+      coord.y += progressPerTick
+
       //done climbing stairs
-      if (stairProgress > 1) {
+      if (stairProgress >= 1) {
         Game.game.map.getTile(coord).deregister(this)
         coord.y = coord.y - 1
         Game.game.map.getTile(coord).register(this)
@@ -137,20 +147,18 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     }
     //even levels move right, odd levels move left.
     var newX: Float = 0
-    if (y%2 == 0) {
+    if (movingRight) {
       newX = coord.x + speed
     } else {
       newX = coord.x - speed
     }
     //check for map bounds
-    if (newX < 0) {
-      newX = 0
+    if (newX < 1 && !movingRight) {
       isClimbingStairs = true
       stairProgress = 0
     }
-    val sizeOfMap = 6
-    if (newX > sizeOfMap) {
-      newX = sizeOfMap
+    val sizeOfMap = 8
+    if (newX > sizeOfMap - 1 && movingRight) {
       isClimbingStairs = true
       stairProgress = 0
     }
@@ -219,7 +227,9 @@ object Brute {
       case TrollID => new Troll(coord)
       case _ => throw new Exception("Unrecognized Brute Type")
     }
-    brute.coord.y -= (1-brute.height)
+    brute.coord.y += (1-brute.height - 1/4f)
+    brute.coord.x += (1-brute.width)
+    android.util.Log.e("bruteb", "making brute at "+ brute.x.toString +" " +brute.y.toString)
     brute
   }
 }

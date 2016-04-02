@@ -23,7 +23,6 @@ class BattleActivity extends BaseActivity {
     super.onCreate(savedState)
 
     import Game.game
-
     setContentView(
       new SLinearLayout {
         (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
@@ -43,4 +42,8 @@ class BattleActivity extends BaseActivity {
       }
     )
   }
+  override def onResume() {
+    super.onResume()
+    Game.game.startGame
+  }  
 }

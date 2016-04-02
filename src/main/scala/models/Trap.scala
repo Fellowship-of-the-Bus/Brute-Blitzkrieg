@@ -29,7 +29,15 @@ case object TrapDoorID extends FloorTrapID {
   def image = R.drawable.trapdoor_closed
   def name = R.string.Trapdoor
 }
+case object TrapDoorOpenID extends FloorTrapID {
+  def image = R.drawable.trapdoor_open
+  def name = R.string.Trapdoor
+}
 case object ReuseTrapDoorID extends FloorTrapID {
+  def image = R.drawable.ahmed2
+  def name = R.string.ReusableTrapdoor
+}
+case object ReuseTrapDoorOpenID extends FloorTrapID {
   def image = R.drawable.ahmed2
   def name = R.string.ReusableTrapdoor
 }
@@ -67,6 +75,7 @@ case object NoTrapID extends TrapID {
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
     val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
+    val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID)
   }
   implicit lazy val extractor = Json.extractor[String].map(Factory.fromString(_))
 
@@ -75,7 +84,7 @@ object TrapID {
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
 
 
-class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinates with TimerListener{
+class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinates with TimerListener{
   //grab stuff from IDMap
   val attr = TrapAttributeMap(id)
 
@@ -119,8 +128,17 @@ class BaseTrap (val id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
   override def width = 1
 
 }
+class FloorTrap(tid: FloorTrapID, tCoord: Coordinate) extends BaseTrap(tid, tCoord) {
+  override def height = 1/4f
+  override def width = 1
+}
 
-class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
+class WallTrap(tid: WallTrapID, tCoord: Coordinate) extends BaseTrap(tid, tCoord) {
+  override def height = 3/4f
+  override def width = 1
+}
+
+class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
 
   var isOpen = false
   var isBlockedByWeb = false
@@ -135,6 +153,7 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
       if (listOfBrutes.length != 0) {
         if (isOpen == false) {
           isOpen = true
+          id = TrapDoorOpenID
         }
       } else {
         return None
@@ -153,9 +172,13 @@ class TrapDoor(tCoord: Coordinate) extends BaseTrap(TrapDoorID, tCoord){
     }
     None
   }
+  override def height = {
+    if (isOpen) 3/8f
+    else 1/4f
+  }
 }
 
-class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord) {
+class ReuseTrapDoor(tCoord: Coordinate) extends FloorTrap(ReuseTrapDoorID, tCoord) {
   var isOpen = false
   var isBlockedByWeb = false
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
@@ -173,8 +196,12 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
         return None
       }
       isOpen = true
+      id = ReuseTrapDoorOpenID
       // add a timer to close the trap after some number of ticks
-      add(new TickTimer(10, () => isOpen = false))
+      add(new TickTimer(10, () => {
+        isOpen = false
+        id = ReuseTrapDoorID
+      }))
       //check for spider
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
         isBlockedByWeb = true
@@ -194,7 +221,7 @@ class ReuseTrapDoor(tCoord: Coordinate) extends BaseTrap(ReuseTrapDoorID, tCoord
   }
 }
 
-class Tar(tCoord: Coordinate) extends BaseTrap(TarID, tCoord) {
+class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
   override def attack(): Option[BaseProjectile] = {
     tickOnce()
     //probably apply a debuff on each
@@ -209,14 +236,14 @@ class Tar(tCoord: Coordinate) extends BaseTrap(TarID, tCoord) {
   }
 }
 
-class Poison(tCoord: Coordinate) extends BaseTrap(PoisonID, tCoord) {
+class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
   // override def attack(): Option[BaseProjectile] = {
   //   //either straight up deal damage or apply a debuff
   //   None
   // }
 }
 
-class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
+class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
   //if cur target is None, then get a target, then fire a projectile
   var curTarget: Option[BaseBrute] = None
   override def getInRangeBrutes: List[BaseBrute] = {
@@ -262,21 +289,21 @@ class Arrow(tCoord: Coordinate) extends BaseTrap(ArrowID, tCoord) {
   }
 }
 
-class Lightning(tCoord: Coordinate) extends BaseTrap(LightningID, tCoord) {
+class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
   // override def attack(): Option[BaseProjectile] = {
   //   //attack all in range
   //   None
   // }
 }
 
-class FlameVent(tCoord: Coordinate) extends BaseTrap(FlameVentID, tCoord) {
+class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
   // override def attack(): Option[BaseProjectile] = {
   //   // attack all in range
   //   None
   // }
 }
 
-class HighBlade(tCoord: Coordinate) extends BaseTrap(HighBladeID, tCoord) {
+class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
   // override def attack(): Option[BaseProjectile] = {
   //   None
   // }

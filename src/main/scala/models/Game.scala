@@ -13,20 +13,21 @@ class Game(val map: MapInfo) {
   // brutes that can be selected
   var brutes = Vector[BruteID](null, null, null, null)
 
-  val msPerTick = 50          //20 ticks/sec
+  val msPerTick = 1000          //20 ticks/sec
   val msPerCleanup = 2000     //cleanup every 2 secs
   val msAuraStickiness = 500  //update auras every 1/2 sec
   var bruteList: List[BaseBrute] = List[BaseBrute]()
   var trapList: List[BaseTrap] = List[BaseTrap]()
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
+  var battleCanvas: BattleCanvas = null
   val timer: Timer = new Timer()
 
   //make the towers that the map needs
   for (y <- 0 until map.height) {
     for (x <- 0 until map.width ) {
       val tile = map.tiles(y)(x)
-      addTrapFromID(tile.floorTrapID, Coordinate(x,y))
+      addTrapFromID(tile.floorTrapID, Coordinate(x,y+3/4f))
       addTrapFromID(tile.wallTrapID, Coordinate(x,y))
     }
   }
@@ -51,7 +52,7 @@ class Game(val map: MapInfo) {
     //regenerate brutes
     //move projectiles
     //fire towers
-    for (brute <- bruteList.filter(_.isAlive)) {
+    for (brute <- bruteList){//.filter(_.isAlive)) {
       brute.move()
       //if brute reached end
       if (map.getTile(brute.coord) == map.getTile(map.endTileCoord)) {
@@ -70,6 +71,7 @@ class Game(val map: MapInfo) {
         case None => ()
       }
     }
+    //battleCanvas.postInvalidate()
   }
 
   def cleanup() = {
@@ -103,6 +105,10 @@ class Game(val map: MapInfo) {
         updateAuras()
       }
     }, 0, msAuraStickiness)
+
+    //for now send some brutes
+    sendBrute(OgreID)
+
   }
 
   def pauseGame() = {

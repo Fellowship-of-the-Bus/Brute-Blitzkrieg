@@ -33,6 +33,8 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
   override def y = coord.y
   override def width = 1
   override def height = 1
+
+  def image: Int
 }
 
 class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val source: BaseTrap, val target: BaseBrute) extends BaseProjectile(pid, pcoord, pdamage) {
@@ -57,4 +59,5 @@ class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val
       deactivate()
     }
   }
+  def image = R.drawable.arrow
 }

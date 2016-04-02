@@ -1,7 +1,7 @@
 {
   "OgreID": {
     "maxHP": 100,
-    "moveSpeed": 0.3,
+    "moveSpeed": 0.01,
     "width": 0.5,
     "height": 0.5,
     "flying": false,
