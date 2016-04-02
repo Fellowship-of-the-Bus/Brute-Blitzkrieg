@@ -20,11 +20,13 @@ class BruteSelectActivity extends BaseActivity {
   case class Selection(val button: SImageButton, var brute: BruteID)
 
   val viewSeq = new AtomicInteger(0)
-  var currentButton: Option[Selection] = None
-  var selections = Vector[Selection]()
-  var bruteButtons = Vector[SImageButton]()
 
   override def onCreate(savedState: Bundle) {
+    var currentButton: Option[Selection] = None
+    var selections = Vector[Selection]()
+    var bruteButtons = Vector[SImageButton]()
+    var confirmButton: SButton = null
+
     android.util.Log.e("bruteb", "Brute Blitzkrieg brute select activity started")
     super.onCreate(savedState)
     setContentView(
@@ -41,12 +43,10 @@ class BruteSelectActivity extends BaseActivity {
                   for (i <- 0 until bruteIDs.length) {
                     val button = bruteButtons(i)
                     val brute = bruteIDs(i)
-                    button.clickable = selections.forall(_.brute != brute)
-                    val colors = new ColorMatrix()
-                    colors.setSaturation(if (button.clickable) 1 else 0)
-                    val filter = new ColorMatrixColorFilter(colors)
-                    button.setColorFilter(filter)
+                    button.enabled = selections.forall(_.brute != brute)
                   }
+                  // must make a selection in each button before confirming
+                  confirmButton.enabled = selections.forall(_.brute != null)
                 }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).adjustViewBounds(true)
                 bruteButtons = bruteButtons :+ newButton
               }
@@ -60,13 +60,10 @@ class BruteSelectActivity extends BaseActivity {
             }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
             selections = selections :+ Selection(newButton, null)
           }
-          SButton("Confirm", {
-            // must make a selection in each button before confirming
-            if (selections.forall(_.brute != null)) {
-              Game.game.brutes = selections.map(_.brute)
-              finish()
-            }
-          })
+          confirmButton = SButton("Confirm", {
+            Game.game.brutes = selections.map(_.brute)
+            finish()
+          }).enabled = false
         }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )
