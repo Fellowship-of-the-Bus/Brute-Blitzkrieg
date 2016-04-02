@@ -53,7 +53,7 @@ case object FlameImpID extends BruteID {
   def name = R.string.FlameImp
 }
 case object CageGoblinID extends BruteID {
-  def image = R.drawable.ogre1
+  def image = R.drawable.cage_goblin1
   def name = R.string.CageGoblin
 }
 case object TrollID extends BruteID {

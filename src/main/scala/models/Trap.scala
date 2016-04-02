@@ -26,7 +26,7 @@ trait FloorTrapID extends TrapID
 trait WallTrapID extends TrapID
 
 case object TrapDoorID extends FloorTrapID {
-  def image = R.drawable.ahmed2
+  def image = R.drawable.trapdoor_closed
   def name = R.string.Trapdoor
 }
 case object ReuseTrapDoorID extends FloorTrapID {
