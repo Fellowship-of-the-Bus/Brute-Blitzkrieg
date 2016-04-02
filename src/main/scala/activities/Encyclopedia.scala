@@ -22,6 +22,11 @@ class Encyclopedia extends BaseActivity {
       text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum."
       textSize = 16 dip
     }
+    val nametxt = new STextView {
+      text = "Ahmed"
+      textSize = 16 dip
+    }
+
     val img = new SImageView {
       imageResource=R.drawable.ahmed
     }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
@@ -30,11 +35,14 @@ class Encyclopedia extends BaseActivity {
     setContentView(
 
       new SLinearLayout {
-        new SScrollView {
           new SVerticalLayout {
-            img.<<.wrap.>>.here
-            txt.<<.wrap.>>.here
-          }.<<.wrap.>>.here
+            new SLinearLayout {
+              img.<<.wrap.>>.here
+              nametxt.<<.wrap.>>.here
+            }.<<.wrap.>>.here
+            new SScrollView {
+              txt.<<.wrap.>>.here
+            }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
         new SScrollView {
@@ -46,6 +54,7 @@ class Encyclopedia extends BaseActivity {
               SButton(name, {
                 txt.text = s"${description}"
                 img.imageResource = image
+                nametxt.text = name
               })
             }
           }.<<.wrap.>>.here
