@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
 import android.widget.GridView
+import android.widget.ImageView
 import android.content.Intent
 import android.graphics.Canvas
 
@@ -21,24 +22,18 @@ class BattleActivity extends BaseActivity {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)
 
-    val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    Game.game = new Game(maps(mapId))
-    error(s"got level id $mapId")
+    import Game.game
 
     setContentView(
       new SLinearLayout {
-        (new BattleCanvas(Game.game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
+        (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
 
-        new SRelativeLayout {
-          SButton("Pick Minions", {
-            val intent = new Intent(BattleActivity.this, classOf[BruteSelectActivity])
-            startActivity(intent)
-          }).<<.wrap.alignParentTop.>>
-          SButton("Start Level").<<.wrap.centerVertical.>>
-          SButton("Menu", {
-            finish()
-            }).<<.wrap.alignParentBottom.>>
-        }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+        new SVerticalLayout {
+          for (i <- 0 until 4) {
+            SImageButton(game.brutes(i).image, {
+            }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+          }
+        }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )
   }

@@ -27,7 +27,7 @@ class MainActivity extends BaseActivity {
 
   def switchScreen(id: Int) = {
     android.util.Log.e("bruteb", s"Trying to switch to BattleActivity")
-    val intent = new Intent(this, classOf[BattleActivity])
+    val intent = new Intent(this, classOf[PreBattleActivity])
     intent.putExtra("level", id)
     startActivity(intent)
   }
