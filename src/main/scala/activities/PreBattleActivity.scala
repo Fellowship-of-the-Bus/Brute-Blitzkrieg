@@ -17,14 +17,17 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class PreBattleActivity extends BaseActivity {
-  override def onCreate(savedState: Bundle) {
+  import Game.game
+  var startButton: SButton = null
+
+  override def onCreate(savedState: Bundle): Unit = {
     android.util.Log.e("bruteb", "Brute Blitzkrieg pre battle activity started")
     super.onCreate(savedState)
 
     val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    import Game.game
     game = new Game(maps(mapId))
     error(s"got level id $mapId")
+
 
     setContentView(
       new SLinearLayout {
@@ -35,11 +38,9 @@ class PreBattleActivity extends BaseActivity {
             val intent = new Intent(PreBattleActivity.this, classOf[BruteSelectActivity])
             startActivity(intent)
           }).<<.wrap.alignParentTop.>>
-          SButton("Start Level", {
-            if (! game.brutes.isEmpty) {
-              val intent = new Intent(PreBattleActivity.this, classOf[BattleActivity])
-              startActivity(intent)
-            }
+          startButton = SButton("Start Level", {
+            val intent = new Intent(PreBattleActivity.this, classOf[BattleActivity])
+            startActivity(intent)
           }).<<.wrap.centerVertical.>>
           SButton("Menu", {
             finish()
@@ -47,5 +48,11 @@ class PreBattleActivity extends BaseActivity {
         }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )
+  }
+
+  override def onResume(): Unit = {
+    super.onResume()
+    startButton.enabled = ! game.brutes.isEmpty
+    ()
   }
 }
