@@ -30,10 +30,16 @@ class BattleActivity extends BaseActivity {
 
         new SVerticalLayout {
           for (i <- 0 until 4) {
-            SImageButton(game.brutes(i).image, {
-            }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+            new SLinearLayout {
+              SImageButton(game.brutes(i).image, {
+              }).<<(0,MATCH_PARENT).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+              new STextView {
+                text = game.brutes(i).name
+                textSize = 16 dip
+              }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER).here
+            }.<<(MATCH_PARENT,0).Weight(1).>>.here
           }
-        }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+        }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.LEFT).here
       }
     )
   }
