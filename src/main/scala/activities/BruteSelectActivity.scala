@@ -19,7 +19,6 @@ class BruteSelectActivity extends BaseActivity {
   import BruteID.Factory.{ids => bruteIDs}
   case class Selection(val button: SImageButton, var brute: BruteID)
 
-  val viewSeq = new AtomicInteger(0)
   var currentButton: Option[Selection] = None
   var selections = Vector[Selection]()
   var bruteButtons = Vector[SImageButton]()
