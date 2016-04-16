@@ -138,11 +138,12 @@ class WallTrap(tid: WallTrapID, tCoord: Coordinate) extends BaseTrap(tid, tCoord
   override def width = 1
 }
 
-class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
+class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoord){
 
   var isOpen = false
   var isBlockedByWeb = false
   canAttack = true
+  val altid : FloorTrapID = TrapDoorOpenID
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
     if (isBlockedByWeb) {
@@ -150,10 +151,10 @@ class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
     } else {
       val listOfBrutes = getInRangeBrutes
       //check if any is in range. If so, open the trap
-      if (listOfBrutes.length != 0) {
+      if (listOfBrutes.filter(!_.attr.flying).length != 0) {
         if (isOpen == false) {
           isOpen = true
-          id = TrapDoorOpenID
+          id = altid
         }
       } else {
         return None
@@ -162,16 +163,18 @@ class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
         isBlockedByWeb = true
       } else {
         listOfBrutes.map(brute => {
-          Game.game.map.getTile(brute.coord).deregister(brute)
-          brute.coord.y += 1
-          Game.game.map.getTile(brute.coord).register(brute)
+          if (!brute.attr.flying) {
+            Game.game.map.getTile(brute.coord).deregister(brute)
+            brute.coord.y += 1
+            Game.game.map.getTile(brute.coord).register(brute)
+          }
         })
         //merge brute sets from our tile into the tile below us
 
         val curTile = Game.game.map.getTile(coord)
         val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
-        tileBelow.bruteList ++= curTile.bruteList
-        curTile.bruteList.clear
+        tileBelow.bruteList ++= curTile.bruteList.filter(!_.attr.flying)
+        curTile.bruteList.filter(_.attr.flying)
       }
     }
     None
@@ -182,13 +185,27 @@ class TrapDoor(tCoord: Coordinate) extends FloorTrap(TrapDoorID, tCoord){
   }
 }
 
-class ReuseTrapDoor(tCoord: Coordinate) extends FloorTrap(ReuseTrapDoorID, tCoord) {
-  var isOpen = false
-  var isBlockedByWeb = false
+class ReuseTrapDoor(tCoord: Coordinate) extends TrapDoor(ReuseTrapDoorID, tCoord) {
+  //var isOpen = false
+  //var isBlockedByWeb = false
+  override val altid = ReuseTrapDoorOpenID
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
   override def attack(): Option[BaseProjectile] = {
-    //check if we can attack
     tickOnce()
+    if (isOpen || canAttack) {
+      val wasOpen = isOpen
+      super.attack()
+      if (!wasOpen && isOpen) {
+        add(new TickTimer(10, () => {
+            isOpen = false
+            id = ReuseTrapDoorID
+          }))
+        setCooldown()
+      }
+    }
+    None
+    //check if we can attack
+    /*tickOnce()
     if (!canAttack && !isOpen) {
       return None
     }
@@ -222,7 +239,9 @@ class ReuseTrapDoor(tCoord: Coordinate) extends FloorTrap(ReuseTrapDoorID, tCoor
       if (canAttack) setCooldown()
     }
     None
+  */
   }
+
 }
 
 class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
@@ -333,7 +352,7 @@ class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
 object Trap {
   def apply(id: TrapID, coord:Coordinate) = {
     id match {
-      case TrapDoorID => new TrapDoor(coord)
+      case TrapDoorID => new TrapDoor(TrapDoorID, coord)
       case ReuseTrapDoorID => new ReuseTrapDoor(coord)
       case TarID => new Tar(coord)
       case PoisonID => new Poison(coord)

@@ -14,7 +14,7 @@
       [
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "TrapDoorID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "ArrowID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
@@ -25,7 +25,7 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "ReuseTrapDoorID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },

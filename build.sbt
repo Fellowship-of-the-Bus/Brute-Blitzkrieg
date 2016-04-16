@@ -81,8 +81,7 @@ proguardOptions in Android ++= Seq(
   "-keepattributes InnerClasses,EnclosingMethod",
   "-printconfiguration target/configuration.txt",
   "-dontwarn org.w3c.dom.bootstrap.DOMImplementationRegistry",
-  "-dontwarn scala.xml.parsing.MarkupParser",
-  "-keep class scala.collection.SeqLike { public protected *; }"
+  "-dontwarn scala.xml.parsing.MarkupParser"
 )
 
 run <<= run in Android
