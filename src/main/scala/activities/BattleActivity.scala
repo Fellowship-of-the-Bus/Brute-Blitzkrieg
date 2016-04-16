@@ -32,7 +32,7 @@ class BattleActivity extends BaseActivity {
             new SLinearLayout {
               SImageButton(game.brutes(i).image, {
               	game.sendBrute(game.brutes(i))
-              }).<<(0,MATCH_PARENT).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+              }).<<(0,MATCH_PARENT).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true).backgroundColor(Color.TRANSPARENT)
               new STextView {
                 text = game.brutes(i).name
                 textSize = 16 dip
@@ -47,8 +47,10 @@ class BattleActivity extends BaseActivity {
     super.onResume()
     Game.game.startGame
   }
+
   override def onStop() {
     super.onStop()
     Game.game.pauseGame()
-  }  
+  }
+
 }
