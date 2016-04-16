@@ -35,6 +35,8 @@ object BattleCanvas {
   lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield 
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
   lazy val projImage = BitmapFactory.decodeResource(canvas.getResources(),R.drawable.arrow)
+  lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
+  lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
 }
 
 class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
@@ -68,6 +70,16 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null);
+    canvas.drawBitmap(exitImage, null, 
+        new Rect(normX(Game.game.map.endTileCoord.x),
+            normY(Game.game.map.endTileCoord.y),
+            normX(Game.game.map.endTileCoord.x + 1),
+            normY(Game.game.map.endTileCoord.y + 0.75f)), null);
+    canvas.drawBitmap(entranceImage, null, 
+        new Rect(normX(Game.game.map.startTileCoord.x),
+            normY(Game.game.map.startTileCoord.y),
+            normX(Game.game.map.startTileCoord.x + 1),
+            normY(Game.game.map.startTileCoord.y + 0.75f)), null);
 
     for (trap <- Game.game.trapList) {
       val image = trapImages(trap.id)
