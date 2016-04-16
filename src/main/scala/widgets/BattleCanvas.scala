@@ -39,9 +39,9 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     override def handleMessage(m: Message) = {
       BattleCanvas.this.invalidate()
     }
-    def sleep(delay: Long) = {
+    def sleep(delay: Long): Unit = {
       this.removeMessages(0)
-      sendMessageDelayed(obtainMessage(0), delay)
+      val _ = sendMessageDelayed(obtainMessage(0), delay)
     }
   }
 
