@@ -25,39 +25,40 @@ case class BruteAttributes(
   )
 
 sealed trait BruteID {
-  def image: Int
+  def imageList: List[Int]
+  def image = imageList(0)
   def name : Int
 }
 case object OgreID extends BruteID {
-  def image = R.drawable.ogre1
+  def imageList = List(R.drawable.ogre1, R.drawable.ogre2)
   def name = R.string.Ogre
 }
 case object GoblinID extends BruteID {
-  def image = R.drawable.goblin1
+  def imageList = List(R.drawable.goblin1, R.drawable.goblin2)
   def name = R.string.Goblin
 }
 case object VampireBatID extends BruteID {
-  def image = R.drawable.bat1
+  def imageList = List(R.drawable.bat1, R.drawable.bat2)
   def name = R.string.VampireBat
 }
 case object GoblinShamanID extends BruteID {
-  def image = R.drawable.goblinshaman1
+  def imageList = List(R.drawable.goblinshaman1, R.drawable.goblinshaman2) 
   def name = R.string.GoblinShaman
 }
 case object SpiderID extends BruteID {
-  def image = R.drawable.spider1
+  def imageList = List(R.drawable.spider1, R.drawable.spider2)
   def name = R.string.Spider
 }
 case object FlameImpID extends BruteID {
-  def image = R.drawable.flame_imp1
+  def imageList = List(R.drawable.flame_imp1, R.drawable.flame_imp2)
   def name = R.string.FlameImp
 }
 case object CageGoblinID extends BruteID {
-  def image = R.drawable.cage_goblin1
+  def imageList = List(R.drawable.cage_goblin1, R.drawable.cage_goblin2)
   def name = R.string.CageGoblin
 }
 case object TrollID extends BruteID {
-  def image = R.drawable.troll1
+  def imageList = List(R.drawable.troll1, R.drawable.troll2)
   def name = R.string.Troll
 }
 
@@ -81,6 +82,8 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var isClimbingStairs = false
   var stairProgress = 0f
   var facingRight = false
+  var currentFrame = 0
+  var frameCounter = 0
 
   def isAlive = hp > 0
 
@@ -112,12 +115,20 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var buffs = Set[BruteID]()
   var debuffs = Set[TrapID]()
 
+  def incFrame(): Unit = {
+    frameCounter = (frameCounter + 1) % 10
+    if (frameCounter == 0) {
+      currentFrame = (currentFrame + 1) % id.imageList.length
+    }
+  }
+
   def movingRight = (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0
 
   def move(): Unit = {
+    incFrame()
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
-    //android.util.Log.e("bruteb", s"brute hp $hp")
+    android.util.Log.e("bruteb", s"brute frame $currentFrame")
 
     if (isClimbingStairs) {
       val progressPerTick = 0.02f

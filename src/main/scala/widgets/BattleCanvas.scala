@@ -27,11 +27,14 @@ object BattleCanvas {
   var canvas : BattleCanvas = null
   var decoderOptions = new BitmapFactory.Options()
   decoderOptions.inSampleSize = 8
+  var trapDecoderOptions = new BitmapFactory.Options()
+  decoderOptions.inSampleSize = 2
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
-  lazy val bruteImages: Map[BruteID, Bitmap] = (for (x <- BruteID.Factory.ids) yield 
-    (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, decoderOptions))).toMap
+  lazy val bruteImages: Map[BruteID, List[Bitmap]] = (for (x <- BruteID.Factory.ids) yield 
+    (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
   lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield 
-    (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, decoderOptions))).toMap
+    (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
+  lazy val projImage = BitmapFactory.decodeResource(canvas.getResources(),R.drawable.arrow)
 }
 
 class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
@@ -72,13 +75,12 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     }
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
-      val image = bruteImages(brute.id)
+      val image = bruteImages(brute.id)(brute.currentFrame)
 
       drawPositioned(image, brute, brute.facingRight)
     }
-    for (proj <- Game.game.projList) {
-      val image = BitmapFactory.decodeResource(getResources(), proj.image)
-      drawPositioned(image, proj, false)
+    for (proj <- Game.game.projList.filter(_.isActive)) {
+      drawPositioned(projImage, proj, false)
     }
 
     paint.setColor(Color.WHITE);
