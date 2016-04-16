@@ -79,6 +79,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def width = attr.width
   def height = attr.height
   var hp: Float  = attr.maxHP
+  def maxHP: Float  = attr.maxHP
   var isClimbingStairs = false
   var stairProgress = 0f
   var facingRight = false
