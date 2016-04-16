@@ -80,6 +80,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var hp: Float  = attr.maxHP
   var isClimbingStairs = false
   var stairProgress = 0f
+  var facingRight = false
 
   def isAlive = hp > 0
 
@@ -122,15 +123,18 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       val progressPerTick = 0.02f
       stairProgress += progressPerTick
       var climbingSpeed = 1.95f * progressPerTick
+      facingRight = true
       if ((movingRight && (stairProgress > 0.54)) ||
           !movingRight && (stairProgress < 0.54)) {
         climbingSpeed = -climbingSpeed
+        facingRight = false
       }
       coord.x += climbingSpeed
       coord.y -= progressPerTick
 
       //done climbing stairs
       if (stairProgress >= 1) {
+        facingRight = movingRight
         Game.game.map.getTile(Coordinate(coord.x, coord.y+1)).deregister(this)
 
         Game.game.map.getTile(coord).register(this)
