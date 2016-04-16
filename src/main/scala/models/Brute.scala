@@ -117,7 +117,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def move(): Unit = {
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
-    android.util.Log.e("bruteb", "moving brute at "+ x.toString +" " + y.toString)
+    //android.util.Log.e("bruteb", s"brute hp $hp")
 
     if (isClimbingStairs) {
       val progressPerTick = 0.02f
@@ -234,7 +234,7 @@ object Brute {
     }
     brute.coord.y += (1-brute.height - 1/4f)
     brute.coord.x += (1-brute.width)
-    android.util.Log.e("bruteb", "making brute at "+ brute.x.toString +" " +brute.y.toString)
+    //android.util.Log.e("bruteb", "making brute at "+ brute.x.toString +" " +brute.y.toString)
     brute
   }
 }

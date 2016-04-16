@@ -32,7 +32,7 @@ case class MapInfo(
   def height = tiles.length
   def width = tiles(0).length
   def getTile(coord: Coordinate) = {
-    android.util.Log.e("bruteb", s"${coord.y}, ${coord.x}, $height, $width")
+    //android.util.Log.e("bruteb", s"${coord.y}, ${coord.x}, $height, $width")
     tiles(coord.y.toInt)(coord.x.toInt)
   }
 }

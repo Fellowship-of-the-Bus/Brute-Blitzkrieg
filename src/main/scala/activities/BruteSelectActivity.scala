@@ -33,9 +33,19 @@ class BruteSelectActivity extends BaseActivity {
     }
   }
 
+  def selectButton(button: SImageButton): Unit = {
+    val _ = button.enabled = false
+  }
+
+  def deselectButton(button: SImageButton): Unit = {
+    val _ = button.enabled = true
+  }
+
+  def nextSelection: Option[Selection] = selections.find(_.brute == null)
+
   override def onCreate(savedState: Bundle) {
     import Game.game
-    var currentButton: Option[Selection] = None
+    var currentSelection: Option[Selection] = None
 
     error("Brute Blitzkrieg brute select activity started")
     super.onCreate(savedState)
@@ -46,10 +56,23 @@ class BruteSelectActivity extends BaseActivity {
             this += new STableRow {
               for (i <- range) {
                 val newButton = SImageButton(bruteIDs(i).image, {
-                  val cur = if (currentButton.isEmpty) selections.find(_.brute == null) else currentButton
+                  val cur = if (currentSelection.isEmpty) {
+                    val next = nextSelection
+                    for (sel <- next) {
+                      deselectButton(sel.button)
+                    }
+                    next
+                  } else {
+                    currentSelection
+                  }
                   for (sel <- cur) {
                     sel.brute = bruteIDs(i)
                     sel.button.imageResource = sel.brute.image
+                  }
+                  if (currentSelection.isEmpty) {
+                    for (sel <- nextSelection) {
+                      selectButton(sel.button)
+                    }
                   }
                   enableButtons()
                 }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).adjustViewBounds(true)
@@ -61,7 +84,9 @@ class BruteSelectActivity extends BaseActivity {
         new SVerticalLayout {
           for (i <- 0 until 4) {
             val newButton = SImageButton(R.drawable.ahmed2, {
-              currentButton = Some(selections(i))
+              selections.foreach(x => deselectButton(x.button))
+              selectButton(selections(i).button)
+              currentSelection = Some(selections(i))
             }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
             selections = selections :+ Selection(newButton, game.brutes(i))
           }
@@ -81,8 +106,11 @@ class BruteSelectActivity extends BaseActivity {
       if (selections(i).brute != null) {
         selections(i).button.imageResource = selections(i).brute.image
       }
+      deselectButton(selections(i).button)
     }
-    error(s"${bruteButtons.length}")
+    for (sel <- nextSelection) {
+      selectButton(sel.button)
+    }
   }
 }
 

@@ -21,7 +21,7 @@ import android.os.{Handler, Message}
 
 
 import models.MapInfo
-import models.{BruteID, TrapID, Game}
+import models.{BruteID, TrapID, Game, Coordinate}
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
@@ -43,9 +43,9 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     override def handleMessage(m: Message) = {
       BattleCanvas.this.invalidate()
     }
-    def sleep(delay: Long) = {
+    def sleep(delay: Long): Unit = {
       this.removeMessages(0)
-      sendMessageDelayed(obtainMessage(0), delay)
+      val _ = sendMessageDelayed(obtainMessage(0), delay)
     }
   }
 
@@ -73,15 +73,13 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
       val image = bruteImages(brute.id)
-      
-      android.util.Log.e("bruteb", "Draw brute at " + brute.x.toString + " " + brute.y.toString)
+
       drawPositioned(image, brute, brute.facingRight)
     }
     for (proj <- Game.game.projList) {
       val image = BitmapFactory.decodeResource(getResources(), proj.image)
       drawPositioned(image, proj, false)
     }
-    
 
     paint.setColor(Color.WHITE);
     //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
@@ -101,6 +99,6 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
                     normX(drawX2), normY(gameObject.y + gameObject.height)), null)
       canvas.restore()
     }
-    battleHandler.sleep(100)
+    battleHandler.sleep(50)
   }
 }
