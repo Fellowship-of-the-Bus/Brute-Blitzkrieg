@@ -21,7 +21,7 @@ class Game(val map: MapInfo) {
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
   var battleCanvas: BattleCanvas = null
-  val timer: Timer = new Timer()
+  var timer: Timer = null//new Timer()
 
   //make the towers that the map needs
   for (y <- 0 until map.height) {
@@ -91,6 +91,7 @@ class Game(val map: MapInfo) {
 
   //start timers also call for resume
   def startGame () = {
+    timer = new Timer()
     timer.scheduleAtFixedRate(new TimerTask() {
       override def run() = {
         tick()
