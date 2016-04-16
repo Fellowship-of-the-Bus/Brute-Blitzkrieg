@@ -46,5 +46,9 @@ class BattleActivity extends BaseActivity {
   override def onResume() {
     super.onResume()
     Game.game.startGame
+  }
+  override def onStop() {
+    super.onStop()
+    Game.game.pauseGame()
   }  
 }

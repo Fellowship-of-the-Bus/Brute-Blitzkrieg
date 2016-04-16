@@ -21,7 +21,7 @@ import android.os.{Handler, Message}
 
 
 import models.MapInfo
-import models.{BruteID, TrapID, Game}
+import models.{BruteID, TrapID, Game, Coordinate}
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
@@ -73,14 +73,16 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
       val image = bruteImages(brute.id)
-      android.util.Log.e("bruteb", "Draw brute at " + brute.x.toString + " " + brute.y.toString)
+      //android.util.Log.e("bruteb", "Draw brute at " + brute.x.toString + " " + brute.y.toString)
       drawPositioned(image, brute)
     }
+    //android.util.Log.e("bruteb", Game.game.projList.length.toString())
     for (proj <- Game.game.projList) {
       val image = BitmapFactory.decodeResource(getResources(), proj.image)
       drawPositioned(image, proj)
     }
     canvas.restore()
+    //android.util.Log.e("bruteb", "getting brute list from 3,3" + map.getTile(Coordinate(3,3)).bruteList.mkString(" "))
 
     paint.setColor(Color.WHITE);
     //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
@@ -91,6 +93,6 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       canvas.drawBitmap(image, null, new Rect(normX(gameObject.x), normY(gameObject.y),
                     normX(gameObject.x + gameObject.width), normY(gameObject.y + gameObject.height)), null)
     }
-    battleHandler.sleep(100)
+    battleHandler.sleep(50)
   }
 }

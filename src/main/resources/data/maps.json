@@ -35,7 +35,7 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
-        { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
+        { "floorTrapID": "NoTrapID", "wallTrapID": "PoisonID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" },
