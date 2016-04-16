@@ -18,8 +18,8 @@
     "description": "Run"
   },
   "PoisonID": {
-    "damage": 20,
-    "shotInterval": 5,
+    "damage": 5,
+    "shotInterval": 1,
     "targetFlying": true,
     "description": "Suffocate"
   },

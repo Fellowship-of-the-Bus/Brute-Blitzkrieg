@@ -13,9 +13,11 @@ class Game(val map: MapInfo) {
   // brutes that can be selected
   var brutes = Vector[BruteID](null, null, null, null)
 
-  val msPerTick = 50          //20 ticks/sec
-  val msPerCleanup = 2000     //cleanup every 2 secs
-  val msAuraStickiness = 500  //update auras every 1/2 sec
+  val ticksPerSecond = 20
+
+  val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
+  val msPerCleanup = msPerTick*40     //cleanup every 2 secs
+  val msAuraStickiness = msPerTick*10  //update auras every 10 ticks
   var bruteList: List[BaseBrute] = List[BaseBrute]()
   var trapList: List[BaseTrap] = List[BaseTrap]()
   var projList: List[BaseProjectile] = List[BaseProjectile]()
@@ -50,6 +52,7 @@ class Game(val map: MapInfo) {
     //move brutes
     //check for brutes at exit
     //regenerate brutes
+    //expire effects
     //move projectiles
     //fire towers
     for (brute <- bruteList.filter(_.isAlive)) {
@@ -60,6 +63,7 @@ class Game(val map: MapInfo) {
         brute.hp = -1
       }
       brute.regenerate()
+      brute.tickEffects()
     }
     for (proj <- projList.filter(_.isActive)) {
       proj.move()
@@ -77,12 +81,13 @@ class Game(val map: MapInfo) {
   def cleanup() = {
     //actions: clean up inactive projectiles, dead brutes
     projList = projList.filter(_.isActive)
+    bruteList = bruteList.filter(_.isAlive)
   }
 
   def updateAuras() = {
     //clear auras, then apply them
     for (brute <- bruteList.filter(_.isAlive)) {
-      brute.clearBuffs()
+      brute.cleanUpEffects()
     }
     for (brute <- bruteList.filter(_.isAlive)) {
       brute.applyAura(bruteList.filter(_.isAlive))

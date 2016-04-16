@@ -233,7 +233,7 @@ class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
     if (canAttack && listOfBrutes.length != 0) {
 
       //for each in range, attack
-      listOfBrutes.map(brute => brute.debuffs += this.id)
+      listOfBrutes.map(brute => brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
       setCooldown()
     }
     None
@@ -241,6 +241,20 @@ class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
 }
 
 class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
+  override def attack(): Option[BaseProjectile] = {
+    tickOnce()
+    //get brutes in range
+    val listOfBrutes = getInRangeBrutes
+    if (canAttack && listOfBrutes.length != 0) {
+
+      //for each in range, give them the poison debuff
+      listOfBrutes.map(brute => {
+          brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects
+        })
+      setCooldown()
+    }
+    None
+  }
   // override def attack(): Option[BaseProjectile] = {
   //   //either straight up deal damage or apply a debuff
   //   None

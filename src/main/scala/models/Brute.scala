@@ -6,12 +6,28 @@ import scala.collection.mutable.Set
 
 
 import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
+import lib.util._
 
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
 case class Coordinate(var x: Float, var y:Float)
 
+case class TimedEffect(val buffId: Option[BruteID], val debuffId: Option[TrapID], val n: Int) extends TimerListener {
+  var active = true
+  def isActive = active
+  def deactivate() = active = false
+
+  def tickOnce() = {
+    if (ticking()) {
+      tick(1)
+    } else {
+      cancelAll()
+    }
+  }
+
+  add(new TickTimer(n, () => deactivate()))
+}
 case class BruteAttributes(
   maxHP: Int,
   moveSpeed: Float, //tiles/tick I guess
@@ -90,7 +106,11 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
 
   def hit(source: BaseTrap, damage: Float) : Unit = {
     //check source has lightning and effected by cage..
-    if ( source.isInstanceOf[Lightning] && (buffs contains CageGoblinID)) {
+    if ( source.isInstanceOf[Lightning] && (effects.filter( x => {
+                                              x.buffId match {
+                                                case Some(id) => id == CageGoblinID && x.isActive
+                                                case _ => false
+                                              }}).size != 0)) {
       return
     }
 
@@ -101,8 +121,19 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def regenerate(): Unit = {
     if (! isAlive) return
     hp += attr.regen
-    if (buffs contains GoblinShamanID) {
+    if (effects.filter(x => {
+      x.buffId match {
+        case Some(id) => id == GoblinShamanID && x.isActive
+        case _ => false
+      }}).size != 0) {
       hp += BruteAttributeMap(GoblinShamanID).auraRegen
+    }
+    if (effects.filter( x => {
+      x.debuffId match {
+        case Some(id) => id == PoisonID && x.isActive
+        case _ => false
+      }}).size != 0) {
+      hp -= TrapAttributeMap(PoisonID).damage
     }
     hp = math.min(hp, attr.maxHP)
     ()
@@ -111,10 +142,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def isFlying = attr.flying
   def applyAura(brutes: List[BaseBrute]) = {
     val inRadius = brutes.filter(brute => distance(brute) <= attr.radius)
-    inRadius.map(brute => brute.buffs += id)
+    inRadius.map(brute => brute.effects = TimedEffect(Some(id), None, Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
   }
-  var buffs = Set[BruteID]()
-  var debuffs = Set[TrapID]()
+  var effects = List[TimedEffect]()
 
   def incFrame(): Unit = {
     frameCounter = (frameCounter + 1) % 10
@@ -157,7 +187,11 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       return
     }
     var speed: Float = 0
-    if (debuffs contains TarID) {
+    if (effects.filter( x => {
+      x.debuffId match {
+        case Some(id) => id == TarID && x.isActive
+        case _ => false
+      }}).size != 0) {
       speed = attr.moveSpeed * 0.5f
     } else {
       speed = attr.moveSpeed
@@ -192,10 +226,14 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   override def x = coord.x
   override def y = coord.y
 
-  //clear buffs every ~ 1/2 second then reapply them
-  def clearBuffs() = {
-    buffs.clear
-    debuffs.clear
+
+  def cleanUpEffects() = {
+    effects.filter(_.isActive)
+  }
+
+  def tickEffects () = {
+    //ticks the effects
+    effects.map(x => x.tickOnce())
   }
 
 }
