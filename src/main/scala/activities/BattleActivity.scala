@@ -31,6 +31,7 @@ class BattleActivity extends BaseActivity {
           for (i <- 0 until 4) {
             new SLinearLayout {
               SImageButton(game.brutes(i).image, {
+              	game.sendBrute(game.brutes(i))
               }).<<(0,MATCH_PARENT).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
               new STextView {
                 text = game.brutes(i).name

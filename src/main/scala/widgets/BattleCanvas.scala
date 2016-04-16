@@ -25,9 +25,13 @@ import models.{BruteID, TrapID, Game}
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
+  var decoderOptions = new BitmapFactory.Options()
+  decoderOptions.inSampleSize = 8
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
-  lazy val bruteImages: Map[BruteID, Bitmap] = (for (x <- BruteID.Factory.ids) yield (x, BitmapFactory.decodeResource(canvas.getResources(), x.image))).toMap
-  lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield (x, BitmapFactory.decodeResource(canvas.getResources(), x.image))).toMap
+  lazy val bruteImages: Map[BruteID, Bitmap] = (for (x <- BruteID.Factory.ids) yield 
+    (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, decoderOptions))).toMap
+  lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield 
+    (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, decoderOptions))).toMap
 }
 
 class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {

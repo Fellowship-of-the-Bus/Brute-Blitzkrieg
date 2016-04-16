@@ -41,7 +41,7 @@ class Game(val map: MapInfo) {
 
   //function for sending brutes
   def sendBrute(id: BruteID) = {
-    val brute = Brute(id, map.startTileCoord)
+    val brute = Brute(id, new Coordinate(map.startTileCoord.x, map.startTileCoord.y))
     bruteList = brute::bruteList
   }
 
