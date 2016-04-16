@@ -31,8 +31,8 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
   }
   override def x = coord.x
   override def y = coord.y
-  override def width = 1
-  override def height = 1
+  override def width = 0.4f
+  override def height = 0.4f
 
   def image: Int
 }
@@ -47,8 +47,11 @@ class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val
       (dx/norm, dy/norm)
     }
   }
-  def speed() = 1
+  def speed() = 0.2f
   override def move() = {
+    if (!target.isAlive) {
+      deactivate
+    }
     val (dx, dy) = (target.coord.x-coord.x, target.coord.y - coord.y)
     val norm = math.sqrt(dx*dx + dy*dy)
     //check if we collide 

@@ -91,7 +91,7 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
   var canAttack = true
   //getThe right tile, and then try to damage each brute there
   def getInRangeBrutes: List[BaseBrute] = {
-    Game.game.map.getTile(coord).bruteList.toList
+    Game.game.map.getTile(coord).bruteList.toList.filter(_.isAlive)
     //List[BaseBrute]()
   }
   def attack(): Option[BaseProjectile] = {
@@ -254,19 +254,21 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
     //get a list of all brutes in the current floor (same y-value)
     val setOfBrutes: Set[BaseBrute] = Set[BaseBrute]()
     Game.game.map.tiles(y.toInt).map(tile => setOfBrutes ++= tile.bruteList)
-    setOfBrutes.toList
+    setOfBrutes.toList.filter(_.isAlive)
   }
 
   override def attack() : Option[BaseProjectile]= {
     tickOnce()
+
+    //android.util.Log.e("bruteb", s"arrow location $x, $y")
     if (!canAttack) return None
     curTarget match {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
-        if (!brute.isClimbingStairs && dy < 0.5) {
+        if (!brute.isClimbingStairs && dy < 0.5 && brute.isAlive) {
           setCooldown()
-          return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
+          return Some(new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
         }
       }
       case _ => ()
@@ -276,19 +278,20 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
       case Some(brute) => {
         curTarget = Some(brute)
         setCooldown()
-        return Some(new ArrowProjectile(ArrowProj, coord, attr.damage, this, brute))
+        return Some(new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
       }
       case None => None
     }
   }
 
   def getNewTarget(): Option[BaseBrute] = {
+    //android.util.Log.e("bruteb", s"Getting target from arrow tower $coord.y")
     val listOfBrutes = getInRangeBrutes
       if (listOfBrutes.length == 0) {
         return None
       } else {
         // some targeting heuristic
-        None
+        return Some(listOfBrutes.head)
       }
   }
 }

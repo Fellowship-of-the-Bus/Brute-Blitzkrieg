@@ -18,14 +18,14 @@
     "description": "Run"
   },
   "PoisonID": {
-    "damage": 0,
-    "shotInterval": 20,
+    "damage": 20,
+    "shotInterval": 5,
     "targetFlying": true,
     "description": "Suffocate"
   },
   "ArrowID": {
-    "damage": 5,
-    "shotInterval": 20,
+    "damage": 20,
+    "shotInterval": 10,
     "targetFlying": true,
     "description": "Shoots arrows at things"
   },

@@ -76,6 +76,7 @@ class Game(val map: MapInfo) {
 
   def cleanup() = {
     //actions: clean up inactive projectiles, dead brutes
+    projList = projList.filter(_.isActive)
   }
 
   def updateAuras() = {

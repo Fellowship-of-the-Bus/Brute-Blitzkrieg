@@ -5,9 +5,9 @@
     "width": 0.5,
     "height": 0.5,
     "flying": false,
-    "regen": 0.3,
+    "regen": 0,
     "radius": 2,
-    "auraRegen": 0.1,
+    "auraRegen": 0,
     "description": "Shrek"
   },
   "GoblinID": {

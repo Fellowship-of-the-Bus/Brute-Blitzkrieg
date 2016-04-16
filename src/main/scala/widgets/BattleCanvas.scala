@@ -21,7 +21,7 @@ import android.os.{Handler, Message}
 
 
 import models.MapInfo
-import models.{BruteID, TrapID, Game, BaseBrute}
+import models.{BruteID, TrapID, Game, BaseBrute, Coordinate}
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
@@ -65,34 +65,43 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null);
-    canvas.save()
+
     for (trap <- Game.game.trapList) {
       val image = trapImages(trap.id)
-      drawPositioned(image, trap)
+      drawPositioned(image, trap, false)
     }
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
 
       drawLifebar(brute)
       val image = bruteImages(brute.id)
-      android.util.Log.e("bruteb", "Draw brute at " + brute.x.toString + " " + brute.y.toString)
-      drawPositioned(image, brute)
+
+      drawPositioned(image, brute, brute.facingRight)
     }
     for (proj <- Game.game.projList) {
       val image = BitmapFactory.decodeResource(getResources(), proj.image)
-      drawPositioned(image, proj)
+      drawPositioned(image, proj, false)
     }
-    canvas.restore()
 
     paint.setColor(Color.WHITE);
     //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
     def normX(x: Float) = (x * cellX).toInt
     def normY(y: Float) = (y * cellY).toInt
 
-    def drawPositioned(image: Bitmap, gameObject: TopLeftCoordinates) = {
-      canvas.drawBitmap(image, null, new Rect(normX(gameObject.x), normY(gameObject.y),
-                    normX(gameObject.x + gameObject.width), normY(gameObject.y + gameObject.height)), null)
+    def drawPositioned(image: Bitmap, gameObject: TopLeftCoordinates, flip: Boolean) = {
+      var drawX1 = gameObject.x
+      var drawX2 = drawX1 + gameObject.width
+      canvas.save()
+      if (flip) {
+        canvas.scale(-1f,1f)
+        drawX1 = drawX2 * -1
+        drawX2 = gameObject.x * -1
+      }
+      canvas.drawBitmap(image, null, new Rect(normX(drawX1), normY(gameObject.y),
+                    normX(drawX2), normY(gameObject.y + gameObject.height)), null)
+      canvas.restore()
     }
+
     def drawLifebar(brute: BaseBrute) = {
       // vertical distance between a lifebar and the top left corner of the image
       val dist = 10
@@ -119,6 +128,6 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       canvas.drawRect(pos, paint)
       error(s"drawing lifebar at $pos")(new LoggerTag("bruteb"))
     }
-    battleHandler.sleep(100)
+    battleHandler.sleep(50)
   }
 }
