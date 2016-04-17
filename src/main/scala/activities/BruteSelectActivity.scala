@@ -57,6 +57,7 @@ class BruteSelectActivity extends BaseActivity {
             this += new STableRow {
               for (i <- range) {
                 val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
+                  // brute button clicked
                   val cur = if (currentSelection.isEmpty) {
                     val next = nextSelection
                     for (sel <- next) {
@@ -85,6 +86,7 @@ class BruteSelectActivity extends BaseActivity {
         new SVerticalLayout {
           for (i <- 0 until 4) {
             val newButton = SImageButton(R.drawable.ahmed2, {
+              // selection clicked
               selections.foreach(x => deselectButton(x.button))
               selectButton(selections(i).button)
               currentSelection = Some(selections(i))
