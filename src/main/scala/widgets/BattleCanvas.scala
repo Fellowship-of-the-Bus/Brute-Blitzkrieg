@@ -28,11 +28,11 @@ object BattleCanvas {
   var decoderOptions = new BitmapFactory.Options()
   decoderOptions.inSampleSize = 8
   var trapDecoderOptions = new BitmapFactory.Options()
-  decoderOptions.inSampleSize = 2
+  trapDecoderOptions.inSampleSize = 2
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
-  lazy val bruteImages: Map[BruteID, List[Bitmap]] = (for (x <- BruteID.Factory.ids) yield 
+  lazy val bruteImages: Map[BruteID, List[Bitmap]] = (for (x <- BruteID.Factory.ids) yield
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
-  lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield 
+  lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
   lazy val projImage = BitmapFactory.decodeResource(canvas.getResources(),R.drawable.arrow)
   lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
@@ -70,12 +70,12 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null);
-    canvas.drawBitmap(exitImage, null, 
+    canvas.drawBitmap(exitImage, null,
         new Rect(normX(Game.game.map.endTileCoord.x),
             normY(Game.game.map.endTileCoord.y),
             normX(Game.game.map.endTileCoord.x + 1),
             normY(Game.game.map.endTileCoord.y + 0.75f)), null);
-    canvas.drawBitmap(entranceImage, null, 
+    canvas.drawBitmap(entranceImage, null,
         new Rect(normX(Game.game.map.startTileCoord.x),
             normY(Game.game.map.startTileCoord.y),
             normX(Game.game.map.startTileCoord.x + 1),
@@ -139,7 +139,6 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       paint.setStyle(Paint.Style.FILL)
       paint.setColor(Color.RED)
       canvas.drawRect(pos, paint)
-      error(s"drawing lifebar at $pos")(new LoggerTag("bruteb"))
     }
     battleHandler.sleep(50)
   }

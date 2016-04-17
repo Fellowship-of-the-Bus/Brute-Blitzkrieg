@@ -7,6 +7,7 @@ import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
 import android.graphics.{Color,ColorMatrix,ColorMatrixColorFilter}
+import android.graphics.drawable.BitmapDrawable
 import android.widget.GridView
 import android.widget.ImageView
 import android.content.Intent
@@ -55,7 +56,7 @@ class BruteSelectActivity extends BaseActivity {
           for (range <- 0 until bruteIDs.length grouped 4) {
             this += new STableRow {
               for (i <- range) {
-                val newButton = SImageButton(bruteIDs(i).image, {
+                val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
                   val cur = if (currentSelection.isEmpty) {
                     val next = nextSelection
                     for (sel <- next) {
@@ -67,7 +68,7 @@ class BruteSelectActivity extends BaseActivity {
                   }
                   for (sel <- cur) {
                     sel.brute = bruteIDs(i)
-                    sel.button.imageResource = sel.brute.image
+                    sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
                   }
                   if (currentSelection.isEmpty) {
                     for (sel <- nextSelection) {
@@ -75,7 +76,7 @@ class BruteSelectActivity extends BaseActivity {
                     }
                   }
                   enableButtons()
-                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).adjustViewBounds(true)
+                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip)//.adjustViewBounds(true)
                 bruteButtons = bruteButtons :+ newButton
               }
             }
@@ -104,7 +105,7 @@ class BruteSelectActivity extends BaseActivity {
     enableButtons()
     for (i <- 0 until 4) {
       if (selections(i).brute != null) {
-        selections(i).button.imageResource = selections(i).brute.image
+        selections(i).button.imageBitmap = BattleCanvas.bruteImages(bruteIDs(i)).head
       }
       deselectButton(selections(i).button)
     }

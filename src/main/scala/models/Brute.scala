@@ -58,7 +58,7 @@ case object VampireBatID extends BruteID {
   def name = R.string.VampireBat
 }
 case object GoblinShamanID extends BruteID {
-  def imageList = List(R.drawable.goblinshaman1, R.drawable.goblinshaman2) 
+  def imageList = List(R.drawable.goblinshaman1, R.drawable.goblinshaman2)
   def name = R.string.GoblinShaman
 }
 case object SpiderID extends BruteID {
@@ -159,7 +159,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     incFrame()
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
-    android.util.Log.e("bruteb", s"brute frame $currentFrame")
+    android.util.Log.e("bruteb", s"brute frame $coord")
 
     if (isClimbingStairs) {
       val progressPerTick = 0.02f

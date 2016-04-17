@@ -170,11 +170,12 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           }
         })
         //merge brute sets from our tile into the tile below us
-
+/*
         val curTile = Game.game.map.getTile(coord)
         val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
         tileBelow.bruteList ++= curTile.bruteList.filter(!_.attr.flying)
-        curTile.bruteList.filter(_.attr.flying)
+        curTile.bruteList = curTile.bruteList.filter(_.attr.flying)
+*/
       }
     }
     None

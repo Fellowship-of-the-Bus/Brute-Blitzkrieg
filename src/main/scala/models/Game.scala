@@ -26,7 +26,7 @@ class Game(val map: MapInfo) {
   var timer: Timer = null//new Timer()
 
   //make the towers that the map needs
-  for (y <- 0 until map.height) {
+  for (y <- map.height - 1 to 0 by -1) {
     for (x <- 0 until map.width ) {
       val tile = map.tiles(y)(x)
       addTrapFromID(tile.floorTrapID, Coordinate(x,y+3/4f))

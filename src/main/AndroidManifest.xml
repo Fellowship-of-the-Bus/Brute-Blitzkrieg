@@ -5,7 +5,8 @@
   <application
     android:icon="@drawable/ahmed"
     android:label="BruteBlitzkrieg"
-    android:hardwareAccelerated="false">
+    android:hardwareAccelerated="false"
+    android:largeHeap="true">
 
     <activity android:label="BruteBlitzkrieg" android:name="MainActivity" android:screenOrientation="landscape">
       <intent-filter>
