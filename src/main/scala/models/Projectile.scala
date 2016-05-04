@@ -6,15 +6,28 @@ import scala.collection.mutable.Set
 
 
 import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
+import lib.util.{TimerListener, TickTimer}
 
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
-trait ProjectileID
-case object ArrowProj extends ProjectileID
+sealed trait ProjectileID {
+  def imageList: List[Int]
+  def image = imageList(0)
+}
+case object ArrowProj extends ProjectileID {
+  override def imageList = List(R.drawable.arrow)
+}
+case object PoisonProj extends ProjectileID {
+  override def imageList = List(R.drawable.poison_gas)
+}
 
 case class ProjAttr(
   speed: Float)
+
+object ProjIds {
+  val ids = Vector(ArrowProj, PoisonProj)
+}
 
 abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val damage: Float) extends TopLeftCoordinates {
   var active = true
@@ -34,8 +47,28 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
   override def width = 0.4f
   override def height = 0.4f
 
-  def image: Int
+  def image = id.image
 }
+
+abstract class TimedProjectile(pid: ProjectileID, pcoord:Coordinate, val source: BaseTrap, val target: BaseBrute, val numFrames: Int) extends BaseProjectile(pid, pcoord, 0) with TimerListener {
+  //a projectile drawable that does not do damage but only gives something to draw
+  //damage is done instantly when the projectile is fired 
+  //for instance a lightning bolt will be drawn for a couple frames but the damage is done when the tower fires
+  add(new TickTimer(numFrames, () => deactivate()))
+
+  override def move() = {
+    tickOnce()
+  }
+
+  def tickOnce() = {
+    if (ticking()) {
+      tick(1)
+    } else {
+      cancelAll()
+    }
+  }
+
+} 
 
 class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val source: BaseTrap, val target: BaseBrute) extends BaseProjectile(pid, pcoord, pdamage) {
   def direction(): (Float, Float) = {
@@ -62,5 +95,11 @@ class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val
       deactivate()
     }
   }
-  def image = R.drawable.arrow
+}
+
+class PoisonProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 10) {
+  override def width = 1f
+  override def height = 3/4f
+  override def direction = (0,0)
+  override def speed = 0f
 }

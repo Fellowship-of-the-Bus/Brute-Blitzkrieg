@@ -21,7 +21,7 @@ import android.os.{Handler, Message}
 
 
 import models.MapInfo
-import models.{BruteID, TrapID, Game, BaseBrute, Coordinate}
+import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate}
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
@@ -34,7 +34,8 @@ object BattleCanvas {
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
   lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
-  lazy val projImage = BitmapFactory.decodeResource(canvas.getResources(),R.drawable.arrow)
+  lazy val projImages: Map[ProjectileID, List[Bitmap]] =  (for (x <- ProjIds.ids) yield 
+    (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
   lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
   lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
   lazy val goldImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.gold, decoderOptions)
@@ -98,7 +99,8 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       drawPositioned(image, brute, brute.facingRight)
     }
     for (proj <- Game.game.projList.filter(_.isActive)) {
-      drawPositioned(projImage, proj, false)
+      val image = projImages(proj.id)(0)
+      drawPositioned(image, proj, false)
     }
 
     paint.setColor(Color.WHITE);

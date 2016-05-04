@@ -272,8 +272,10 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
           brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects
         })
       setCooldown()
+      Some(new PoisonProjectile(PoisonProj, coord.copy(), this, null))
+    } else {
+      None
     }
-    None
   }
   // override def attack(): Option[BaseProjectile] = {
   //   //either straight up deal damage or apply a debuff
