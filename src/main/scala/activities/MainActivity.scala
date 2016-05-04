@@ -42,7 +42,7 @@ class MainActivity extends BaseActivity {
               }
             }
           }
-        }.<<.wrap.>>.here//.stretchColumns("*")
+        }.<<(0, MATCH_PARENT).Weight(3).>>.here//.stretchColumns("*")
         /*var grid = new SGridLayout {
           SButton("Level One").<<.wrap.>>
           SButton("Level Two").<<.wrap.>>
@@ -61,7 +61,7 @@ class MainActivity extends BaseActivity {
           SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.wrap.alignParentTop.>>
           SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.wrap.centerVertical.>>
           SButton(R.string.QuitButton, finish()).<<.wrap.alignParentBottom.>>
-        }.<<.fw.>>.gravity(Gravity.RIGHT).here
+        }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )
   }

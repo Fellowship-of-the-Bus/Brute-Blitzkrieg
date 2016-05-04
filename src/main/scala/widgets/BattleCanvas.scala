@@ -37,6 +37,7 @@ object BattleCanvas {
   lazy val projImage = BitmapFactory.decodeResource(canvas.getResources(),R.drawable.arrow)
   lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
   lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
+  lazy val goldImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.gold, decoderOptions)
 }
 
 class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
@@ -66,10 +67,14 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
     paint.setColor(Color.WHITE);
     //canvas.drawPaint(paint);
     // Use Color.parseColor to define HTML colors
-    paint.setColor(Color.parseColor("#CD5C5C"));
+    paint.setColor(Color.parseColor("#000000"));
+    paint.setTextAlign(Paint.Align.LEFT)
+    paint.setTextSize(40)
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null);
+    canvas.drawBitmap(goldImage, null, new Rect(0, 0, 50, 50), null)
+    canvas.drawText(Game.game.currentGold.toString, 60, 40, paint)
     canvas.drawBitmap(exitImage, null,
         new Rect(normX(Game.game.map.endTileCoord.x),
             normY(Game.game.map.endTileCoord.y),

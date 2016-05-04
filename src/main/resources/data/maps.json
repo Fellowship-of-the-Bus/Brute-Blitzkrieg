@@ -43,6 +43,7 @@
       ]
     ],
     "startTileCoord": {"x": 7, "y":3},
-    "endTileCoord": {"x": 7, "y":0}
+    "endTileCoord": {"x": 7, "y":0},
+    "startingGold": 200
   }
 }

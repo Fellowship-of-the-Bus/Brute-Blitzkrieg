@@ -37,7 +37,8 @@ case class BruteAttributes(
   regen: Float,     //life regen per tick?
   radius: Float,    //radius of any aura abilities (heal/draw lightning)
   auraRegen: Float,  //Amount of regen of the aura
-  description: String // A brief description of the brute
+  description: String, // A brief description of the brute
+  goldCost: Int
   )
 
 sealed trait BruteID {

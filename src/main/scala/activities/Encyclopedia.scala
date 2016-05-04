@@ -26,6 +26,10 @@ class Encyclopedia extends BaseActivity {
       text = "Ahmed"
       textSize = 16 dip
     }
+    val valuetxt = new STextView {
+      text = "Hp:100 \nSpeed: 0.1\nFlying: Yes\nCost: 10"
+      textSize = 16 dip
+    }
 
     val img = new SImageView {
       imageResource=R.drawable.ahmed
@@ -43,6 +47,9 @@ class Encyclopedia extends BaseActivity {
             new SScrollView {
               txt.<<.wrap.>>.here
             }.<<.wrap.>>.here
+            new SScrollView {
+              valuetxt.<<.wrap.>>.here
+            }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
         new SScrollView {
@@ -51,10 +58,18 @@ class Encyclopedia extends BaseActivity {
               val image = if (doBrute) bruteIDs(i).image else trapIDs(i).image
               val name = if (doBrute) bruteIDs(i).name else trapIDs(i).name
               val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
+              val values = if (doBrute) {
+                val brute = BruteAttributeMap(bruteIDs(i))
+                s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\n Flying: ${brute.flying}\nCost:${brute.goldCost}"
+              } else {
+                val trap = TrapAttributeMap(trapIDs(i))
+                s"Damage: ${trap.damage}\n AttackSpeed: ${trap.shotInterval}"
+              }
               SButton(name, {
                 txt.text = s"${description}"
                 img.imageResource = image
                 nametxt.text = name
+                valuetxt.text = values
               })
             }
           }.<<.wrap.>>.here

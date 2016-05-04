@@ -26,7 +26,7 @@ class BattleActivity extends BaseActivity {
     setContentView(
       new SLinearLayout {
         (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
-
+          
         new SVerticalLayout {
           for (i <- 0 until 4) {
             new SLinearLayout {
@@ -50,7 +50,7 @@ class BattleActivity extends BaseActivity {
 
   override def onStop() {
     super.onStop()
-    Game.game.pauseGame()
+    Game.game.reset()
   }
 
 }

@@ -25,6 +25,8 @@ class Game(val map: MapInfo) {
   var battleCanvas: BattleCanvas = null
   var timer: Timer = null//new Timer()
 
+  var currentGold = map.startingGold
+
   //make the towers that the map needs
   for (y <- map.height - 1 to 0 by -1) {
     for (x <- 0 until map.width ) {
@@ -43,8 +45,12 @@ class Game(val map: MapInfo) {
 
   //function for sending brutes
   def sendBrute(id: BruteID) = {
-    val brute = Brute(id, new Coordinate(map.startTileCoord.x, map.startTileCoord.y))
-    bruteList = brute::bruteList
+    //check that we have enough gold
+    if (currentGold >= BruteAttributeMap(id).goldCost) {
+      val brute = Brute(id, new Coordinate(map.startTileCoord.x, map.startTileCoord.y))
+      bruteList = brute::bruteList
+      currentGold = currentGold - BruteAttributeMap(id).goldCost
+    }
   }
 
   def tick() = {
@@ -114,11 +120,28 @@ class Game(val map: MapInfo) {
     }, 0, msAuraStickiness)
 
     //for now send some brutes
-    sendBrute(OgreID)
+    //sendBrute(OgreID)
 
   }
 
   def pauseGame() = {
     timer.cancel()
+  }
+
+  def reset() = {
+    //cancel timers
+    pauseGame()
+    //reset brute+projectile Lists
+    bruteList = List[BaseBrute]()
+    projList = List[BaseProjectile]()
+    //clear all tiles of brutes
+    for (y <- map.height - 1 to 0 by -1) {
+      for (x <- 0 until map.width ) {
+        val tile = map.tiles(y)(x)
+        tile.bruteList.clear()
+      }
+    }
+    //reset gold
+    currentGold = map.startingGold
   }
 }

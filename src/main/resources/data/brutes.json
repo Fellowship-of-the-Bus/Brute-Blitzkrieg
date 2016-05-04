@@ -8,7 +8,8 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 0,
-    "description": "Shrek"
+    "description": "Shrek",
+    "goldCost": 10
   },
   "GoblinID": {
     "maxHP": 100,
@@ -19,7 +20,8 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0.1,
-    "description": "Small fast, likes shiny things"
+    "description": "Small fast, likes shiny things",
+    "goldCost": 10
   },
   "VampireBatID": {
     "maxHP": 100,
@@ -30,7 +32,8 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Probably a vampire transformed into a bat"
+    "description": "Probably a vampire transformed into a bat",
+    "goldCost": 10
   },
   "GoblinShamanID": {
     "maxHP": 100,
@@ -41,7 +44,8 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Come get healed"
+    "description": "Come get healed",
+    "goldCost": 10
   },
   "SpiderID": {
     "maxHP": 100,
@@ -52,7 +56,8 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Do you have arachnophobia."
+    "description": "Do you have arachnophobia.",
+    "goldCost": 10
   },
   "FlameImpID": {
     "maxHP": 100,
@@ -63,7 +68,8 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "A lesser demon from hell"
+    "description": "A lesser demon from hell",
+    "goldCost": 10
   },
   "CageGoblinID": {
     "maxHP": 100,
@@ -74,7 +80,8 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "They have this technology?"
+    "description": "They have this technology?",
+    "goldCost": 10
   },
   "TrollID": {
     "maxHP": 100,
@@ -85,6 +92,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "A larger Shrek"
+    "description": "A larger Shrek",
+    "goldCost": 10
   }
 }

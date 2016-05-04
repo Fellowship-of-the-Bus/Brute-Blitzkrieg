@@ -27,7 +27,8 @@ case class Tile(val floorTrapID: TrapID, val wallTrapID: TrapID) {
 case class MapInfo(
   tiles: List[List[Tile]],
   startTileCoord: Coordinate,
-  endTileCoord: Coordinate) {
+  endTileCoord: Coordinate,
+  startingGold: Int) {
 
   def height = tiles.length
   def width = tiles(0).length
