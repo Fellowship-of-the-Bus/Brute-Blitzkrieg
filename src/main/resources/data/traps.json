@@ -3,48 +3,48 @@
     "damage": 0,
     "shotInterval": 20,
     "targetFlying": false,
-    "description": "Have a Fall"
+    "description": "Sends all non-flying brutes down a floor. Once opened, stays open unless blocked by a spider.\nHave a Fall"
   },
   "ReuseTrapDoorID": {
-    "damage": 5,
+    "damage": 0,
     "shotInterval": 20,
     "targetFlying": false,
-    "description": "Feeling Lucky?"
+    "description": "Sends all non-flying brutes down a floor. Opens every so often, unless blocked by a spider.\nFeeling Lucky?"
   },
   "TarID": {
-    "damage": 5,
+    "damage": 0,
     "shotInterval": 20,
     "targetFlying": false,
-    "description": "Run"
+    "description": "Slows all non-flying brutes by 50%.\nWalk, don't run."
   },
   "PoisonID": {
     "damage": 5,
     "shotInterval": 1,
     "targetFlying": true,
-    "description": "Suffocate"
+    "description": "Poisons brutes, dealing damage over time.\nSuffocate"
   },
   "ArrowID": {
     "damage": 20,
     "shotInterval": 10,
     "targetFlying": true,
-    "description": "Shoots arrows at things"
+    "description": "Range is the entire floor.\nShoots arrows at things"
   },
   "LightningID": {
     "damage": 5,
     "shotInterval": 20,
     "targetFlying": true,
-    "description": "You'll be Shocked"
+    "description": "Deals lightning damage to all brutes in range.\nYou'll be Shocked"
   },
   "FlameVentID": {
     "damage": 5,
     "shotInterval": 20,
     "targetFlying": true,
-    "description": "Hot enough to melt steel"
+    "description": "Deals fire damage to all brutes in range.\nHot enough to melt steel"
   },
   "HighBladeID": {
-    "damage": 5,
+    "damage": 30,
     "shotInterval": 20,
     "targetFlying": false,
-    "description": "Where's Your Head?"
+    "description": "Deals heavy damage to all non-flying brutes in range.\nWhere's Your Head?"
   }
 }

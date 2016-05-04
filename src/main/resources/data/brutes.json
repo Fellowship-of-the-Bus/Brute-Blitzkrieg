@@ -8,31 +8,31 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 0,
-    "description": "Shrek",
+    "description": "Slow moving but durable.\nShrek.",
     "goldCost": 10
   },
   "GoblinID": {
-    "maxHP": 100,
-    "moveSpeed": 0.3,
-    "width": 0.5,
-    "height": 0.5,
+    "maxHP": 50,
+    "moveSpeed": 0.15,
+    "width": 0.3,
+    "height": 0.3,
     "flying": false,
     "regen": 0,
     "radius": 0,
     "auraRegen": 0.1,
-    "description": "Small fast, likes shiny things",
+    "description": "Small fast.\nLikes shiny things.",
     "goldCost": 10
   },
   "VampireBatID": {
-    "maxHP": 100,
-    "moveSpeed": 0.3,
+    "maxHP": 75,
+    "moveSpeed": 0.12,
     "width": 0.5,
     "height": 0.5,
     "flying": true,
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Probably a vampire transformed into a bat",
+    "description": "Can fly over many traps.\nProbably a vampire transformed into a bat.",
     "goldCost": 10
   },
   "GoblinShamanID": {
@@ -44,7 +44,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Come get healed",
+    "description": "All brutes within 2 units will regenerate health.\nCome get healed.",
     "goldCost": 10
   },
   "SpiderID": {
@@ -56,7 +56,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "Do you have arachnophobia.",
+    "description": "Spins webs to disable trapdoors permanently.\nDo you have arachnophobia.",
     "goldCost": 10
   },
   "FlameImpID": {
@@ -68,7 +68,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "A lesser demon from hell",
+    "description": "Immune to fire.\nA lesser demon from hell.",
     "goldCost": 10
   },
   "CageGoblinID": {
@@ -80,7 +80,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "They have this technology?",
+    "description": "All lightning targeting brutes within 2 units will be drawn this. Immune to lightning.\nThey have this technology?",
     "goldCost": 10
   },
   "TrollID": {
@@ -92,7 +92,7 @@
     "regen": 0.3,
     "radius": 2,
     "auraRegen": 0.1,
-    "description": "A larger Shrek",
+    "description": "Has life regeneration and high HP.\nA larger Shrek.",
     "goldCost": 10
   }
 }
