@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
 import android.widget.GridView
-import android.content.Intent
+import android.content.{Intent, Context}
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
@@ -31,6 +31,15 @@ class MainActivity extends BaseActivity {
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg main activity started")
     super.onCreate(savedState)
+    val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+    val editor = prefs.edit()
+    //first time setup
+    if (!prefs.contains("level1")) {
+      for (range <- 1 to 12) {
+        editor.putInt(s"level${range}", 0)
+      }
+    }
+    editor.commit()
     setContentView(
 
       new SLinearLayout {
@@ -38,8 +47,27 @@ class MainActivity extends BaseActivity {
           for (range <- 1 to 12 grouped 3) {
             this += new STableRow {
               for (i <- range) {
-                SButton(s"Level $i", switchScreen(i)).<<.wrap.>>
-              }
+                new SVerticalLayout {
+                  SButton(s"Level $i", switchScreen(i)).<<.fill.>>
+                  new SLinearLayout {
+                    // if (prefs.getInt(s"level${i}") == 0) {
+                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
+                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
+                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
+                    // } else {
+                      for (index <- 1 to prefs.getInt(s"level$i",0 )) {
+                        SImageView(R.drawable.star).<<(50,50)
+                      }
+                      for (index <- prefs.getInt(s"level$i", 0)+1 to 3) {
+                        SImageView(R.drawable.grey_star).<<(50,50)
+                      }
+                    //}
+                    // SImageView(R.drawable.grey_star).<<(50,50)
+                    // SImageView(R.drawable.star).<<(50,50)
+                    // SImageView(R.drawable.grey_star).<<(50,50)
+                  }.gravity(Gravity.CENTER).here
+                }
+              }.here
             }
           }
         }.<<(0, MATCH_PARENT).Weight(3).>>.here//.stretchColumns("*")
