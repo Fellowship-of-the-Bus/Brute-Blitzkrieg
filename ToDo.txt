@@ -1,0 +1,13 @@
+MainActivity:
+	loading screen?
+	design more levels
+	Stars on each level selection
+	progression saving
+
+Battleactivity
+	test all towers
+	draw rotated projectiles
+	game over / win screen
+	balance
+
+

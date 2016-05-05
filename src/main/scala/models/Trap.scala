@@ -106,6 +106,7 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
           if (attr.targetFlying || !brute.attr.flying) brute.hit(this, attr.damage)
         })
       setCooldown()
+      fireProjectile(listOfBrutes.head)
     }
     None
   }
@@ -120,6 +121,7 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
       cancelAll()
     }
   }
+  def fireProjectile(target: BaseBrute) : Option[BaseProjectile] = None
 
   override def x = coord.x
   override def y = coord.y
@@ -333,17 +335,15 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
 }
 
 class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
-  // override def attack(): Option[BaseProjectile] = {
-  //   //attack all in range
-  //   None
-  // }
+  override def fireProjectile(brute: BaseBrute): Option[BaseProjectile] = {
+    Some(new LightningProjectile(LightningProj, coord.copy(), this, brute))
+  }
 }
 
 class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
-  // override def attack(): Option[BaseProjectile] = {
-  //   // attack all in range
-  //   None
-  // }
+  override def fireProjectile(brute: BaseBrute): Option[BaseProjectile] = {
+    Some(new FireProjectile(FireProj, coord.copy(), this, brute))
+  }
 }
 
 class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {

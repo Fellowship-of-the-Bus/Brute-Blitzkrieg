@@ -19,9 +19,11 @@ import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 
 import android.os.{Handler, Message}
 
+import scala.math.{atan, toDegrees}
 
 import models.MapInfo
-import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate}
+import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate, BaseProjectile}
+
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
@@ -91,16 +93,17 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       val image = trapImages(trap.id)
       drawPositioned(image, trap, false)
     }
+    for (proj <- Game.game.projList.filter(_.isActive)) {
+      val image = projImages(proj.id)(0)
+      //drawPositioned(image, proj, false)
+      drawRotated(image, proj)
+    }
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
       //to do climbing stairs
       drawLifebar(brute)
       val image = bruteImages(brute.id)(brute.currentFrame)
 
       drawPositioned(image, brute, brute.facingRight)
-    }
-    for (proj <- Game.game.projList.filter(_.isActive)) {
-      val image = projImages(proj.id)(0)
-      drawPositioned(image, proj, false)
     }
 
     paint.setColor(Color.WHITE);
@@ -119,6 +122,30 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
       }
       canvas.drawBitmap(image, null, new Rect(normX(drawX1), normY(gameObject.y),
                     normX(drawX2), normY(gameObject.y + gameObject.height)), null)
+      canvas.restore()
+    }
+    def drawRotated(image: Bitmap, projectile: BaseProjectile) : Unit= {
+      val (dx, dy) = projectile.direction
+      //if no direction specified, just draw it without rotations
+      if (dx == 0 && dy == 0) {
+        drawPositioned(image, projectile, false)
+        return
+      }
+      canvas.save()
+      val angle : Float = {
+        if (dx == 0 && dy > 0) {
+          90f
+        } else if (dx == 0 && dy < 0) {
+          270f
+        } else {
+          toDegrees(atan(dy/dx)).toFloat
+        }
+      }
+      var (cx, cy) = projectile.centerCoord()
+      cx = normX(cx)
+      cy = normY(cy)
+      canvas.rotate(angle, cx, cy)
+      drawPositioned(image, projectile, false)
       canvas.restore()
     }
 

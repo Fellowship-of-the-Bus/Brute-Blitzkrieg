@@ -21,6 +21,12 @@ case object ArrowProj extends ProjectileID {
 case object PoisonProj extends ProjectileID {
   override def imageList = List(R.drawable.poison_gas)
 }
+case object FireProj extends ProjectileID {
+  override def imageList = List(R.drawable.fire)
+}
+case object LightningProj extends ProjectileID {
+  override def imageList = List(R.drawable.lightning4)
+}
 
 case class ProjAttr(
   speed: Float)
@@ -44,8 +50,8 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
   }
   override def x = coord.x
   override def y = coord.y
-  override def width = 0.4f
-  override def height = 0.4f
+  override def width = 0.6f
+  override def height = 0.3f
 
   def image = id.image
 }
@@ -101,5 +107,26 @@ class PoisonProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, 
   override def width = 1f
   override def height = 3/4f
   override def direction = (0,0)
+  override def speed = 0f
+}
+class FireProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 10) {
+  override def width = 1f
+  override def height = 3/4f
+  override def direction = (0,0)
+  override def speed = 0f
+}
+class LightningProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 10) {
+  override def width = 3/4f
+  override def height = 3/8f
+  override def direction = {
+    val dx = target.x - source.x
+    val dy = target.y - source.y
+    val norm : Float = math.sqrt(dx*dx + dy*dy).toFloat
+    if (norm == 0) {
+      (0,0)
+    } else {
+      (dx/norm, dy/norm)
+    }
+  }
   override def speed = 0f
 }
