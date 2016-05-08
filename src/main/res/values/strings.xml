@@ -3,6 +3,7 @@
     <string name="MinionButton">Minions</string>
     <string name="TrapButton">Traps</string>
     <string name="LevelEditorButton">Level Editor</string>
+    <string name="DeleteButton">Delete</string>
     <string name="QuitButton">Quit</string>
 
     <string name="Ogre">Ogre</string>

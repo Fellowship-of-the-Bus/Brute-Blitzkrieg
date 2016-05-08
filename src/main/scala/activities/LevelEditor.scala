@@ -28,14 +28,18 @@ class LevelEditor extends BaseActivity {
     android.util.Log.e("bruteb", "Brute Blitzkrieg level editor started")
     super.onCreate(savedState)
 
-    // game = new Game(maps(mapId))
+    game = new Game(
+      new MapInfo(
+        List.fill(MapID.height, MapID.width)(new Tile(NoTrapID, NoTrapID)), 0, 0, 0, 0
+      )
+    )
     // error(s"got level id $mapId")
 
     //
 
     setContentView(
       new SLinearLayout {
-        (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
+        (new BattleCanvas(game.map, true)).<<(0,MATCH_PARENT).Weight(3).>>.here
 
         new STableLayout {
           for (range <- 0 until trapIDs.length grouped 2) {
@@ -62,11 +66,12 @@ class LevelEditor extends BaseActivity {
                   //   }
                   // }
                   // enableButtons()
-                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip)//.adjustViewBounds(true)
+                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
                 // bruteButtons = bruteButtons :+ newButton
               }
             }
           }
+          SButton(R.string.QuitButton, finish()).<<.fw.>>
         }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
 
         // new SRelativeLayout {

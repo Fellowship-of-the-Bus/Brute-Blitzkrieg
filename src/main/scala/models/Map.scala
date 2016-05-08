@@ -9,7 +9,7 @@ import lib.game.{IDMap, IDFactory}
 import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
-case class Tile(val floorTrapID: TrapID, val wallTrapID: TrapID) {
+case class Tile(var floorTrapID: TrapID, var wallTrapID: TrapID) {
   val bruteList: Set[BaseBrute] = Set[BaseBrute]()
 
   def register(e: BaseBrute): Unit = {
@@ -26,12 +26,15 @@ case class Tile(val floorTrapID: TrapID, val wallTrapID: TrapID) {
 
 case class MapInfo(
   tiles: List[List[Tile]],
-  startTileCoord: Coordinate,
-  endTileCoord: Coordinate,
   startingGold: Int,
   oneStar: Int,
   twoStar: Int,
   threeStar: Int) {
+  require(height == MapID.height)
+  require(width == MapID.width)
+
+  val startTileCoord = Coordinate(7, 3)
+  val endTileCoord = Coordinate(7, 0)
 
   def height = tiles.length
   def width = tiles(0).length
@@ -46,6 +49,9 @@ sealed trait MapID
 case object Level1 extends MapID
 
 object MapID {
+  val height = 4
+  val width = 8
+
   implicit object Factory extends IDFactory[MapID] {
     val ids = Vector(Level1)
   }
