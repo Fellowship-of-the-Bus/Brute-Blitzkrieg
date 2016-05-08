@@ -151,12 +151,14 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
   var isBlockedByWeb = false
   canAttack = true
   val altid : FloorTrapID = TrapDoorOpenID
+  val belowCoord = new Coordinate(tCoord.x, tCoord.y + 1)
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
     if (isBlockedByWeb) {
       return None
     } else {
       val listOfBrutes = getInRangeBrutes
+      val belowBrutes = Game.game.map.getTile(belowCoord).bruteList.toList.filter(_.isAlive)
       //check if any is in range. If so, open the trap
       if (listOfBrutes.filter(!_.attr.flying).length != 0) {
         if (isOpen == false) {
@@ -174,6 +176,14 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           if (!brute.attr.flying) {
             Game.game.map.getTile(brute.coord).deregister(brute)
             brute.coord.y += 1
+            Game.game.map.getTile(brute.coord).register(brute)
+          }
+          
+        })
+        belowBrutes.map(brute => {
+          if (brute.attr.flying) {
+            Game.game.map.getTile(brute.coord).deregister(brute)
+            brute.coord.y -= 1
             Game.game.map.getTile(brute.coord).register(brute)
           }
         })
