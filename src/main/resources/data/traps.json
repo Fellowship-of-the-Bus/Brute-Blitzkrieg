@@ -7,25 +7,25 @@
   },
   "ReuseTrapDoorID": {
     "damage": 0,
-    "shotInterval": 20,
+    "shotInterval": 60,
     "targetFlying": false,
     "description": "Sends all non-flying brutes down a floor. Opens every so often, unless blocked by a spider.\nFeeling Lucky?"
   },
   "TarID": {
     "damage": 0,
-    "shotInterval": 20,
+    "shotInterval": 5,
     "targetFlying": false,
     "description": "Slows all non-flying brutes by 50%.\nWalk, don't run."
   },
   "PoisonID": {
-    "damage": 5,
+    "damage": 2,
     "shotInterval": 1,
     "targetFlying": true,
     "description": "Poisons brutes, dealing damage over time.\nSuffocate"
   },
   "ArrowID": {
-    "damage": 20,
-    "shotInterval": 10,
+    "damage": 40,
+    "shotInterval": 20,
     "targetFlying": true,
     "description": "Range is the entire floor.\nShoots arrows at things"
   },

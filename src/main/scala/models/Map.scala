@@ -45,8 +45,12 @@ case class MapInfo(
 }
 
 
-sealed trait MapID
-case object Level1 extends MapID
+sealed trait MapID {
+  val id: String
+}
+case object Level1 extends MapID {
+  val id = "level1"
+}
 
 object MapID {
   val height = 4

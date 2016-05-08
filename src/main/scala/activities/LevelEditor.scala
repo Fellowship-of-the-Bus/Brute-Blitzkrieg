@@ -37,7 +37,8 @@ class LevelEditor extends BaseActivity {
     game = new Game(
       new MapInfo(
         List.fill(MapID.height, MapID.width)(new Tile(NoTrapID, NoTrapID)), 0, 0, 0, 0
-      )
+      ),
+      Level1
     )
 
     setContentView(

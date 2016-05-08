@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
 import android.widget.GridView
-import android.content.Intent
+import android.content.{Intent, Context}
 import android.graphics.Canvas
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -25,7 +25,7 @@ class PreBattleActivity extends BaseActivity {
     super.onCreate(savedState)
 
     val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    game = new Game(maps(mapId))
+    game = new Game(maps(mapId), mapId)
     error(s"got level id $mapId")
 
 

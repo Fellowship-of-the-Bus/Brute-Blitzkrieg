@@ -99,7 +99,7 @@ class BruteSelectActivity extends BaseActivity {
     enableButtons()
     for (i <- 0 until 4) {
       if (selections(i).brute != null) {
-        selections(i).button.imageBitmap = BattleCanvas.bruteImages(bruteIDs(i)).head
+        selections(i).button.imageBitmap = BattleCanvas.bruteImages(selections(i).brute).head
       }
       deselectButton(selections(i).button)
     }

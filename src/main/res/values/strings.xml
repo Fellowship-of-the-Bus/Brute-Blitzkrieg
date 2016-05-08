@@ -5,6 +5,11 @@
     <string name="LevelEditorButton">Level Editor</string>
     <string name="SaveButton">Save...</string>
     <string name="QuitButton">Quit</string>
+    <string name="ReturnButton">Return</string>
+
+    <string name="Win">You Win</string>
+    <string name="Lose">You Lose</string>
+
 
     <string name="Ogre">Ogre</string>
     <string name="Goblin">Goblin</string>

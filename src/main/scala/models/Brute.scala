@@ -163,9 +163,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     android.util.Log.e("bruteb", s"brute frame $coord")
 
     if (isClimbingStairs) {
-      val progressPerTick = 0.02f
+      val progressPerTick = attr.moveSpeed * 0.5f
       stairProgress += progressPerTick
-      var climbingSpeed = 1.95f * progressPerTick
+      var climbingSpeed = attr.moveSpeed
       facingRight = true
       if ((movingRight && (stairProgress > 0.54)) ||
           !movingRight && (stairProgress < 0.54)) {
