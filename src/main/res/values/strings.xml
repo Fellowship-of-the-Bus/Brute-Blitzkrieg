@@ -3,6 +3,11 @@
     <string name="MinionButton">Minions</string>
     <string name="TrapButton">Traps</string>
     <string name="QuitButton">Quit</string>
+    <string name="ReturnButton">Return</string>
+
+    <string name="Win">You Win</string>
+    <string name="Lose">You Lose</string>
+
 
     <string name="Ogre">Ogre</string>
     <string name="Goblin">Goblin</string>

@@ -2,6 +2,7 @@ package com.github.fellowship_of_the_bus
 package bruteb
 package models
 
+import android.content.SharedPreferences
 
 import java.util.{Timer, TimerTask}
 
@@ -9,7 +10,11 @@ object Game {
   var game: Game = null
 }
 
-class Game(val map: MapInfo) {
+trait GameListener {
+  def gameOver(numStars:Int): Unit
+}
+
+class Game(val map: MapInfo, val levelName: MapID) {
   // brutes that can be selected
   var brutes = Vector[BruteID](null, null, null, null)
 
@@ -26,6 +31,8 @@ class Game(val map: MapInfo) {
   var timer: Timer = null//new Timer()
 
   var currentGold = map.startingGold
+  var score = 0
+  var listener: GameListener = null
 
   //make the towers that the map needs
   for (y <- map.height - 1 to 0 by -1) {
@@ -55,18 +62,24 @@ class Game(val map: MapInfo) {
 
   def tick() = {
     //order of actions:
+    //check game over
     //move brutes
     //check for brutes at exit
     //regenerate brutes
     //expire effects
     //move projectiles
     //fire towers
+    if (checkGameOver) {
+      pauseGame()
+      gameOver()
+    }
     for (brute <- bruteList.filter(_.isAlive)) {
       brute.move()
       //if brute reached end
       if (map.getTile(brute.coord) eq map.getTile(map.endTileCoord)) {
         //just kill for now do something more sophiscated later
         brute.hp = -1
+        score += 1
       }
       brute.regenerate()
       brute.tickEffects()
@@ -143,5 +156,24 @@ class Game(val map: MapInfo) {
     }
     //reset gold
     currentGold = map.startingGold
+  }
+
+  def checkGameOver(): Boolean = {
+    for (brute <- brutes) {
+      if (BruteAttributeMap(brute).goldCost <= currentGold) {
+        return false
+      }
+    }
+    if (bruteList.filter(_.isAlive).length != 0) return false
+    true
+  }
+
+  def setListener(l: GameListener) {
+    listener = l
+  }
+
+  def gameOver() = {
+    val curNumStars = if( score >= map.threeStar) 3 else if (score >= map.twoStar) 2 else if (score >= map.oneStar) 1 else 0
+    listener.gameOver(curNumStars)
   }
 }
