@@ -91,6 +91,7 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     // draw grid for level editor
     if (drawGrid) {
       paint.setColor(Color.RED)
+      paint.setStrokeWidth(2 dip)
       for (row <- 0 to MapID.height) {
         canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
       }
