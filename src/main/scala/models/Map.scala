@@ -28,7 +28,10 @@ case class MapInfo(
   tiles: List[List[Tile]],
   startTileCoord: Coordinate,
   endTileCoord: Coordinate,
-  startingGold: Int) {
+  startingGold: Int,
+  oneStar: Int,
+  twoStar: Int,
+  threeStar: Int) {
 
   def height = tiles.length
   def width = tiles(0).length
