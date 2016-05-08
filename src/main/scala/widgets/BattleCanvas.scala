@@ -21,14 +21,14 @@ import android.os.{Handler, Message}
 
 import scala.math.{atan, toDegrees}
 
-import models.MapInfo
-import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate, BaseProjectile}
+import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate, BaseProjectile, MapInfo, MapID}
 
+import scala.language.postfixOps
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
   var decoderOptions = new BitmapFactory.Options()
-  decoderOptions.inSampleSize = 8
+  decoderOptions.inSampleSize = 2
   var trapDecoderOptions = new BitmapFactory.Options()
   trapDecoderOptions.inSampleSize = 2
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
@@ -36,14 +36,14 @@ object BattleCanvas {
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
   lazy val trapImages: Map[TrapID, Bitmap] = (for (x <- TrapID.Factory.ids ++ TrapID.Factory.openIds) yield
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
-  lazy val projImages: Map[ProjectileID, List[Bitmap]] =  (for (x <- ProjIds.ids) yield 
+  lazy val projImages: Map[ProjectileID, List[Bitmap]] =  (for (x <- ProjIds.ids) yield
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
   lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
   lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
   lazy val goldImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.gold, decoderOptions)
 }
 
-class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
+class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context: Context) extends SView {
   Game.game.battleCanvas = this
   import BattleCanvas._
   canvas = this
@@ -60,36 +60,48 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
 
   override def onDraw(canvas: Canvas) = {
     super.onDraw(canvas)
-    val canvasX = getWidth();
-    val canvasY = getHeight();
-    val cellX = (canvasX/8f).toInt
-    val cellY = (canvasY/4f).toInt
+    val canvasX = getWidth()
+    val canvasY = getHeight()
+    val cellX = (canvasX/MapID.width).toInt
+    val cellY = (canvasY/MapID.height).toInt
 
-    val paint = new Paint();
-    paint.setStyle(Paint.Style.FILL);
-    paint.setColor(Color.WHITE);
+    val paint = new Paint()
+    paint.setStyle(Paint.Style.FILL)
+    paint.setColor(Color.WHITE)
     //canvas.drawPaint(paint);
     // Use Color.parseColor to define HTML colors
-    paint.setColor(Color.parseColor("#000000"));
+    paint.setColor(Color.parseColor("#000000"))
     paint.setTextAlign(Paint.Align.LEFT)
     paint.setTextSize(40)
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
-    canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null);
+    canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
     canvas.drawBitmap(goldImage, null, new Rect(0, 0, 50, 50), null)
     canvas.drawText(Game.game.currentGold.toString, 60, 40, paint)
     canvas.drawBitmap(exitImage, null,
         new Rect(normX(Game.game.map.endTileCoord.x),
             normY(Game.game.map.endTileCoord.y),
             normX(Game.game.map.endTileCoord.x + 1),
-            normY(Game.game.map.endTileCoord.y + 0.75f)), null);
+            normY(Game.game.map.endTileCoord.y + 0.75f)), null)
     canvas.drawBitmap(entranceImage, null,
         new Rect(normX(Game.game.map.startTileCoord.x),
             normY(Game.game.map.startTileCoord.y),
             normX(Game.game.map.startTileCoord.x + 1),
-            normY(Game.game.map.startTileCoord.y + 0.75f)), null);
+            normY(Game.game.map.startTileCoord.y + 0.75f)), null)
 
-    for (trap <- Game.game.trapList) {
+    // draw grid for level editor
+    if (drawGrid) {
+      paint.setColor(Color.RED)
+      paint.setStrokeWidth(2 dip)
+      for (row <- 0 to MapID.height) {
+        canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
+      }
+      for (col <- 0 to MapID.width) {
+        canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
+      }
+    }
+
+    for (trap <- Game.game.trapList.reverse) {
       val image = trapImages(trap.id)
       drawPositioned(image, trap, false)
     }

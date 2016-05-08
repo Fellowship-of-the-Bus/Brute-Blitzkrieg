@@ -77,7 +77,7 @@ class BruteSelectActivity extends BaseActivity {
                     }
                   }
                   enableButtons()
-                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip)//.adjustViewBounds(true)
+                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
                 bruteButtons = bruteButtons :+ newButton
               }
             }
@@ -107,7 +107,7 @@ class BruteSelectActivity extends BaseActivity {
     enableButtons()
     for (i <- 0 until 4) {
       if (selections(i).brute != null) {
-        selections(i).button.imageBitmap = BattleCanvas.bruteImages(bruteIDs(i)).head
+        selections(i).button.imageBitmap = BattleCanvas.bruteImages(selections(i).brute).head
       }
       deselectButton(selections(i).button)
     }

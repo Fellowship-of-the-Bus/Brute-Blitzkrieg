@@ -14,10 +14,7 @@ trait GameListener {
   def gameOver(numStars:Int): Unit
 }
 
-class Game(val map: MapInfo, val levelName: MapID) {
-  // brutes that can be selected
-  var brutes = Vector[BruteID](null, null, null, null)
-
+class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
   val ticksPerSecond = 20
 
   val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
@@ -142,20 +139,7 @@ class Game(val map: MapInfo, val levelName: MapID) {
   }
 
   def reset() = {
-    //cancel timers
-    pauseGame()
-    //reset brute+projectile Lists
-    bruteList = List[BaseBrute]()
-    projList = List[BaseProjectile]()
-    //clear all tiles of brutes
-    for (y <- map.height - 1 to 0 by -1) {
-      for (x <- 0 until map.width ) {
-        val tile = map.tiles(y)(x)
-        tile.bruteList.clear()
-      }
-    }
-    //reset gold
-    currentGold = map.startingGold
+    Game.game = new Game(map, levelName, brutes)
   }
 
   def checkGameOver(): Boolean = {

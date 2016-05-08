@@ -85,10 +85,22 @@ class MainActivity extends BaseActivity {
           SButton("Level Eleven").<<.wrap.>>
           SButton("Level Twelve").<<.wrap.>>
         }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
-        new SRelativeLayout {
-          SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.wrap.alignParentTop.>>
-          SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.wrap.centerVertical.>>
-          SButton(R.string.QuitButton, finish()).<<.wrap.alignParentBottom.>>
+        new STableLayout {
+          new STableRow {
+            SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
+          }.<<.wrap.>>.here
+          new STableRow {
+          SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
+
+          }.<<.wrap.>>.here
+          new STableRow {
+          SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
+
+          }.<<.wrap.>>.here
+          new STableRow {
+          SButton(R.string.QuitButton, finish()).<<.fw.>>
+
+          }.<<.wrap.>>.here
         }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )

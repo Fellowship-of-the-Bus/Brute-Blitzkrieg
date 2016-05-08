@@ -26,6 +26,9 @@
 
     <activity android:label="BruteBlitzkrieg" android:name="BruteSelectActivity" android:screenOrientation="landscape">
     </activity>
+
+    <activity android:label="BruteBlitzkrieg" android:name="LevelEditor" android:screenOrientation="landscape">
+    </activity>
   </application>
 
   <uses-permission android:name="android.permission.READ_PHONE_STATE"/>

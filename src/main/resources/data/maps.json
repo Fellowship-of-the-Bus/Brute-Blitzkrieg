@@ -42,8 +42,6 @@
         { "floorTrapID": "NoTrapID", "wallTrapID": "NoTrapID" }
       ]
     ],
-    "startTileCoord": {"x": 7, "y":3},
-    "endTileCoord": {"x": 7, "y":0},
     "startingGold": 200,
     "oneStar": 1,
     "twoStar": 2,
