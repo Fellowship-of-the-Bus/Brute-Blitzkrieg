@@ -34,14 +34,6 @@ class BruteSelectActivity extends BaseActivity {
     }
   }
 
-  def selectButton(button: SImageButton): Unit = {
-    val _ = button.enabled = false
-  }
-
-  def deselectButton(button: SImageButton): Unit = {
-    val _ = button.enabled = true
-  }
-
   def nextSelection: Option[Selection] = selections.find(_.brute == null)
 
   override def onCreate(savedState: Bundle) {

@@ -57,12 +57,12 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     }
   }
 
+  lazy val canvasX = getWidth()
+  lazy val canvasY = getHeight()
+  lazy val cellX = (canvasX/MapID.width).toInt
+  lazy val cellY = (canvasY/MapID.height).toInt
   override def onDraw(canvas: Canvas) = {
     super.onDraw(canvas)
-    val canvasX = getWidth()
-    val canvasY = getHeight()
-    val cellX = (canvasX/MapID.width).toInt
-    val cellY = (canvasY/MapID.height).toInt
 
     val paint = new Paint()
     paint.setStyle(Paint.Style.FILL)

@@ -31,16 +31,27 @@ class Game(val map: MapInfo) {
   for (y <- map.height - 1 to 0 by -1) {
     for (x <- 0 until map.width ) {
       val tile = map.tiles(y)(x)
-      addTrapFromID(tile.floorTrapID, Coordinate(x,y+3/4f))
+      addTrapFromID(tile.floorTrapID, Coordinate(x,y))
       addTrapFromID(tile.wallTrapID, Coordinate(x,y))
     }
   }
 
+  private def adjustTrapCoord(id: TrapID, coord: Coordinate) = id match {
+    case _: FloorTrapID => coord.copy(y = coord.y + 3/4f)
+    case _ => coord
+  }
+
   def addTrapFromID(id: TrapID, coord:Coordinate) = {
     if (id != NoTrapID) {
-      val trap = Trap(id, coord)
+      val trap = Trap(id, adjustTrapCoord(id, coord))
       trapList = trap::trapList
     }
+  }
+
+  // id should only be FloorTrapID or WallTrapID
+  def removeTrap(id: TrapID, coord: Coordinate) = {
+    val copy = adjustTrapCoord(id, coord)
+    trapList = trapList.filter(x => x.coord != copy)
   }
 
   //function for sending brutes

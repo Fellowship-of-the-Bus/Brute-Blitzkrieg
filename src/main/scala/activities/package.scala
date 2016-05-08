@@ -14,4 +14,12 @@ package object bruteb {
     view.setColorFilter(filter)
     view
   }
+
+  def selectButton(button: SImageButton): Unit = {
+    val _ = button.enabled = false
+  }
+
+  def deselectButton(button: SImageButton): Unit = {
+    val _ = button.enabled = true
+  }
 }
