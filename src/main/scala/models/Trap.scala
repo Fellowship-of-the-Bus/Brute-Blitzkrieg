@@ -176,6 +176,7 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           if (!brute.attr.flying) {
             Game.game.map.getTile(brute.coord).deregister(brute)
             brute.coord.y += 1
+            brute.facingRight = !brute.facingRight
             Game.game.map.getTile(brute.coord).register(brute)
           }
           
@@ -184,6 +185,7 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           if (brute.attr.flying) {
             Game.game.map.getTile(brute.coord).deregister(brute)
             brute.coord.y -= 1
+            brute.facingRight = !brute.facingRight
             Game.game.map.getTile(brute.coord).register(brute)
           }
         })
