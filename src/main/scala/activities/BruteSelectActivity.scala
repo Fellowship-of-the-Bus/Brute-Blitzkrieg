@@ -77,7 +77,7 @@ class BruteSelectActivity extends BaseActivity {
                     }
                   }
                   enableButtons()
-                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip)//.adjustViewBounds(true)
+                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
                 bruteButtons = bruteButtons :+ newButton
               }
             }

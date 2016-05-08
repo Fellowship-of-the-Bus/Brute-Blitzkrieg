@@ -28,7 +28,7 @@ import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordina
 object BattleCanvas {
   var canvas : BattleCanvas = null
   var decoderOptions = new BitmapFactory.Options()
-  decoderOptions.inSampleSize = 8
+  decoderOptions.inSampleSize = 2
   var trapDecoderOptions = new BitmapFactory.Options()
   trapDecoderOptions.inSampleSize = 2
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
@@ -89,7 +89,7 @@ class BattleCanvas(val map: MapInfo)(implicit context: Context) extends SView {
             normX(Game.game.map.startTileCoord.x + 1),
             normY(Game.game.map.startTileCoord.y + 0.75f)), null);
 
-    for (trap <- Game.game.trapList) {
+    for (trap <- Game.game.trapList.reverse) {
       val image = trapImages(trap.id)
       drawPositioned(image, trap, false)
     }
