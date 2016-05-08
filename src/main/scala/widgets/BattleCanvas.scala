@@ -23,6 +23,7 @@ import scala.math.{atan, toDegrees}
 
 import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate, BaseProjectile, MapInfo, MapID}
 
+import scala.language.postfixOps
 
 object BattleCanvas {
   var canvas : BattleCanvas = null
