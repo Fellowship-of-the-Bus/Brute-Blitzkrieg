@@ -27,7 +27,7 @@ import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordina
 object BattleCanvas {
   var canvas : BattleCanvas = null
   var decoderOptions = new BitmapFactory.Options()
-  decoderOptions.inSampleSize = 8
+  decoderOptions.inSampleSize = 2
   var trapDecoderOptions = new BitmapFactory.Options()
   trapDecoderOptions.inSampleSize = 2
   lazy val backgroundImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.map);
@@ -99,7 +99,7 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
       }
     }
 
-    for (trap <- Game.game.trapList) {
+    for (trap <- Game.game.trapList.reverse) {
       val image = trapImages(trap.id)
       drawPositioned(image, trap, false)
     }
