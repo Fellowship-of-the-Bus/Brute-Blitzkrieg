@@ -53,6 +53,7 @@ class BattleActivity extends BaseActivity with GameListener {
           }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.LEFT).here
         }.<<.fill.>>.here
         popUp = new SRelativeLayout{
+          new SView().<<.fill.>>.alpha(0.5f).backgroundColor(Color.BLACK).here
           new SRelativeLayout{
             txt.<<.wrap.alignParentTop.centerHorizontal.>>.here
             val starsView = new SLinearLayout {
@@ -62,18 +63,18 @@ class BattleActivity extends BaseActivity with GameListener {
             }.<<.wrap.below(txt).centerHorizontal.>>.gravity(Gravity.CENTER).here
             SButton(R.string.ReturnButton, {Game.game.reset()
                                             finish()}).<<.wrap.below(starsView).centerHorizontal.>>
-          }.<<.wrap.centerInParent.>>.backgroundColor(Color.BLACK).gravity(Gravity.CENTER).here
+          }.<<.wrap.centerInParent.>>.alpha(1f).backgroundColor(Color.BLACK).gravity(Gravity.CENTER).here
         }.<<.fill.>>.visibility(View.GONE).here
       }
     )
   }
-  override def onResume() {
-    super.onResume()
+  override def onResume() = {
     Game.game.startGame
+    super.onResume()
   }
 
-  override def onStop() {
-    super.onStop()
+  override def onBackPressed() = {
+    super.onBackPressed()
     Game.game.reset()
   }
 

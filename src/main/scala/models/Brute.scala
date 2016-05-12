@@ -160,7 +160,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     incFrame()
     //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
     //tar slows speed
-    android.util.Log.e("bruteb", s"brute frame $coord")
+    //android.util.Log.e("bruteb", s"brute frame $coord")
 
     if (isClimbingStairs) {
       val progressPerTick = attr.moveSpeed * 0.5f
