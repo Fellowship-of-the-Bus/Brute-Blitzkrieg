@@ -19,20 +19,20 @@ class Encyclopedia extends BaseActivity {
   override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     val txt = new STextView {
-      text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed risus arcu, consequat ut sodales sit amet, semper nec dui. Quisque ullamcorper leo odio, sit amet cursus orci interdum sed. Pellentesque imperdiet scelerisque congue. Phasellus semper auctor auctor. Sed faucibus urna quam, vitae iaculis enim aliquam vel. Vivamus in mauris diam. Proin malesuada iaculis orci, nec rhoncus mi ullamcorper ac. Nullam vitae scelerisque nibh. Sed nunc lectus, porta dapibus neque pharetra, posuere sagittis ipsum."
+      text = "Select a monster for more information."
       textSize = 16 dip
     }
     val nametxt = new STextView {
-      text = "Ahmed"
-      textSize = 16 dip
+      text = "Monster Encyclopedia"
+      textSize = 20 dip
     }
     val valuetxt = new STextView {
-      text = "Hp:100 \nSpeed: 0.1\nFlying: Yes\nCost: 10"
+      text = ""
       textSize = 16 dip
     }
 
     val img = new SImageView {
-      imageResource=R.drawable.ahmed
+      imageResource=R.drawable.unknown
     }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
     val doBrute = getIntent().getBooleanExtra("brute", true)
     val ids = if (doBrute) bruteIDs else trapIDs
@@ -40,15 +40,15 @@ class Encyclopedia extends BaseActivity {
 
       new SLinearLayout {
           new SVerticalLayout {
+            new STextView {
+              nametxt.<<.wrap.>>.here
+            }.setGravity(Gravity.CENTER_HORIZONTAL)
             new SLinearLayout {
               img.<<.wrap.>>.here
-              nametxt.<<.wrap.>>.here
+              valuetxt.<<.wrap.>>.here
             }.<<.wrap.>>.here
             new SScrollView {
               txt.<<.wrap.>>.here
-            }.<<.wrap.>>.here
-            new SScrollView {
-              valuetxt.<<.wrap.>>.here
             }.<<.wrap.>>.here
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
@@ -60,7 +60,12 @@ class Encyclopedia extends BaseActivity {
               val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
               val values = if (doBrute) {
                 val brute = BruteAttributeMap(bruteIDs(i))
-                s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\n Flying: ${brute.flying}\nCost:${brute.goldCost}"
+                val baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\nCost:${brute.goldCost}"
+                if (brute.flying) {
+                  baseValues + "\nFlying"
+                } else {
+                  baseValues
+                }
               } else {
                 val trap = TrapAttributeMap(trapIDs(i))
                 s"Damage: ${trap.damage}\n AttackSpeed: ${trap.shotInterval}"

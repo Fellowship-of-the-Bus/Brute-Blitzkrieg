@@ -77,7 +77,7 @@ class BruteSelectActivity extends BaseActivity {
         }.<<(0,WRAP_CONTENT).Weight(3).>>.here
         new SVerticalLayout {
           for (i <- 0 until 4) {
-            val newButton = SImageButton(R.drawable.ahmed2, {
+            val newButton = SImageButton(R.drawable.unknown, {
               // selection clicked
               selections.foreach(x => deselectButton(x.button))
               selectButton(selections(i).button)
