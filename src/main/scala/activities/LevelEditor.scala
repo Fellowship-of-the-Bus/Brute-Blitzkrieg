@@ -78,15 +78,15 @@ class LevelEditor extends BaseActivity {
           SButton(R.string.SaveButton, {
             val numeric = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL
             // open dialog
-            val builder = new AlertDialogBuilder("Save the Map").setView(new STableLayout {
+            val builder = new AlertDialogBuilder("Save the Map").positiveButton("Done").setView(new STableLayout {
               val name = SEditText().hint("Name")
               val gold = SEditText().hint("Gold").inputType(numeric)
               val maxStar = SEditText().hint("Max Star Value").inputType(numeric)
               new STableRow {
-                val SSeekBar().max(0)
-                SSeekBar().max(0)
+                val starOne = SSeekBar().max(0)
+                val starTwo = SSeekBar().max(0)
               }.here
-            }).positiveButton("Done").show
+            }).show
           }).<<.fw.>>
         }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
