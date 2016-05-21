@@ -150,6 +150,7 @@ class Game(val map: MapInfo, var levelName: String, var brutes: Vector[BruteID] 
 
   def reset() = {
     pauseGame
+    map.clear()
     Game.game = new Game(map, levelName, brutes)
   }
 

@@ -42,6 +42,14 @@ case class MapInfo(
     //android.util.Log.e("bruteb", s"${coord.y}, ${coord.x}, $height, $width")
     tiles(coord.y.toInt)(coord.x.toInt)
   }
+
+  def clear() = {
+    for (row <- tiles) {
+      for (t <- row) {
+        t.bruteList.clear
+      }
+    }
+  }
 }
 
 
