@@ -42,10 +42,12 @@ class BattleActivity extends BaseActivity with GameListener {
             for (i <- 0 until 4) {
               new SLinearLayout {
                 SImageButton(game.brutes(i).image, {
-                	game.sendBrute(game.brutes(i))
+                  game.sendBrute(game.brutes(i))
                 }).<<(0,MATCH_PARENT).Weight(1).marginBottom(if (i == 3) 0 dip else 5 dip).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true).backgroundColor(Color.GRAY)
                 new STextView {
-                  text = game.brutes(i).name
+                  val name: CharSequence = game.brutes(i).name
+                  val cost = BruteAttributeMap(game.brutes(i)).goldCost
+                  text = s"${name}\n$$${cost}"
                   textSize = 16 dip
                 }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER).here
               }.<<(MATCH_PARENT,0).Weight(1).>>.here
