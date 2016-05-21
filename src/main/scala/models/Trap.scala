@@ -13,8 +13,9 @@ import rapture.json._
 import rapture.json.jsonBackends.jackson._
 
 case class TrapAttributes(
-  damage: Float,   //damage of the trap
-  shotInterval: Int, // number of ticks per shot
+  damage: Float,         //damage of the trap
+  duration: Int,         // Number of ticks attack persists
+  shotInterval: Int,     // number of ticks per shot
   targetFlying: Boolean, // can target flying units
   description: String
   )

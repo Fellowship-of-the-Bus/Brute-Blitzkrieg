@@ -68,7 +68,15 @@ class Encyclopedia extends BaseActivity {
                 }
               } else {
                 val trap = TrapAttributeMap(trapIDs(i))
-                s"Damage: ${trap.damage}\n AttackSpeed: ${trap.shotInterval}"
+                var stats = ""
+                if (trap.damage != 0) {
+                  stats = stats + s"Damage: ${trap.damage}\n"
+                }
+                if (trap.duration != 0) {
+                  stats = stats + s"Active Duration: ${trap.duration}\n"
+                }
+                val shotPerSec = 20.0f / trap.shotInterval
+                stats + f"Shots per Second: $shotPerSec%2.2f"
               }
               SButton(name, {
                 txt.text = s"${description}"
