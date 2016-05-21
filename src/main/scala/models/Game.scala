@@ -15,9 +15,9 @@ trait GameListener {
   def gameOver(numStars:Int): Unit
 }
 
-class Game(val map: MapInfo, var levelName: String, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
+class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
   val ticksPerSecond = 20
-
+  val levelName = mapID.id
   val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
   val msPerCleanup = msPerTick*40     //cleanup every 2 secs
   val msAuraStickiness = msPerTick*10  //update auras every 10 ticks
@@ -152,7 +152,7 @@ class Game(val map: MapInfo, var levelName: String, var brutes: Vector[BruteID] 
   def reset() = {
     pauseGame
     map.clear()
-    Game.game = new Game(map, levelName, brutes)
+    Game.game = new Game(map, mapID, brutes)
   }
 
   def checkGameOver(): Boolean = {

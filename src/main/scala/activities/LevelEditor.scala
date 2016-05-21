@@ -44,7 +44,7 @@ class LevelEditor extends BaseActivity {
       new MapInfo(
         List.fill(MapID.height, MapID.width)(new Tile(NoTrapID, NoTrapID)), 0, 0, 0, 0
       ),
-      Level1.id
+      Level1
     )
     def map = game.map
 
@@ -111,8 +111,13 @@ class LevelEditor extends BaseActivity {
 
                 import rapture.json._
                 import rapture.json.jsonBackends.jackson._
-                val json: Json = Json(Map[String, MapInfo](name.str -> map))
-                out.write(json.toString.getBytes)
+                try {
+                  val json: Json = Json[Map[String,MapInfo]](Map[String, MapInfo](name.str -> map))
+                  out.write(json.toString.getBytes)
+                  android.util.Log.e("bruteb", s"${json} stored in ${getFilesDir}")
+                } catch {
+                  case _ => android.util.Log.e("bruteb", "BAD THINGS HAPPENED")
+                }
               }
               // new STableRow {
               //   val starOne = SSeekBar().max(0)
