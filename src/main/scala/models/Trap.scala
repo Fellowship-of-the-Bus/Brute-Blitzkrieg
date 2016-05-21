@@ -383,9 +383,11 @@ class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
 }
 
 class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
-  // override def attack(): Option[BaseProjectile] = {
-  //   None
-  // }
+  override def getInRangeBrutes: List[BaseBrute] = {
+    Game.game.map.getTile(coord).bruteList.toList.filter(b => {
+      b.height >= 0.6f || b.isFlying
+    })
+  }
 }
 
 object Trap {
