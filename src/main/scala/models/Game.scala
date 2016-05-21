@@ -15,7 +15,7 @@ trait GameListener {
   def gameOver(numStars:Int): Unit
 }
 
-class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
+class Game(val map: MapInfo, var levelName: String, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
   val ticksPerSecond = 20
 
   val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
@@ -151,6 +151,7 @@ class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] =
 
   def reset() = {
     pauseGame
+    map.clear()
     Game.game = new Game(map, levelName, brutes)
   }
 

@@ -25,7 +25,7 @@ class PreBattleActivity extends BaseActivity {
     super.onCreate(savedState)
 
     val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    game = new Game(maps(mapId), mapId)
+    game = new Game(maps(mapId).copy(), mapId.id)
     error(s"got level id $mapId")
 
 

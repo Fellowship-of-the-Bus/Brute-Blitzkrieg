@@ -114,8 +114,9 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
         })
       setCooldown()
       fireProjectile(listOfBrutes.head)
+    } else {
+      None
     }
-    None
   }
   def setCooldown() = {
     canAttack = false
@@ -279,7 +280,7 @@ class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
     if (canAttack && listOfBrutes.length != 0) {
 
       //for each in range, attack
-      listOfBrutes.map(brute => brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
+      listOfBrutes.filter(b => !b.isFlying).map(brute => brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
       setCooldown()
     }
     None

@@ -32,7 +32,7 @@ case class ProjAttr(
   speed: Float)
 
 object ProjIds {
-  val ids = Vector(ArrowProj, PoisonProj)
+  val ids = Vector(ArrowProj, PoisonProj, FireProj, LightningProj)
 }
 
 abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val damage: Float) extends TopLeftCoordinates {
@@ -58,7 +58,7 @@ abstract class BaseProjectile(val id: ProjectileID, val coord: Coordinate, val d
 
 abstract class TimedProjectile(pid: ProjectileID, pcoord:Coordinate, val source: BaseTrap, val target: BaseBrute, val numFrames: Int) extends BaseProjectile(pid, pcoord, 0) with TimerListener {
   //a projectile drawable that does not do damage but only gives something to draw
-  //damage is done instantly when the projectile is fired 
+  //damage is done instantly when the projectile is fired
   //for instance a lightning bolt will be drawn for a couple frames but the damage is done when the tower fires
   add(new TickTimer(numFrames, () => deactivate()))
 
@@ -74,7 +74,7 @@ abstract class TimedProjectile(pid: ProjectileID, pcoord:Coordinate, val source:
     }
   }
 
-} 
+}
 
 class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val source: BaseTrap, val target: BaseBrute) extends BaseProjectile(pid, pcoord, pdamage) {
   def direction(): (Float, Float) = {
@@ -93,7 +93,7 @@ class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val
     }
     val (dx, dy) = (target.coord.x-coord.x, target.coord.y - coord.y)
     val norm = math.sqrt(dx*dx + dy*dy)
-    //check if we collide 
+    //check if we collide
     if (norm >= speed) {
       super.move()
     } else {

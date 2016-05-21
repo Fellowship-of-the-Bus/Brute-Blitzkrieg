@@ -82,9 +82,9 @@ class BattleActivity extends BaseActivity with GameListener {
     import Game.game
     val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
     val editor = data.edit()
-    val storedNumStars = data.getInt(game.levelName.id, 0)
+    val storedNumStars = data.getInt(game.levelName, 0)
     if (numStars > storedNumStars) {
-      editor.putInt(game.levelName.id, numStars)
+      editor.putInt(game.levelName, numStars)
       editor.commit()
     }
     this.runOnUiThread(() => {
