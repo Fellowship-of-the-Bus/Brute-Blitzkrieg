@@ -74,8 +74,8 @@
   "CageGoblinID": {
     "maxHP": 50,
     "moveSpeed": 0.1,
-    "width": 0.6,
-    "height": 0.6,
+    "width": 0.59,
+    "height": 0.59,
     "flying": false,
     "regen": 0,
     "radius": 2,
