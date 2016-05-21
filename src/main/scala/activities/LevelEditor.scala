@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.text.InputType
 
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.Arrays
 
 import scala.language.postfixOps
 
@@ -98,7 +99,7 @@ class LevelEditor extends BaseActivity {
 
               doneFunction = () => {
                 import scala.language.implicitConversions
-                val out = openFileOutput(name.str, Context.MODE_PRIVATE)
+                val out = openFileOutput(name.str, Context.MODE_WORLD_READABLE)
                 game = new Game(
                   map.copy(
                     startingGold = gold.int,
@@ -115,6 +116,7 @@ class LevelEditor extends BaseActivity {
                   val json: Json = Json[Map[String,MapInfo]](Map[String, MapInfo](name.str -> map))
                   out.write(json.toString.getBytes)
                   android.util.Log.e("bruteb", s"${json} stored in ${getFilesDir}")
+                  android.util.Log.e("bruteb", s"${getFilesDir.listFiles.mkString(" ")}")
                 } catch {
                   case _ => android.util.Log.e("bruteb", "BAD THINGS HAPPENED")
                 }
