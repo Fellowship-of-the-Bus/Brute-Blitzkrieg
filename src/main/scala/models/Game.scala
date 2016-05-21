@@ -24,7 +24,6 @@ class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] =
   var trapList: List[BaseTrap] = List[BaseTrap]()
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
-  var battleCanvas: BattleCanvas = null
   var timer: Timer = null//new Timer()
 
   var currentGold = map.startingGold
@@ -59,7 +58,7 @@ class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] =
   }
 
   //function for sending brutes
-  def sendBrute(id: BruteID) = {
+  def sendBrute(id: BruteID) = synchronized {
     //check that we have enough gold
     if (currentGold >= BruteAttributeMap(id).goldCost) {
       val brute = Brute(id, new Coordinate(map.startTileCoord.x, map.startTileCoord.y))
@@ -150,6 +149,7 @@ class Game(val map: MapInfo, var levelName: MapID, var brutes: Vector[BruteID] =
   }
 
   def reset() = {
+    pauseGame
     Game.game = new Game(map, levelName, brutes)
   }
 

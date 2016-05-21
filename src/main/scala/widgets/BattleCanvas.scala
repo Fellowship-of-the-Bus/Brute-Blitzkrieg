@@ -19,7 +19,7 @@ import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 
 import android.os.{Handler, Message}
 
-import scala.math.{atan, toDegrees}
+import scala.math.{atan, toDegrees, atan2}
 
 import models.{BruteID, TrapID, ProjectileID, ProjIds, Game, BaseBrute, Coordinate, BaseProjectile, MapInfo, MapID}
 
@@ -44,7 +44,6 @@ object BattleCanvas {
 }
 
 class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context: Context) extends SView {
-  Game.game.battleCanvas = this
   import BattleCanvas._
   canvas = this
   val battleHandler = new BattleHandler()
@@ -145,18 +144,18 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
       }
       canvas.save()
       val angle : Float = {
-        if (dx == 0 && dy > 0) {
+        if (dx == 0 && dy < 0) {
           90f
-        } else if (dx == 0 && dy < 0) {
+        } else if (dx == 0 && dy > 0) {
           270f
         } else {
-          toDegrees(atan(dy/dx)).toFloat
+          (toDegrees(atan2(-dy, dx)).toFloat + 360) % 360
         }
       }
       var (cx, cy) = projectile.centerCoord()
       cx = normX(cx)
       cy = normY(cy)
-      canvas.rotate(angle, cx, cy)
+      canvas.rotate(-angle, cx, cy)
       drawPositioned(image, projectile, false)
       canvas.restore()
     }
