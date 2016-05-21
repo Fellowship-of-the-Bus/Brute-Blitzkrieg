@@ -111,8 +111,9 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
         })
       setCooldown()
       fireProjectile(listOfBrutes.head)
+    } else {
+      None
     }
-    None
   }
   def setCooldown() = {
     canAttack = false
@@ -179,7 +180,7 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             brute.facingRight = !brute.facingRight
             Game.game.map.getTile(brute.coord).register(brute)
           }
-          
+
         })
         belowBrutes.map(brute => {
           if (brute.attr.flying) {
