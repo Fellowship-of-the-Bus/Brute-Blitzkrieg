@@ -1,12 +1,17 @@
 MainActivity:
-	loading screen?
 	design more levels
-	progression saving
 
 Battleactivity
 	test all towers
-	game over / win screen
 
+Others:
+bat drawing at top of each floor
+
+leveledit
+delete button on tile
+
+images:
+? default image
 
 balance
 	flame imps invuln + heal when hit by flame towers?
