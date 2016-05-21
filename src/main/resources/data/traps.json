@@ -43,7 +43,7 @@
   },
   "FlameVentID": {
     "damage": 5,
-    "duration": 0,
+    "duration": 10,
     "shotInterval": 20,
     "targetFlying": true,
     "description": "Deals fire damage to all brutes in range.\nHot enough to melt steel"
