@@ -102,8 +102,11 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var facingRight = false
   var currentFrame = 0
   var frameCounter = 0
+  val sizeOfMap = 8
 
   def isAlive = hp > 0
+
+  def flyingHeight = 0f
 
   def hit(source: BaseTrap, damage: Float) : Unit = {
     //check source has lightning and effected by cage..
@@ -154,7 +157,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     }
   }
 
-  def movingRight = (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0
+  def movingRight: Boolean = (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0
 
   def move(): Unit = {
     incFrame()
@@ -183,7 +186,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
         Game.game.map.getTile(coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
-        coord.y = (coord.y).toInt + 0.75f - height
+        coord.y = (coord.y).toInt + 0.75f - height - flyingHeight
       }
       return
     }
@@ -209,7 +212,6 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       isClimbingStairs = true
       stairProgress = 0
     }
-    val sizeOfMap = 8
     if ((newX + width) > sizeOfMap - 1 && movingRight && coord.y.toInt != 0) {
       isClimbingStairs = true
       stairProgress = 0
@@ -246,6 +248,16 @@ class Goblin(bCoord: Coordinate) extends BaseBrute(GoblinID, bCoord){
 }
 
 class VampireBat(bCoord: Coordinate) extends BaseBrute(VampireBatID, bCoord){
+  override def flyingHeight = 0.249f
+  coord.y -= flyingHeight
+  override def movingRight: Boolean = {
+    //special case for stairs climbing
+    if (x < 1 || x > sizeOfMap - 1) {
+      (this.bottomRightCoord._2 + 0.249f + flyingHeight).toInt % 2 == 0
+    } else {
+      (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0
+    }
+  }
 }
 
 class GoblinShaman(bCoord: Coordinate) extends BaseBrute(GoblinShamanID, bCoord){
