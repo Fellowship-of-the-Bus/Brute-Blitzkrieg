@@ -51,6 +51,9 @@ sealed trait MapID {
 case object Level1 extends MapID {
   val id = "level1"
 }
+case object Custom extends MapID {
+  val id = "custom"
+}
 
 object MapID {
   val height = 4
@@ -60,7 +63,9 @@ object MapID {
     val ids = Vector(Level1)
   }
   implicit lazy val extractor =
-      Json.extractor[String].map(Factory.fromString(_))
+    Json.extractor[String].map(Factory.fromString(_))
+  implicit lazy val serializer =
+    Json.serializer[String].contramap[MapID] { mid => mid.id }
 
   def fromInt(i: Int): MapID = Factory.ids(i-1)
 }

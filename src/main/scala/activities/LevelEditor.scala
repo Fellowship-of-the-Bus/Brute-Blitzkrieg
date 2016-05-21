@@ -7,17 +7,23 @@ import org.scaloid.common._
 // import android.app.Activity
 import android.os.Bundle
 import android.view.Gravity
-import android.graphics.Color
-import android.widget.GridView
-import android.content.Intent
-import android.graphics.Canvas
+import android.widget.{GridView, ImageView}
+import android.content.{Intent, Context}
+import android.graphics.{Color, Canvas}
 import android.graphics.drawable.BitmapDrawable
-import android.widget.ImageView
 import android.text.InputType
 
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
+
+object LevelEditor {
+  implicit class RichEditText(val view: SEditText) extends AnyVal {
+    def int() = view.text.toString.toInt
+    def str() = view.text.toString
+  }
+}
+import LevelEditor._
 
 class LevelEditor extends BaseActivity {
   case class Selection(val button: SImageButton, var trap: TrapID)
@@ -40,18 +46,19 @@ class LevelEditor extends BaseActivity {
       ),
       Level1
     )
+    def map = game.map
 
     setContentView(
       new SLinearLayout {
-        (new BattleCanvas(game.map, true)).<<(0,MATCH_PARENT).Weight(3).>>.here.onTouch {
+        (new BattleCanvas(map, true)).<<(0,MATCH_PARENT).Weight(3).>>.here.onTouch {
           (view, event) => {
             val canvas = view.asInstanceOf[BattleCanvas]
             val (x, y) = (event.getX.toInt/canvas.cellX, event.getY.toInt/canvas.cellY)
             for (sel <- currentSelection; if (x < MapID.width)) {
               error(s"$x $y ${sel.trap}")
               sel.trap match {
-                case _: models.FloorTrapID => game.map.tiles(y)(x).floorTrapID = sel.trap
-                case _: models.WallTrapID => game.map.tiles(y)(x).wallTrapID = sel.trap
+                case _: models.FloorTrapID => map.tiles(y)(x).floorTrapID = sel.trap
+                case _: models.WallTrapID => map.tiles(y)(x).wallTrapID = sel.trap
                 case _ => ()
               }
               game.removeTrap(sel.trap, Coordinate(x, y))
@@ -77,16 +84,43 @@ class LevelEditor extends BaseActivity {
           }
           SButton(R.string.SaveButton, {
             val numeric = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL
+
+            var doneFunction = () => ()
+
             // open dialog
-            val builder = new AlertDialogBuilder("Save the Map").positiveButton("Done").setView(new STableLayout {
+            val builder = new AlertDialogBuilder("Save the Map")
+            builder.setView(new STableLayout {
               val name = SEditText().hint("Name")
               val gold = SEditText().hint("Gold").inputType(numeric)
-              val maxStar = SEditText().hint("Max Star Value").inputType(numeric)
-              new STableRow {
-                val starOne = SSeekBar().max(0)
-                val starTwo = SSeekBar().max(0)
-              }.here
-            }).show
+              val starOne = SEditText().hint("One Star Value").inputType(numeric)
+              val starTwo = SEditText().hint("Two Star Value").inputType(numeric)
+              val starThree = SEditText().hint("Three Star Value").inputType(numeric)
+
+              doneFunction = () => {
+                import scala.language.implicitConversions
+                val out = openFileOutput(name.str, Context.MODE_PRIVATE)
+                game = new Game(
+                  map.copy(
+                    startingGold = gold.int,
+                    oneStar = starOne.int,
+                    twoStar = starTwo.int,
+                    threeStar = starThree.int
+                  ),
+                  Custom
+                )
+
+                import rapture.json._
+                import rapture.json.jsonBackends.jackson._
+                val json: Json = Json(Map[String, MapInfo](name.str -> map))
+                out.write(json.toString.getBytes)
+              }
+              // new STableRow {
+              //   val starOne = SSeekBar().max(0)
+              //   val starTwo = SSeekBar().max(0)
+              // }.here
+            })
+            builder.positiveButton("Done", doneFunction())
+            builder.show
           }).<<.fw.>>
         }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }

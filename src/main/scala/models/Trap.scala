@@ -4,6 +4,7 @@ package models
 
 import scala.collection.mutable.Set
 
+import org.scaloid.common._
 
 import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 import lib.util._
@@ -21,6 +22,7 @@ case class TrapAttributes(
 sealed trait TrapID {
   def image: Int
   def name: Int
+  def string = Game.res.getString(name)
 }
 trait FloorTrapID extends TrapID
 trait WallTrapID extends TrapID
@@ -74,6 +76,7 @@ case object HighBladeID extends WallTrapID {
 case object NoTrapID extends TrapID {
   def image = 0
   def name = 0
+  override def string = "NoTrapID"
 }
 
 object TrapID {
@@ -82,7 +85,7 @@ object TrapID {
     val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID, TrapDoorWebbedID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
-
+  implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string)
 }
 
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
@@ -179,7 +182,7 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             brute.facingRight = !brute.facingRight
             Game.game.map.getTile(brute.coord).register(brute)
           }
-          
+
         })
         belowBrutes.map(brute => {
           if (brute.attr.flying) {

@@ -31,6 +31,7 @@ class MainActivity extends BaseActivity {
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg main activity started")
     super.onCreate(savedState)
+    Game.res = getResources
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
     val editor = prefs.edit()
     //first time setup
