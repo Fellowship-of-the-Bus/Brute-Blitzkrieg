@@ -18,7 +18,7 @@ case class TrapAttributes(
   shotInterval: Int,     // number of ticks per shot
   targetFlying: Boolean, // can target flying units
   description: String
-  )
+)
 
 sealed trait TrapID {
   def image: Int
@@ -77,7 +77,7 @@ case object HighBladeID extends WallTrapID {
 case object NoTrapID extends TrapID {
   def image = 0
   def name = 0
-  override def string = "NoTrapID"
+  override def string = "NoTrap"
 }
 
 object TrapID {
@@ -86,7 +86,7 @@ object TrapID {
     val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID, TrapDoorWebbedID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
-  implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string)
+  implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string + "ID")
 }
 
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")

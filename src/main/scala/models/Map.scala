@@ -57,10 +57,13 @@ sealed trait MapID {
   val id: String
 }
 case object Level1 extends MapID {
-  val id = "level1"
+  val id = "Level1"
 }
-case object Custom extends MapID {
-  val id = "custom"
+object Custom {
+  val prefix = "Custom_"
+}
+case class Custom(val name: String) extends MapID {
+  val id = s"${Custom.prefix}$name"
 }
 
 object MapID {
@@ -71,7 +74,7 @@ object MapID {
     val ids = Vector(Level1)
   }
   implicit lazy val extractor =
-    Json.extractor[String].map(Factory.fromString(_))
+    Json.extractor[String].map(x => if (Factory.fromString.isDefinedAt(x)) Factory.fromString(x) else Custom(x))
   implicit lazy val serializer =
     Json.serializer[String].contramap[MapID] { mid => mid.id }
 

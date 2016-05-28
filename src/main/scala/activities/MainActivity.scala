@@ -33,74 +33,44 @@ class MainActivity extends BaseActivity {
     super.onCreate(savedState)
     Game.res = getResources
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
-    val editor = prefs.edit()
-    //first time setup
-    if (!prefs.contains("level1")) {
-      for (range <- 1 to 12) {
-        editor.putInt(s"level${range}", 0)
-      }
-    }
-    editor.commit()
     setContentView(
+
+      // number of stars earned in level i
 
       new SLinearLayout {
         new STableLayout {
-          for (range <- 1 to 12 grouped 3) {
+          import MapID.Factory.ids
+          def stars(i: Int): Int = prefs.getInt(ids.lift(i).map(_.id).getOrElse("No Key"), 0)
+          for (range <- 1 to ids.length grouped 3) {
             this += new STableRow {
               for (i <- range) {
                 new SVerticalLayout {
                   SButton(s"Level $i", switchScreen(i)).<<.fill.>>
                   new SLinearLayout {
-                    // if (prefs.getInt(s"level${i}") == 0) {
-                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
-                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
-                    //   this += SImageView(R.drawable.grey_star).<<(50,50).here
-                    // } else {
-                      for (index <- 1 to prefs.getInt(s"level$i",0 )) {
-                        SImageView(R.drawable.star).<<(50,50)
-                      }
-                      for (index <- prefs.getInt(s"level$i", 0)+1 to 3) {
-                        SImageView(R.drawable.grey_star).<<(50,50)
-                      }
-                    //}
-                    // SImageView(R.drawable.grey_star).<<(50,50)
-                    // SImageView(R.drawable.star).<<(50,50)
-                    // SImageView(R.drawable.grey_star).<<(50,50)
+                    for (index <- 1 to stars(i)) {
+                      SImageView(R.drawable.star).<<(50,50)
+                    }
+                    for (index <- stars(i)+1 to 3) {
+                      SImageView(R.drawable.grey_star).<<(50,50)
+                    }
                   }.gravity(Gravity.CENTER).here
                 }
               }.here
             }
           }
-        }.<<(0, MATCH_PARENT).Weight(3).>>.here//.stretchColumns("*")
-        /*var grid = new SGridLayout {
-          SButton("Level One").<<.wrap.>>
-          SButton("Level Two").<<.wrap.>>
-          SButton("Level Three").<<.wrap.>>
-          SButton("Level Four").<<.wrap.>>
-          SButton("Level Five").<<.wrap.>>
-          SButton("Level Six").<<.wrap.>>
-          SButton("Level Seven").<<.wrap.>>
-          SButton("Level Eight").<<.wrap.>>
-          SButton("Level Nine").<<.wrap.>>
-          SButton("Level Ten").<<.wrap.>>
-          SButton("Level Eleven").<<.wrap.>>
-          SButton("Level Twelve").<<.wrap.>>
-        }.<<.wrap.>>.columnCount(3).columnOrderPreserved(true).here*/
+        }.<<(0, MATCH_PARENT).Weight(3).>>.here
         new STableLayout {
           new STableRow {
             SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
           }.<<.wrap.>>.here
           new STableRow {
-          SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
-
+            SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
           }.<<.wrap.>>.here
           new STableRow {
-          SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
-
+            SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
           }.<<.wrap.>>.here
           new STableRow {
-          SButton(R.string.QuitButton, finish()).<<.fw.>>
-
+            SButton(R.string.QuitButton, finish()).<<.fw.>>
           }.<<.wrap.>>.here
         }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }

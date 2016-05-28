@@ -1,4 +1,5 @@
-package com.github.fellowship_of_the_bus.bruteb
+package com.github.fellowship_of_the_bus
+package bruteb
 
 import models._
 
@@ -6,8 +7,8 @@ import org.scaloid.common._
 
 // import android.app.Activity
 import android.os.Bundle
-import android.view.Gravity
-import android.widget.{GridView, ImageView}
+import android.view.{Gravity, View}
+import android.widget.{GridView, ImageView, AdapterView}
 import android.content.{Intent, Context}
 import android.graphics.{Color, Canvas}
 import android.graphics.drawable.BitmapDrawable
@@ -100,26 +101,22 @@ class LevelEditor extends BaseActivity {
               doneFunction = () => {
                 import scala.language.implicitConversions
                 val out = openFileOutput(name.str, Context.MODE_WORLD_READABLE)
+                val customID = Custom(name.str)
                 game = new Game(
                   map.copy(
                     startingGold = gold.int,
                     oneStar = starOne.int,
                     twoStar = starTwo.int,
                     threeStar = starThree.int
-                  ),
-                  Custom
+                  ), customID
                 )
 
                 import rapture.json._
                 import rapture.json.jsonBackends.jackson._
-                try {
-                  val json: Json = Json[Map[String,MapInfo]](Map[String, MapInfo](name.str -> map))
-                  out.write(json.toString.getBytes)
-                  android.util.Log.e("bruteb", s"${json} stored in ${getFilesDir}")
-                  android.util.Log.e("bruteb", s"${getFilesDir.listFiles.mkString(" ")}")
-                } catch {
-                  case _ => android.util.Log.e("bruteb", "BAD THINGS HAPPENED")
-                }
+                val json: Json = Json(Map[String, MapInfo](customID.id -> map))
+                out.write((json.toString + "\n").getBytes)
+                android.util.Log.e("bruteb", s"${json} stored in ${getFilesDir}")
+                android.util.Log.e("bruteb", s"${getFilesDir.listFiles.mkString(" ")}")
               }
               // new STableRow {
               //   val starOne = SSeekBar().max(0)
@@ -129,6 +126,31 @@ class LevelEditor extends BaseActivity {
             builder.positiveButton("Done", doneFunction())
             builder.show
           }).<<.fw.>>
+          SButton(R.string.LoadButton, {
+            val files = getFilesDir.listFiles
+            var index = -1
+            val listView = new SListView
+            listView.adapter = SArrayAdapter(files.map{ _.getName })
+            listView.onItemClick((parent: AdapterView[_], item: View, idx: Int, id: Long) => index = idx)
+
+            val builder = new AlertDialogBuilder("Load a Map")
+            builder.setView(listView)
+            builder.positiveButton("Load", {
+              import models.MapInfo._
+              import models.MapID.{extractor}
+              val customID = Custom(files(index).getName)
+              implicit object Factory extends lib.game.IDFactory[MapID] {
+                val ids = Vector(customID)
+                addParser {
+                  case name if (name.startsWith(Custom.prefix)) => Custom(name.substring(Custom.prefix.length))
+                }
+              }
+
+              val idmap = new lib.game.IDMap[MapID, MapInfo](new java.io.FileInputStream(files(index)))
+              game = new Game(idmap(customID), customID)
+            })
+            builder.show
+          })
         }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
       }
     )

@@ -39,7 +39,7 @@ case class BruteAttributes(
   auraRegen: Float,  //Amount of regen of the aura
   description: String, // A brief description of the brute
   goldCost: Int
-  )
+)
 
 sealed trait BruteID {
   def imageList: List[Int]
