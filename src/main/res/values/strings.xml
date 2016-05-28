@@ -4,6 +4,7 @@
     <string name="TrapButton">Traps</string>
     <string name="LevelEditorButton">Level Editor</string>
     <string name="SaveButton">Save...</string>
+    <string name="LoadButton">Load...</string>
     <string name="QuitButton">Quit</string>
     <string name="ReturnButton">Return</string>
 

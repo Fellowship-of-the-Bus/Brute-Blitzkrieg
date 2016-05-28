@@ -61,7 +61,7 @@ libraryDependencies ++= Seq(
   "com.github.fellowship_of_the_bus" %% "fellowship-of-the-bus-android-lib" % "0.1-SNAPSHOT" changing(),
 
   // Tests //////////////////////////////
-  "org.scaloid" %% "scaloid" % "4.1",
+  "org.scaloid" %% "scaloid" % "4.2",
   "org.apache.maven" % "maven-ant-tasks" % "2.1.3" % "test",
   "org.robolectric" % "robolectric" % "3.0" % "test",
   "com.novocode" % "junit-interface" % "0.11" % "test"
