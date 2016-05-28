@@ -127,7 +127,7 @@ class LevelEditor extends BaseActivity {
             builder.show
           }).<<.fw.>>
           SButton(R.string.LoadButton, {
-            val files = getFilesDir.listFiles
+            val files = customMapFiles
             var index = -1
             val listView = new SListView
             listView.adapter = SArrayAdapter(files.map{ _.getName })
@@ -136,18 +136,8 @@ class LevelEditor extends BaseActivity {
             val builder = new AlertDialogBuilder("Load a Map")
             builder.setView(listView)
             builder.positiveButton("Load", {
-              import models.MapInfo._
-              import models.MapID.{extractor}
-              val customID = Custom(files(index).getName)
-              implicit object Factory extends lib.game.IDFactory[MapID] {
-                val ids = Vector(customID)
-                addParser {
-                  case name if (name.startsWith(Custom.prefix)) => Custom(name.substring(Custom.prefix.length))
-                }
-              }
-
-              val idmap = new lib.game.IDMap[MapID, MapInfo](new java.io.FileInputStream(files(index)))
-              game = new Game(idmap(customID), customID)
+              val file = files(index)
+              game = new Game(loadCustom(file), Custom(file.getName))
             })
             builder.show
           })

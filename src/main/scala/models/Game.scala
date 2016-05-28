@@ -9,6 +9,8 @@ import java.util.{Timer, TimerTask}
 object Game {
   var game: Game = null
   var res: android.content.res.Resources = null
+  var map: MapInfo = null
+  var mapId: MapID = null
 }
 
 trait GameListener {

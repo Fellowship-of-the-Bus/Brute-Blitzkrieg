@@ -24,9 +24,7 @@ class PreBattleActivity extends BaseActivity {
     android.util.Log.e("bruteb", "Brute Blitzkrieg pre battle activity started")
     super.onCreate(savedState)
 
-    val mapId: MapID = MapID.fromInt(getIntent().getIntExtra("level", -1))
-    game = new Game(maps(mapId).copy(), mapId)
-    error(s"got level id $mapId")
+    game = new Game(Game.map.copy(), Game.mapId)
 
 
     setContentView(

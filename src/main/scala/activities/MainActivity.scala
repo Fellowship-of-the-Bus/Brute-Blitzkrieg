@@ -21,10 +21,11 @@ class MainActivity extends BaseActivity {
     startActivity(intent)
   }
 
-  def switchScreen(id: Int) = {
+  def switchScreen(id: MapID, map: MapInfo) = {
     android.util.Log.e("bruteb", s"Trying to switch to BattleActivity")
     val intent = new Intent(this, classOf[PreBattleActivity])
-    intent.putExtra("level", id)
+    Game.mapId = id
+    Game.map = map
     startActivity(intent)
   }
 
@@ -40,17 +41,39 @@ class MainActivity extends BaseActivity {
       new SLinearLayout {
         new STableLayout {
           import MapID.Factory.ids
-          def stars(i: Int): Int = prefs.getInt(ids.lift(i).map(_.id).getOrElse("No Key"), 0)
+          def stars(i: Int): Int = stars(ids.lift(i).map(_.id).getOrElse("No Key"))
+          def stars(key: String): Int = prefs.getInt(key, 0)
           for (range <- 1 to ids.length grouped 3) {
             this += new STableRow {
               for (i <- range) {
+                val mapid: MapID = ids(i-1)
                 new SVerticalLayout {
-                  SButton(s"Level $i", switchScreen(i)).<<.fill.>>
+                  SButton(s"Level $i", switchScreen(mapid, maps(mapid))).<<.fill.>>
                   new SLinearLayout {
                     for (index <- 1 to stars(i)) {
                       SImageView(R.drawable.star).<<(50,50)
                     }
                     for (index <- stars(i)+1 to 3) {
+                      SImageView(R.drawable.grey_star).<<(50,50)
+                    }
+                  }.gravity(Gravity.CENTER).here
+                }
+              }.here
+            }
+          }
+          // load custom maps
+          val filenames = customMapFiles.map { _.getName }
+          for (range <- 1 to filenames.length grouped 3) {
+            this += new STableRow {
+              for (i <- range) {
+                new SVerticalLayout {
+                  val name = filenames(i-1)
+                  SButton(name, switchScreen(Custom(name), loadCustom(customMapFiles(i-1)))).<<.fill.>>
+                  new SLinearLayout {
+                    for (index <- 1 to stars(name)) {
+                      SImageView(R.drawable.star).<<(50,50)
+                    }
+                    for (index <- stars(name)+1 to 3) {
                       SImageView(R.drawable.grey_star).<<(50,50)
                     }
                   }.gravity(Gravity.CENTER).here

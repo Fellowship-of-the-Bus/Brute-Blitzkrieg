@@ -86,7 +86,7 @@ object TrapID {
     val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID, TrapDoorWebbedID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
-  implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string + "ID")
+  implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string.replace(" ", "") + "ID")
 }
 
 case object TrapAttributeMap extends IDMap[TrapID, TrapAttributes]("data/traps.json")
