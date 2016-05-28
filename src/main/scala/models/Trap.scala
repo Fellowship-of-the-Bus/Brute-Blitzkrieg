@@ -367,15 +367,27 @@ class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
 }
 
 class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
+  var attacking = false
+  override def setCooldown () = {
+    if (!attacking) {
+      attacking = true
+      add(new TickTimer(attr.duration, () => {
+                                      canAttack = false
+                                      attacking = false}))
+      add(new TickTimer(attr.shotInterval, () => canAttack = true))
+    }
+  }
   override def fireProjectile(brute: BaseBrute): Option[BaseProjectile] = {
     Some(new FireProjectile(FireProj, coord.copy(), this, brute))
   }
 }
 
 class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
-  // override def attack(): Option[BaseProjectile] = {
-  //   None
-  // }
+  override def getInRangeBrutes: List[BaseBrute] = {
+    Game.game.map.getTile(coord).bruteList.toList.filter(b => {
+      b.height >= 0.6f || b.isFlying
+    })
+  }
 }
 
 object Trap {

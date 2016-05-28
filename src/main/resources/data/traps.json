@@ -43,7 +43,7 @@
   },
   "FlameVentID": {
     "damage": 5,
-    "duration": 0,
+    "duration": 10,
     "shotInterval": 20,
     "targetFlying": true,
     "description": "Deals fire damage to all brutes in range.\nHot enough to melt steel"
@@ -52,7 +52,7 @@
     "damage": 30,
     "duration": 0,
     "shotInterval": 20,
-    "targetFlying": false,
-    "description": "Deals heavy damage to all non-flying brutes in range.\nWhere's Your Head?"
+    "targetFlying": true,
+    "description": "Deals heavy damage to all tall brutes in range.\nWhere's Your Head?"
   }
 }

@@ -1,17 +1,8 @@
 MainActivity:
 	design more levels
 
-Battleactivity
-	test all towers
-
-Others:
-bat drawing at top of each floor
-
 leveledit
 delete button on tile
-
-images:
-? default image
 
 balance
 	flame imps invuln + heal when hit by flame towers?

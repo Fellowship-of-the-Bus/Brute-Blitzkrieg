@@ -109,7 +109,7 @@ class PoisonProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, 
   override def direction = (0,0)
   override def speed = 0f
 }
-class FireProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 10) {
+class FireProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 5) {
   override def width = 1f
   override def height = 3/4f
   override def direction = (0,0)
