@@ -1,12 +1,12 @@
 {
-  "TrapDoorID": {
+  "TrapdoorID": {
     "damage": 0,
     "duration": 0,
     "shotInterval": 20,
     "targetFlying": false,
     "description": "Sends all non-flying brutes down a floor. Once opened, stays open unless blocked by a spider.\nHave a Fall"
   },
-  "ReuseTrapDoorID": {
+  "ReuseTrapdoorID": {
     "damage": 0,
     "duration": 10,
     "shotInterval": 60,

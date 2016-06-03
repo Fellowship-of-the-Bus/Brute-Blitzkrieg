@@ -8,7 +8,7 @@ import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
-import android.widget.GridView
+import android.view.View
 import android.content.Intent
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -16,11 +16,30 @@ import scala.language.postfixOps
 
 class BaseActivity extends SActivity {
   override implicit val loggerTag = new LoggerTag("bruteb")
+  var layout: android.view.View = null
 
 	override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     getActionBar().hide()
+
+    //setContentView(
+    //  layout
+    //)
 	}
+
+  override def setContentView (v : View) {
+    super.setContentView(
+      new SLinearLayout {
+         style {
+          case b: SButton => b.allCaps(false)
+          case viw: TraitViewGroup[_] =>
+            for (i <- 0 until viw.basis.childCount) this.applyStyle(viw.basis.getChildAt(i))
+            viw
+        }
+        v.here
+      }
+    )
+  }
 
   def customMapFiles = getFilesDir.listFiles
 

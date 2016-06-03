@@ -28,23 +28,23 @@ sealed trait TrapID {
 trait FloorTrapID extends TrapID
 trait WallTrapID extends TrapID
 
-case object TrapDoorID extends FloorTrapID {
+case object TrapdoorID extends FloorTrapID {
   def image = R.drawable.trapdoor_closed
   def name = R.string.Trapdoor
 }
-case object TrapDoorOpenID extends FloorTrapID {
+case object TrapdoorOpenID extends FloorTrapID {
   def image = R.drawable.trapdoor_open
   def name = R.string.Trapdoor
 }
-case object TrapDoorWebbedID extends FloorTrapID {
+case object TrapdoorWebbedID extends FloorTrapID {
   def image = R.drawable.trapdoor_webbed
   def name = R.string.Trapdoor
 }
-case object ReuseTrapDoorID extends FloorTrapID {
+case object ReuseTrapdoorID extends FloorTrapID {
   def image = R.drawable.reusable_trapdoor
   def name = R.string.ReusableTrapdoor
 }
-case object ReuseTrapDoorOpenID extends FloorTrapID {
+case object ReuseTrapdoorOpenID extends FloorTrapID {
   def image = R.drawable.trapdoor_open
   def name = R.string.ReusableTrapdoor
 }
@@ -82,8 +82,8 @@ case object NoTrapID extends TrapID {
 
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
-    val ids = Vector(TrapDoorID, ReuseTrapDoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
-    val openIds = Vector(TrapDoorOpenID, ReuseTrapDoorOpenID, TrapDoorWebbedID)
+    val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
+    val openIds = Vector(TrapdoorOpenID, ReuseTrapdoorOpenID, TrapdoorWebbedID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
   implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string.replace(" ", "") + "ID")
@@ -149,13 +149,13 @@ class WallTrap(tid: WallTrapID, tCoord: Coordinate) extends BaseTrap(tid, tCoord
   override def width = 1
 }
 
-class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoord){
+class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoord){
   override def height = 3/4f
 
   var isOpen = false
   var isBlockedByWeb = false
   canAttack = true
-  val altid : FloorTrapID = TrapDoorOpenID
+  val altid : FloorTrapID = TrapdoorOpenID
   val belowCoord = new Coordinate(tCoord.x, tCoord.y + 1)
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
   override def attack(): Option[BaseProjectile] = {
@@ -175,7 +175,7 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
       }
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
         isBlockedByWeb = true
-        id = TrapDoorWebbedID
+        id = TrapdoorWebbedID
       } else {
         listOfBrutes.map(brute => {
           if (!brute.attr.flying) {
@@ -211,12 +211,12 @@ class TrapDoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
   // }
 }
 
-class ReuseTrapDoor(tCoord: Coordinate) extends TrapDoor(ReuseTrapDoorID, tCoord) {
+class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord) {
   override def height = 3/4f
 
   //var isOpen = false
   //var isBlockedByWeb = false
-  override val altid = ReuseTrapDoorOpenID
+  override val altid = ReuseTrapdoorOpenID
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
   override def attack(): Option[BaseProjectile] = {
     tickOnce()
@@ -227,7 +227,7 @@ class ReuseTrapDoor(tCoord: Coordinate) extends TrapDoor(ReuseTrapDoorID, tCoord
         add(new TickTimer(10, () => {
             isOpen = false
             if (!isBlockedByWeb)
-              id = ReuseTrapDoorID
+              id = ReuseTrapdoorID
           }))
         setCooldown()
       }
@@ -246,11 +246,11 @@ class ReuseTrapDoor(tCoord: Coordinate) extends TrapDoor(ReuseTrapDoorID, tCoord
         return None
       }
       isOpen = true
-      id = ReuseTrapDoorOpenID
+      id = ReuseTrapdoorOpenID
       // add a timer to close the trap after some number of ticks
       add(new TickTimer(10, () => {
         isOpen = false
-        id = ReuseTrapDoorID
+        id = ReuseTrapdoorID
       }))
       //check for spider
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
@@ -393,8 +393,8 @@ class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
 object Trap {
   def apply(id: TrapID, coord:Coordinate) = {
     id match {
-      case TrapDoorID => new TrapDoor(TrapDoorID, coord)
-      case ReuseTrapDoorID => new ReuseTrapDoor(coord)
+      case TrapdoorID => new Trapdoor(TrapdoorID, coord)
+      case ReuseTrapdoorID => new ReuseTrapdoor(coord)
       case TarID => new Tar(coord)
       case PoisonID => new Poison(coord)
       case ArrowID => new Arrow(coord)

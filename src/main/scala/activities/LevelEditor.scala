@@ -92,7 +92,7 @@ class LevelEditor extends BaseActivity {
             // open dialog
             val builder = new AlertDialogBuilder("Save the Map")
             builder.setView(new STableLayout {
-              val name = SEditText().hint("Name")
+              val name = SEditText().hint("Name").singleLine(true)
               val gold = SEditText().hint("Gold").inputType(numeric)
               val starOne = SEditText().hint("One Star Value").inputType(numeric)
               val starTwo = SEditText().hint("Two Star Value").inputType(numeric)
