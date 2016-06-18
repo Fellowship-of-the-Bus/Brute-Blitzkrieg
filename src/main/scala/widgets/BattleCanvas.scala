@@ -152,7 +152,8 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
           (toDegrees(atan2(-dy, dx)).toFloat + 360) % 360
         }
       }
-      var (cx, cy) = projectile.centerCoord()
+      var cx = projectile.coord.x
+      var cy = projectile.coord.y + (projectile.height / 2)
       cx = normX(cx)
       cy = normY(cy)
       canvas.rotate(-angle, cx, cy)

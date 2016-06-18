@@ -73,6 +73,10 @@ case object HighBladeID extends WallTrapID {
   def image = R.drawable.high_blade1
   def name = R.string.HighBlade
 }
+case object HighBlade2ID extends WallTrapID {
+  def image = R.drawable.high_blade2
+  def name = R.string.HighBlade
+}
 
 case object NoTrapID extends TrapID {
   def image = 0
@@ -83,7 +87,7 @@ case object NoTrapID extends TrapID {
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
     val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
-    val openIds = Vector(TrapdoorOpenID, ReuseTrapdoorOpenID, TrapdoorWebbedID)
+    val openIds = Vector(TrapdoorOpenID, ReuseTrapdoorOpenID, TrapdoorWebbedID, HighBlade2ID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
   implicit lazy val serializer = Json.serializer[String].contramap[TrapID](x => x.string.replace(" ", "") + "ID")
@@ -102,7 +106,7 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
     Game.game.map.getTile(coord).bruteList.toList.filter(_.isAlive)
     //List[BaseBrute]()
   }
-  def attack(): Option[BaseProjectile] = {
+  def attack(): List[BaseProjectile] = {
     tickOnce()
     //get brutes in range
     val listOfBrutes = getInRangeBrutes
@@ -114,9 +118,9 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
           if (attr.targetFlying || !brute.attr.flying) brute.hit(this, attr.damage)
         })
       setCooldown()
-      fireProjectile(listOfBrutes.head)
+      fireProjectiles(listOfBrutes)
     } else {
-      None
+      List[BaseProjectile]()
     }
   }
   def setCooldown() = {
@@ -129,6 +133,16 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
     } else {
       cancelAll()
     }
+  }
+
+  def fireProjectiles(targets: List[BaseBrute]) : List[BaseProjectile] = {
+    var projList: List[BaseProjectile] = List[BaseProjectile]()
+    val proj = fireProjectile(targets.head)
+    proj match {
+      case Some(projectile) => projList = projectile::projList
+      case None => ()
+    }
+    projList
   }
   def fireProjectile(target: BaseBrute) : Option[BaseProjectile] = None
 
@@ -158,9 +172,9 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
   val altid : FloorTrapID = TrapdoorOpenID
   val belowCoord = new Coordinate(tCoord.x, tCoord.y + 1)
   //no damage, drop the brutes down to a lower level, check if spider is over the trap, if so block
-  override def attack(): Option[BaseProjectile] = {
+  override def attack(): List[BaseProjectile] = {
     if (isBlockedByWeb) {
-      return None
+      return List[BaseProjectile]()
     } else {
       val listOfBrutes = getInRangeBrutes
       val belowBrutes = Game.game.map.getTile(belowCoord).bruteList.toList.filter(_.isAlive)
@@ -171,7 +185,7 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           id = altid
         }
       } else {
-        return None
+        return List[BaseProjectile]()
       }
       if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
         isBlockedByWeb = true
@@ -194,21 +208,21 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             Game.game.map.getTile(brute.coord).register(brute)
           }
         })
-        //merge brute sets from our tile into the tile below us
-/*
-        val curTile = Game.game.map.getTile(coord)
-        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
-        tileBelow.bruteList ++= curTile.bruteList.filter(!_.attr.flying)
-        curTile.bruteList = curTile.bruteList.filter(_.attr.flying)
-*/
       }
     }
-    None
+    List[BaseProjectile]()
   }
-  // override def height = {
-  //   if (isOpen) 3/8f
-  //   else 1/4f
-  // }
+
+  override def getInRangeBrutes: List[BaseBrute] = {
+    Game.game.map.getTile(coord).bruteList.toList.filter(b => {
+      val progress = b.x % 1
+      if (b.facingRight) {
+        (progress - b.width) > 0
+      } else {
+        (b.width - progress) > 0
+      }
+    })
+  }
 }
 
 class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord) {
@@ -218,7 +232,7 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
   //var isBlockedByWeb = false
   override val altid = ReuseTrapdoorOpenID
   //no damage, drop the brutes down to a lower level, opens and closes using shotInterval
-  override def attack(): Option[BaseProjectile] = {
+  override def attack(): List[BaseProjectile] = {
     tickOnce()
     if (isOpen || canAttack) {
       val wasOpen = isOpen
@@ -232,49 +246,23 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
         setCooldown()
       }
     }
-    None
-    //check if we can attack
-    /*tickOnce()
-    if (!canAttack && !isOpen) {
-      return None
-    }
-    if (isBlockedByWeb) {
-      return None
-    } else {
-      val listOfBrutes = getInRangeBrutes
-      if (listOfBrutes.length == 0){
-        return None
-      }
-      isOpen = true
-      id = ReuseTrapdoorOpenID
-      // add a timer to close the trap after some number of ticks
-      add(new TickTimer(10, () => {
-        isOpen = false
-        id = ReuseTrapdoorID
-      }))
-      //check for spider
-      if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
-        isBlockedByWeb = true
-      } else {
-        listOfBrutes.map(brute => brute.coord.y += 1)
-        //merge brute sets from our tile into the tile below us
-
-        val curTile = Game.game.map.getTile(coord)
-        val tileBelow = Game.game.map.getTile(Coordinate(coord.x, coord.y+1))
-        tileBelow.bruteList ++= curTile.bruteList
-        curTile.bruteList.clear
-      }
-      //set the cooldown timer if we havent yet
-      if (canAttack) setCooldown()
-    }
-    None
-  */
+    List[BaseProjectile]()
   }
 
+  override def getInRangeBrutes: List[BaseBrute] = {
+    Game.game.map.getTile(coord).bruteList.toList.filter(b => {
+      val progress = b.x % 1
+      if (b.facingRight) {
+        (progress - b.width) > 0
+      } else {
+        (b.width - progress) > 0
+      }
+    })
+  }
 }
 
 class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
+  override def attack(): List[BaseProjectile] = {
     tickOnce()
     //probably apply a debuff on each
     val listOfBrutes = getInRangeBrutes
@@ -284,12 +272,12 @@ class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
       listOfBrutes.filter(b => !b.isFlying).map(brute => brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
       setCooldown()
     }
-    None
+    List[BaseProjectile]()
   }
 }
 
 class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
-  override def attack(): Option[BaseProjectile] = {
+  override def attack(): List[BaseProjectile] = {
     tickOnce()
     //get brutes in range
     val listOfBrutes = getInRangeBrutes
@@ -300,15 +288,11 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
           brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects
         })
       setCooldown()
-      Some(new PoisonProjectile(PoisonProj, coord.copy(), this, null))
+      new PoisonProjectile(PoisonProj, coord.copy(), this, null)::List[BaseProjectile]()
     } else {
-      None
+      List[BaseProjectile]()
     }
   }
-  // override def attack(): Option[BaseProjectile] = {
-  //   //either straight up deal damage or apply a debuff
-  //   None
-  // }
 }
 
 class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
@@ -321,18 +305,18 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
     setOfBrutes.toList.filter(_.isAlive)
   }
 
-  override def attack() : Option[BaseProjectile]= {
+  override def attack() : List[BaseProjectile]= {
     tickOnce()
 
     //android.util.Log.e("bruteb", s"arrow location $x, $y")
-    if (!canAttack) return None
+    if (!canAttack) return List[BaseProjectile]()
     curTarget match {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
         if (!brute.isClimbingStairs && dy < 0.5 && brute.isAlive) {
           setCooldown()
-          return Some(new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
+          return  List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
         }
       }
       case _ => ()
@@ -342,9 +326,9 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
       case Some(brute) => {
         curTarget = Some(brute)
         setCooldown()
-        return Some(new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
+        return List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
       }
-      case None => None
+      case None => List[BaseProjectile]()
     }
   }
 
@@ -361,8 +345,40 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
 }
 
 class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
+  override def height = 3/8f
+  
+  def firingCoord(towerCoord: Coordinate) = {
+    val c = coord.copy()
+    c.x += width / 2
+    c.y += height / 2
+    c
+  }
+
+  override def getInRangeBrutes: List[BaseBrute] = {
+    val leftCoord = coord.copy()
+    leftCoord.x = leftCoord.x - 1
+    val rightCoord = coord.copy()
+    rightCoord.x = rightCoord.x + 1
+
+    (Game.game.map.getTile(coord).bruteList.toList.filter(_.isAlive)
+    :::Game.game.map.getTile(leftCoord).bruteList.toList.filter(_.isAlive)
+    :::Game.game.map.getTile(rightCoord).bruteList.toList.filter(_.isAlive))
+  }
+
+  override def fireProjectiles(targets: List[BaseBrute]) : List[BaseProjectile] = {
+    var projList: List[BaseProjectile] = List[BaseProjectile]()
+    for (brute <- targets) {
+      val proj = fireProjectile(brute)
+      proj match {
+        case Some(projectile) => projList = projectile::projList
+        case None => ()
+      }
+    }
+    projList
+  }
+
   override def fireProjectile(brute: BaseBrute): Option[BaseProjectile] = {
-    Some(new LightningProjectile(LightningProj, coord.copy(), this, brute))
+    Some(new LightningProjectile(LightningProj, firingCoord(coord), this, brute))
   }
 }
 
@@ -383,10 +399,24 @@ class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
 }
 
 class HighBlade(tCoord: Coordinate) extends WallTrap(HighBladeID, tCoord) {
+  override def height = 3/8f
+  var imgSwapCounter = 0
+  val altid : WallTrapID = HighBlade2ID
   override def getInRangeBrutes: List[BaseBrute] = {
     Game.game.map.getTile(coord).bruteList.toList.filter(b => {
       b.height >= 0.6f || b.isFlying
     })
+  }
+  override def attack(): List[BaseProjectile] = {
+    imgSwapCounter = (imgSwapCounter + 1) % 4
+    if (imgSwapCounter == 0) {
+      if (id == altid) {
+        id = HighBladeID
+      } else {
+        id = altid
+      }
+    }
+    super.attack();
   }
 }
 

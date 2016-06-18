@@ -101,11 +101,8 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
       proj.move()
     }
     for (trap <- trapList) {
-      val proj = trap.attack()
-      proj match {
-        case Some(projectile) => projList = projectile::projList
-        case None => ()
-      }
+      val projs = trap.attack()
+      projList = projs:::projList
     }
     //battleCanvas.postInvalidate()
   }

@@ -116,7 +116,10 @@ class FireProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, pt
   override def speed = 0f
 }
 class LightningProjectile(pid:ProjectileID, pcoord: Coordinate, psource: BaseTrap, ptarget:BaseBrute) extends TimedProjectile(pid, pcoord, psource, ptarget, 10) {
-  override def width = 3/4f
+  override def width = {
+    val (dx, dy) = (target.coord.x-coord.x, target.coord.y - coord.y)
+    math.sqrt(dx*dx + dy*dy).toFloat
+  }
   override def height = 3/8f
   override def direction = {
     val dx = target.x - source.x
