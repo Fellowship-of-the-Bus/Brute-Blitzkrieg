@@ -88,17 +88,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
             normX(Game.game.map.startTileCoord.x + 1),
             normY(Game.game.map.startTileCoord.y + 0.75f)), null)
 
-    // draw grid for level editor
-    if (drawGrid) {
-      paint.setColor(Color.RED)
-      paint.setStrokeWidth(2 dip)
-      for (row <- 0 to MapID.height) {
-        canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
-      }
-      for (col <- 0 to MapID.width) {
-        canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
-      }
-    }
 
     for (trap <- Game.game.trapList.reverse) {
       val image = trapImages(trap.id)
@@ -115,6 +104,17 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
       val image = bruteImages(brute.id)(brute.currentFrame)
 
       drawPositioned(image, brute, brute.facingRight)
+    }
+    // draw grid for level editor
+    if (drawGrid) {
+      paint.setColor(Color.RED)
+      paint.setStrokeWidth(2 dip)
+      for (row <- 0 to MapID.height) {
+        canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
+      }
+      for (col <- 0 to MapID.width) {
+        canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
+      }
     }
 
     paint.setColor(Color.WHITE);
