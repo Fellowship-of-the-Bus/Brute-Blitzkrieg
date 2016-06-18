@@ -60,7 +60,7 @@ abstract class TimedProjectile(pid: ProjectileID, pcoord:Coordinate, val source:
   //a projectile drawable that does not do damage but only gives something to draw
   //damage is done instantly when the projectile is fired
   //for instance a lightning bolt will be drawn for a couple frames but the damage is done when the tower fires
-  add(new TickTimer(numFrames, () => deactivate()))
+  this += new TickTimer(numFrames, () => deactivate())
 
   override def move() = {
     tickOnce()

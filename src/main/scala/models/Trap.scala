@@ -121,7 +121,7 @@ class BaseTrap (var id: TrapID, val coord: Coordinate) extends TopLeftCoordinate
   }
   def setCooldown() = {
     canAttack = false
-    add(new TickTimer(attr.shotInterval, () => canAttack = true))
+    this += new TickTimer(attr.shotInterval, () => canAttack = true)
   }
   def tickOnce() = {
     if (ticking()) {
@@ -224,11 +224,11 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
       val wasOpen = isOpen
       super.attack()
       if (!wasOpen && isOpen) {
-        add(new TickTimer(10, () => {
+        this += new TickTimer(10, () => {
             isOpen = false
             if (!isBlockedByWeb)
               id = ReuseTrapdoorID
-          }))
+          })
         setCooldown()
       }
     }
@@ -371,10 +371,10 @@ class FlameVent(tCoord: Coordinate) extends WallTrap(FlameVentID, tCoord) {
   override def setCooldown () = {
     if (!attacking) {
       attacking = true
-      add(new TickTimer(attr.duration, () => {
+      this += new TickTimer(attr.duration, () => {
                                       canAttack = false
-                                      attacking = false}))
-      add(new TickTimer(attr.shotInterval, () => canAttack = true))
+                                      attacking = false})
+      this += new TickTimer(attr.shotInterval, () => canAttack = true)
     }
   }
   override def fireProjectile(brute: BaseBrute): Option[BaseProjectile] = {

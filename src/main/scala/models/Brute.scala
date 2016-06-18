@@ -26,7 +26,7 @@ case class TimedEffect(val buffId: Option[BruteID], val debuffId: Option[TrapID]
     }
   }
 
-  add(new TickTimer(n, () => deactivate()))
+  this += new TickTimer(n, () => deactivate())
 }
 case class BruteAttributes(
   maxHP: Int,
