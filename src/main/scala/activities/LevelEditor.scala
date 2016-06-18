@@ -56,15 +56,24 @@ class LevelEditor extends BaseActivity {
           (view, event) => {
             val canvas = view.asInstanceOf[BattleCanvas]
             val (x, y) = (event.getX.toInt/canvas.cellX, event.getY.toInt/canvas.cellY)
-            for (sel <- currentSelection; if (x < MapID.width)) {
-              error(s"$x $y ${sel.trap}")
-              sel.trap match {
-                case _: models.FloorTrapID => map.tiles(y)(x).floorTrapID = sel.trap
-                case _: models.WallTrapID => map.tiles(y)(x).wallTrapID = sel.trap
-                case _ => ()
+            if (x > 0 && x < MapID.width-1 && y >= 0 && y < MapID.height) {
+              // can't put anything on far edges of the map
+              for (sel <- currentSelection; if (x < MapID.width)) {
+                error(s"$x $y ${sel.trap}")
+                val trapAdded = sel.trap match {
+                  case id: models.FloorTrapID if ((id != TrapdoorID && id != ReuseTrapdoorID) || y < MapID.height-1) =>
+                    map.tiles(y)(x).floorTrapID = sel.trap
+                    true
+                  case _: models.WallTrapID =>
+                    map.tiles(y)(x).wallTrapID = sel.trap
+                    true
+                  case _ => false
+                }
+                if (trapAdded) {
+                  game.removeTrap(sel.trap, Coordinate(x, y))
+                  game.addTrapFromID(sel.trap, Coordinate(x, y))
+                }
               }
-              game.removeTrap(sel.trap, Coordinate(x, y))
-              game.addTrapFromID(sel.trap, Coordinate(x, y))
             }
           }
           true

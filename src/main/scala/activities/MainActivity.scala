@@ -29,6 +29,11 @@ class MainActivity extends BaseActivity {
     startActivity(intent)
   }
 
+  override def onRestart() = {
+    super.onRestart()
+    finish();
+    startActivity(getIntent());
+  }
 
 
   override def onCreate(savedState: Bundle) {
