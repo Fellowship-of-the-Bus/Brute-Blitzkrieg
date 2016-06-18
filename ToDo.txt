@@ -2,7 +2,8 @@ MainActivity:
 	design more levels
 
 leveledit
-delete button on tile
+  delete button on tile
+  level delete button
 
 balance
 	flame imps invuln + heal when hit by flame towers?
@@ -10,3 +11,4 @@ balance
 
 
 winning screen UI
+  next level, return to main menu, retry buttons
