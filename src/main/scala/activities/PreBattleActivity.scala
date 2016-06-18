@@ -42,8 +42,8 @@ class PreBattleActivity extends BaseActivity {
           }).<<.wrap.centerVertical.>>
           SButton("Menu", {
             finish()
-            }).<<.wrap.alignParentBottom.>>
-        }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+          }).<<.wrap.alignParentBottom.>>
+        }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
       }
     )
   }
