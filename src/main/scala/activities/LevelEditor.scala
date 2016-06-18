@@ -12,7 +12,7 @@ import android.widget.{GridView, ImageView, AdapterView}
 import android.content.{Intent, Context}
 import android.graphics.{Color, Canvas}
 import android.graphics.drawable.BitmapDrawable
-import android.text.InputType
+import android.text.{InputType,InputFilter,Spanned}
 
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.Arrays
@@ -128,11 +128,14 @@ class LevelEditor extends BaseActivity {
               // open dialog
               val builder = new AlertDialogBuilder("Save the Map")
               builder.setView(new STableLayout {
-                val name = SEditText().hint("Name").singleLine(true)
-                val gold = SEditText().hint("Gold").inputType(numeric)
-                val starOne = SEditText().hint("One Star Value").inputType(numeric)
-                val starTwo = SEditText().hint("Two Star Value").inputType(numeric)
-                val starThree = SEditText().hint("Three Star Value").inputType(numeric)
+                val txtfilts = Array[InputFilter](new InputFilter.LengthFilter(40))
+                val numfilts = Array[InputFilter](new InputFilter.LengthFilter(9))
+
+                val name = SEditText().hint("Name").singleLine(true).filters(txtfilts)
+                val gold = SEditText().hint("Gold").inputType(numeric).filters(numfilts)
+                val starOne = SEditText().hint("One Star Value").inputType(numeric).filters(numfilts)
+                val starTwo = SEditText().hint("Two Star Value").inputType(numeric).filters(numfilts)
+                val starThree = SEditText().hint("Three Star Value").inputType(numeric).filters(numfilts)
                 for (attr <- attributes) {
                   // set defaults based on the currently loaded map
                   name.text(attr.name)
@@ -161,6 +164,12 @@ class LevelEditor extends BaseActivity {
                   out.write((json.toString + "\n").getBytes)
                   android.util.Log.e("bruteb", s"${json} stored in ${getFilesDir}")
                   android.util.Log.e("bruteb", s"${getFilesDir.listFiles.mkString(" ")}")
+
+                  // reset level's completion
+                  val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+                  val editor = data.edit()
+                  editor.putInt(customID.id, 0)
+                  val _ = editor.commit()
                 }
 
                 doneFunction = () => {
@@ -190,6 +199,16 @@ class LevelEditor extends BaseActivity {
               builder.setView(listView)
               builder.positiveButton("Load", {
                 val file = files(index)
+                val map = loadCustom(file)
+                saveAttributes(file.getName, map)
+                game = new Game(map, Custom(file.getName))
+              })
+              builder.negativeButton("Delete", {
+                val file = files(index)
+                val _ = new AlertDialogBuilder(s"Delete Map '${file.getName}'? This cannot be undone.") {
+                  negativeButton("Cancel")
+                  positiveButton("Confirm", { file.delete(); () })
+                }.show
                 val map = loadCustom(file)
                 saveAttributes(file.getName, map)
                 game = new Game(map, Custom(file.getName))
