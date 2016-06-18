@@ -7,6 +7,8 @@
     <string name="LoadButton">Load...</string>
     <string name="QuitButton">Quit</string>
     <string name="ReturnButton">Return</string>
+    <string name="NextButton">Next</string>
+    <string name="DoneButton">Done</string>
 
     <string name="Win">You Win</string>
     <string name="Lose">You Lose</string>

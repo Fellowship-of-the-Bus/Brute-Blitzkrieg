@@ -37,56 +37,83 @@ class Encyclopedia extends BaseActivity {
     val doBrute = getIntent().getBooleanExtra("brute", true)
     val ids = if (doBrute) bruteIDs else trapIDs
     setContentView(
+      new SRelativeLayout {
+        new SLinearLayout {
+            new SVerticalLayout {
+              new STextView {
+                nametxt.<<.wrap.>>.here
+              }.setGravity(Gravity.CENTER_HORIZONTAL)
+              new SLinearLayout {
+                img.<<.wrap.>>.here
+                valuetxt.<<.wrap.>>.here
+              }.<<.wrap.>>.here
+              new SScrollView {
+                txt.<<.wrap.>>.here
+              }.<<.wrap.>>.here
+          }.<<(0,WRAP_CONTENT).Weight(3).>>.here
 
-      new SLinearLayout {
-          new SVerticalLayout {
-            new STextView {
-              nametxt.<<.wrap.>>.here
-            }.setGravity(Gravity.CENTER_HORIZONTAL)
-            new SLinearLayout {
-              img.<<.wrap.>>.here
-              valuetxt.<<.wrap.>>.here
-            }.<<.wrap.>>.here
-            new SScrollView {
-              txt.<<.wrap.>>.here
-            }.<<.wrap.>>.here
-        }.<<(0,WRAP_CONTENT).Weight(3).>>.here
-
-        new SScrollView {
-          new SVerticalLayout {
-            for(i <- 0 until ids.length) {
-              val image = if (doBrute) bruteIDs(i).image else trapIDs(i).image
-              val name = if (doBrute) bruteIDs(i).name else trapIDs(i).name
-              val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
-              val values = if (doBrute) {
-                val brute = BruteAttributeMap(bruteIDs(i))
-                val baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\nCost:${brute.goldCost}"
-                if (brute.flying) {
-                  baseValues + "\nFlying"
+          new SScrollView {
+            new SVerticalLayout {
+              for(i <- 0 until ids.length) {
+                val image = if (doBrute) bruteIDs(i).image else trapIDs(i).image
+                val name = if (doBrute) bruteIDs(i).name else trapIDs(i).name
+                val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
+                val values = if (doBrute) {
+                  val brute = BruteAttributeMap(bruteIDs(i))
+                  val baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\nCost:${brute.goldCost}"
+                  if (brute.flying) {
+                    baseValues + "\nFlying"
+                  } else {
+                    baseValues
+                  }
                 } else {
-                  baseValues
+                  val trap = TrapAttributeMap(trapIDs(i))
+                  var stats = ""
+                  if (trap.damage != 0) {
+                    stats = stats + s"Damage: ${trap.damage}\n"
+                  }
+                  if (trap.duration != 0) {
+                    stats = stats + s"Active Duration: ${trap.duration}\n"
+                  }
+                  val shotPerSec = 20.0f / trap.shotInterval
+                  stats + f"Shots per Second: $shotPerSec%2.2f"
                 }
-              } else {
-                val trap = TrapAttributeMap(trapIDs(i))
-                var stats = ""
-                if (trap.damage != 0) {
-                  stats = stats + s"Damage: ${trap.damage}\n"
-                }
-                if (trap.duration != 0) {
-                  stats = stats + s"Active Duration: ${trap.duration}\n"
-                }
-                val shotPerSec = 20.0f / trap.shotInterval
-                stats + f"Shots per Second: $shotPerSec%2.2f"
+                SButton(name, {
+                  txt.text = s"${description}"
+                  img.imageResource = image
+                  nametxt.text = name
+                  valuetxt.text = values
+                })
               }
-              SButton(name, {
-                txt.text = s"${description}"
-                img.imageResource = image
-                nametxt.text = name
-                valuetxt.text = values
-              })
-            }
-          }.<<.wrap.>>.here
-        }.<<(0,WRAP_CONTENT).Weight(1).>>.here
+            }.<<.wrap.>>.here
+          }.<<(0,WRAP_CONTENT).Weight(1).>>.here
+        }.<<.fill.>>.here
+        if (Game.Options.firstGame) {
+          new SRelativeLayout {
+            new SVerticalLayout {
+              val text = new STextView {
+                if (getIntent().getBooleanExtra("brute", true)) {
+                  text = "Here you can view stats of each of the brutes"
+                } else {
+                  text = "Here you can view stats of each of the traps"
+                }
+                textSize = 20 dip
+              }.<<.wrap.>>.here
+              if (getIntent().getBooleanExtra("brute", true)) {
+                SButton(R.string.NextButton, {
+                  finish()
+                  switchScreen(classOf[Encyclopedia],false)
+                }).<<.fw
+              } else {
+                SButton(R.string.NextButton, {
+                  finish()
+                  switchScreen(Level1, maps(Level1))
+                }).<<.fw
+              }
+
+            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+          }.<<.fill.>>.here
+        }
       }
     )
   }

@@ -5,7 +5,7 @@ import models._
 // import android.app.Activity
 import org.scaloid.common._
 import android.os.Bundle
-import android.view.Gravity
+import android.view.{Gravity,View}
 import android.graphics.{Color,ColorMatrix,ColorMatrixColorFilter}
 import android.graphics.drawable.BitmapDrawable
 import android.widget.GridView
@@ -23,6 +23,7 @@ class BruteSelectActivity extends BaseActivity {
   var confirmButton: SButton = null
   var selections = Vector[Selection]()
   var bruteButtons = Vector[SImageButton]()
+  var popUp: SRelativeLayout = null
 
   def enableButtons(): Unit = {
     // must make a selection in each button before confirming
@@ -43,53 +44,66 @@ class BruteSelectActivity extends BaseActivity {
     error("Brute Blitzkrieg brute select activity started")
     super.onCreate(savedState)
     setContentView(
-      new SLinearLayout {
-        new STableLayout {
-          for (range <- 0 until bruteIDs.length grouped 4) {
-            this += new STableRow {
-              for (i <- range) {
-                val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
-                  // brute button clicked
-                  val cur = if (currentSelection.isEmpty) {
-                    val next = nextSelection
-                    for (sel <- next) {
-                      deselectButton(sel.button)
+      new SRelativeLayout {
+        new SLinearLayout {
+          new STableLayout {
+            for (range <- 0 until bruteIDs.length grouped 4) {
+              this += new STableRow {
+                for (i <- range) {
+                  val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
+                    // brute button clicked
+                    val cur = if (currentSelection.isEmpty) {
+                      val next = nextSelection
+                      for (sel <- next) {
+                        deselectButton(sel.button)
+                      }
+                      next
+                    } else {
+                      currentSelection
                     }
-                    next
-                  } else {
-                    currentSelection
-                  }
-                  for (sel <- cur) {
-                    sel.brute = bruteIDs(i)
-                    sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
-                  }
-                  if (currentSelection.isEmpty) {
-                    for (sel <- nextSelection) {
-                      selectButton(sel.button)
+                    for (sel <- cur) {
+                      sel.brute = bruteIDs(i)
+                      sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
                     }
-                  }
-                  enableButtons()
-                }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
-                bruteButtons = bruteButtons :+ newButton
+                    if (currentSelection.isEmpty) {
+                      for (sel <- nextSelection) {
+                        selectButton(sel.button)
+                      }
+                    }
+                    enableButtons()
+                  }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
+                  bruteButtons = bruteButtons :+ newButton
+                }
               }
             }
-          }
-        }.<<(0,WRAP_CONTENT).Weight(3).>>.here
-        new SVerticalLayout {
-          for (i <- 0 until 4) {
-            val newButton = SImageButton(R.drawable.unknown, {
-              // selection clicked
-              selections.foreach(x => deselectButton(x.button))
-              selectButton(selections(i).button)
-              currentSelection = Some(selections(i))
-            }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
-            selections = selections :+ Selection(newButton, game.brutes(i))
-          }
-          confirmButton = SButton("Confirm", {
-            game.brutes = selections.map(_.brute)
-            finish()
-          }).enabled = false
-        }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+          }.<<(0,WRAP_CONTENT).Weight(3).>>.here
+          new SVerticalLayout {
+            for (i <- 0 until 4) {
+              val newButton = SImageButton(R.drawable.unknown, {
+                // selection clicked
+                selections.foreach(x => deselectButton(x.button))
+                selectButton(selections(i).button)
+                currentSelection = Some(selections(i))
+              }).<<(WRAP_CONTENT, 0).Weight(1).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true)
+              selections = selections :+ Selection(newButton, game.brutes(i))
+            }
+            confirmButton = SButton("Confirm", {
+              game.brutes = selections.map(_.brute)
+              finish()
+            }).enabled = false
+          }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+        }.<<.fill.>>.here
+        popUp = new SRelativeLayout {
+          new SVerticalLayout {
+            val text = new STextView {
+              text = "You may only take four brutes with you to each level. Look at the traps and choose wisely. When you are done, press confirm and then start game."
+              textSize = 20 dip
+            }.<<.wrap.>>.here
+          }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+        }.<<.fill.>>.visibility(View.GONE).here
+        if (Game.Options.firstGame) {
+          popUp.visibility(View.VISIBLE)
+        }
       }
     )
   }

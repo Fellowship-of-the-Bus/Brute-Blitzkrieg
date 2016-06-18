@@ -93,12 +93,19 @@ class BattleActivity extends BaseActivity with GameListener {
   override def gameOver(numStars: Int): Unit = {
     import Game.game
     val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+    val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
     val editor = data.edit()
     val storedNumStars = data.getInt(game.levelName, 0)
     if (numStars > storedNumStars) {
       editor.putInt(game.levelName, numStars)
       editor.commit()
     }
+
+    val optionsEditor = options.edit()
+    optionsEditor.putInt("FirstGame",1)
+    optionsEditor.commit()
+    Game.Options.firstGame = false
+
     this.runOnUiThread(() => {
       if (numStars > 0) {
         txt.text = getResources().getString(R.string.Win)

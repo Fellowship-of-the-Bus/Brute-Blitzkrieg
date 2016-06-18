@@ -5,8 +5,9 @@ leveledit
 delete button on tile
 
 balance
-	flame imps invuln + heal when hit by flame towers?
 	arrow tower facing direction
 
 
 winning screen UI
+
+draw #brutes needed for each stars in prebattle/battle activities

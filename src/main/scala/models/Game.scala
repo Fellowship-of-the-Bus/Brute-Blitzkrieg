@@ -11,6 +11,9 @@ object Game {
   var res: android.content.res.Resources = null
   var map: MapInfo = null
   var mapId: MapID = null
+  object Options{
+    var firstGame = false
+  }
 }
 
 trait GameListener {

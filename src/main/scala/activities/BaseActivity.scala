@@ -18,6 +18,21 @@ class BaseActivity extends SActivity {
   override implicit val loggerTag = new LoggerTag("bruteb")
   var layout: android.view.View = null
 
+  def switchScreen[T](`class`: Class[T], b : Boolean) = {
+    android.util.Log.e("bruteb", s"Trying to switch to ${`class`}")
+    val intent = new Intent(this, `class`)
+    intent.putExtra("brute",b)
+    startActivity(intent)
+  }
+
+  def switchScreen(id: MapID, map: MapInfo) = {
+    android.util.Log.e("bruteb", s"Trying to switch to BattleActivity")
+    val intent = new Intent(this, classOf[PreBattleActivity])
+    Game.mapId = id
+    Game.map = map
+    startActivity(intent)
+  }
+
 	override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     getActionBar().hide()
