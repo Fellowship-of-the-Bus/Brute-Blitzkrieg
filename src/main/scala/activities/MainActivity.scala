@@ -91,7 +91,7 @@ class MainActivity extends BaseActivity {
               }
             }
           }.<<.fill.>>.here
-        }.<<(0, MATCH_PARENT).Weight(3).>>.here
+        }.<<(0, MATCH_PARENT).Weight(4).>>.here
         new STableLayout {
           new STableRow {
             SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
@@ -105,7 +105,7 @@ class MainActivity extends BaseActivity {
           new STableRow {
             SButton(R.string.QuitButton, finish()).<<.fw.>>
           }.<<.wrap.>>.here
-        }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
+        }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
       }
     )
   }

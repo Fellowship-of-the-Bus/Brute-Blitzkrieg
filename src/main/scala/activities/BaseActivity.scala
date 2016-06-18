@@ -37,6 +37,7 @@ class BaseActivity extends SActivity {
             viw
         }
         v.here
+        v.<<.fill
       }
     )
   }
