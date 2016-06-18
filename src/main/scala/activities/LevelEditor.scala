@@ -37,6 +37,11 @@ class LevelEditor extends BaseActivity {
 
   import TrapID.Factory.{ids => trapIDs}
 
+  case class LevelAttributes(name: String, gold: Int, starOne: Int, starTwo: Int, starThree: Int)
+  var attributes: Option[LevelAttributes] = None
+  def saveAttributes(name: String, map: MapInfo): Unit = {
+    attributes = Some(LevelAttributes(name, map.startingGold, map.oneStar, map.twoStar, map.threeStar))
+  }
 
   override def onCreate(savedState: Bundle): Unit = {
     var currentSelection: Option[Selection] = None
@@ -128,19 +133,27 @@ class LevelEditor extends BaseActivity {
                 val starOne = SEditText().hint("One Star Value").inputType(numeric)
                 val starTwo = SEditText().hint("Two Star Value").inputType(numeric)
                 val starThree = SEditText().hint("Three Star Value").inputType(numeric)
+                for (attr <- attributes) {
+                  // set defaults based on the currently loaded map
+                  name.text(attr.name)
+                  gold.text(attr.gold.toString)
+                  starOne.text(attr.starOne.toString)
+                  starTwo.text(attr.starTwo.toString)
+                  starThree.text(attr.starThree.toString)
+                }
 
                 def writeFile(): Unit = {
                   import scala.language.implicitConversions
                   val out = openFileOutput(name.str, Context.MODE_WORLD_READABLE)
                   val customID = Custom(name.str)
-                  game = new Game(
-                    map.copy(
-                      startingGold = gold.int,
-                      oneStar = starOne.int,
-                      twoStar = starTwo.int,
-                      threeStar = starThree.int
-                    ), customID
+                  val newMap = map.copy(
+                    startingGold = gold.int,
+                    oneStar = starOne.int,
+                    twoStar = starTwo.int,
+                    threeStar = starThree.int
                   )
+                  saveAttributes(name.str, newMap)
+                  game = new Game(newMap, customID)
 
                   import rapture.json._
                   import rapture.json.jsonBackends.jackson._
@@ -151,8 +164,10 @@ class LevelEditor extends BaseActivity {
                 }
 
                 doneFunction = () => {
+                  saveAttributes(name.str, map)
                   if (customMapFiles.exists(x => x.getName == name.str)) {
-                    new AlertDialogBuilder("Overwrite Map?") {
+                    // ask for confirmation before overwriting map
+                    val _ = new AlertDialogBuilder("Overwrite Map?") {
                       negativeButton("Cancel")
                       positiveButton("Confirm", writeFile())
                     }.show
@@ -175,7 +190,9 @@ class LevelEditor extends BaseActivity {
               builder.setView(listView)
               builder.positiveButton("Load", {
                 val file = files(index)
-                game = new Game(loadCustom(file), Custom(file.getName))
+                val map = loadCustom(file)
+                saveAttributes(file.getName, map)
+                game = new Game(map, Custom(file.getName))
               })
               builder.show
             })
