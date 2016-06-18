@@ -71,7 +71,7 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     // Use Color.parseColor to define HTML colors
     paint.setColor(Color.parseColor("#000000"))
     paint.setTextAlign(Paint.Align.LEFT)
-    paint.setTextSize(40)
+    paint.setTextSize(16 sp)
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)

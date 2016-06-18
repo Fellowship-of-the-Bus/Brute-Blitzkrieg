@@ -20,15 +20,15 @@ class Encyclopedia extends BaseActivity {
     super.onCreate(savedState)
     val txt = new STextView {
       text = "Select a monster for more information."
-      textSize = 16 dip
+      textSize = 16 sp
     }
     val nametxt = new STextView {
       text = "Monster Encyclopedia"
-      textSize = 20 dip
+      textSize = 20 sp
     }
     val valuetxt = new STextView {
       text = ""
-      textSize = 16 dip
+      textSize = 16 sp
     }
 
     val img = new SImageView {
@@ -97,7 +97,7 @@ class Encyclopedia extends BaseActivity {
                 } else {
                   text = "Here you can view stats of each of the traps"
                 }
-                textSize = 20 dip
+                textSize = 20 sp
               }.<<.wrap.>>.here
               if (getIntent().getBooleanExtra("brute", true)) {
                 SButton(R.string.NextButton, {

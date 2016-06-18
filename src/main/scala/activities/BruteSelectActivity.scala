@@ -97,7 +97,7 @@ class BruteSelectActivity extends BaseActivity {
           new SVerticalLayout {
             val text = new STextView {
               text = "You may only take four brutes with you to each level. Look at the traps and choose wisely. When you are done, press confirm and then start game."
-              textSize = 20 dip
+              textSize = 20 sp
             }.<<.wrap.>>.here
           }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
         }.<<.fill.>>.visibility(View.GONE).here

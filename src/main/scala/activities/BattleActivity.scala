@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import scala.language.postfixOps
 
 class BattleActivity extends BaseActivity with GameListener {
-  var stars: List[SImageView] = null 
+  var stars: List[SImageView] = null
   var txt: STextView = null
   var popUp: SRelativeLayout = null
   override def onCreate(savedState: Bundle) {
@@ -31,13 +31,13 @@ class BattleActivity extends BaseActivity with GameListener {
     stars = List(new SImageView(R.drawable.grey_star),new SImageView(R.drawable.grey_star),new SImageView(R.drawable.grey_star))
     txt = new STextView{
       text = "hi"
-      textSize = 32 dip
+      textSize = 32 sp
     }
     setContentView(
       new SRelativeLayout{
         new SLinearLayout {
           (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
-            
+
           new SVerticalLayout {
             for (i <- 0 until 4) {
               new SLinearLayout {
@@ -49,14 +49,14 @@ class BattleActivity extends BaseActivity with GameListener {
                     val name: CharSequence = game.brutes(i).name
                     val cost = BruteAttributeMap(game.brutes(i)).goldCost
                     text = s"${name}"//\n$$${cost}"
-                    textSize = 16 dip
+                    textSize = 16 sp
                   }.<<.wrap.Gravity(Gravity.CENTER).>>.gravity(Gravity.CENTER).here
                   new SLinearLayout {
                     SImageView(R.drawable.gold).<<(40,40)
                     new STextView {
                       val cost = BruteAttributeMap(game.brutes(i)).goldCost
                       text = cost.toString
-                      textSize = 16 dip
+                      textSize = 16 sp
                     }.<<.wrap.Gravity(Gravity.CENTER).>>.here
                   }.<<.fw.Gravity(Gravity.CENTER).>>.gravity(Gravity.CENTER).here
                 }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER).here

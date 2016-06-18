@@ -86,7 +86,7 @@ case object NoTrapID extends TrapID {
 
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
-    val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, PoisonID, ArrowID, LightningID, FlameVentID, HighBladeID)
+    val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, ArrowID, PoisonID, FlameVentID, LightningID, HighBladeID)
     val openIds = Vector(TrapdoorOpenID, ReuseTrapdoorOpenID, TrapdoorWebbedID, HighBlade2ID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
@@ -346,7 +346,7 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
 
 class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
   override def height = 3/8f
-  
+
   def firingCoord(towerCoord: Coordinate) = {
     val c = coord.copy()
     c.x += width / 2

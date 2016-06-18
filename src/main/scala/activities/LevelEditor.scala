@@ -60,22 +60,6 @@ class LevelEditor extends BaseActivity {
 
     setContentView(
       new SRelativeLayout {
-        val deleteButton: SButton = SButton("Delete", {
-          val x = deleteButton.getX
-          val y = deleteButton.getY
-          val tilex = (x/battleCanvas.cellX).toInt
-          val tiley = (y/battleCanvas.cellY).toInt
-          for (sel <- currentSelection; if (tilex < MapID.width)) {
-            sel.trap match {
-              case _: models.FloorTrapID => map.tiles(tiley)(tilex).floorTrapID = NoTrapID
-              case _: models.WallTrapID => map.tiles(tiley)(tilex).wallTrapID = NoTrapID
-              case _ => ()
-            }
-            error(s"delete ${sel.trap} $tilex $tiley $x $y")
-            game.removeTrap(sel.trap, Coordinate(tilex, tiley))
-          }
-        }).<<.wrap.>>.visibility(View.VISIBLE)
-
         new SLinearLayout {
           battleCanvas.<<(0,MATCH_PARENT).Weight(3).>>.here.onTouch {
             (view, event) => {
@@ -229,6 +213,22 @@ class LevelEditor extends BaseActivity {
           // }
           // ContextMenu.visibility(View.INVISIBLE).here
         }.here
+        val deleteButton: SImageButton = SImageButton(R.drawable.delete, {
+          val x = deleteButton.getX
+          val y = deleteButton.getY
+          val tilex = (x/battleCanvas.cellX).toInt
+          val tiley = (y/battleCanvas.cellY).toInt
+          for (sel <- currentSelection; if (tilex < MapID.width)) {
+            sel.trap match {
+              case _: models.FloorTrapID => map.tiles(tiley)(tilex).floorTrapID = NoTrapID
+              case _: models.WallTrapID => map.tiles(tiley)(tilex).wallTrapID = NoTrapID
+              case _ => ()
+            }
+            error(s"delete ${sel.trap} $tilex $tiley $x $y")
+            game.removeTrap(sel.trap, Coordinate(tilex, tiley))
+          }
+        }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.VISIBLE)
+
       }
     )
   }
