@@ -28,9 +28,9 @@
     "description": "Poisons brutes, dealing damage over time.\nSuffocate"
   },
   "ArrowID": {
-    "damage": 40,
+    "damage": 20,
     "duration": 0,
-    "shotInterval": 20,
+    "shotInterval": 10,
     "targetFlying": true,
     "description": "Range is the entire floor.\nShoots arrows at things"
   },

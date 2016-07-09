@@ -302,7 +302,7 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
     //get a list of all brutes in the current floor (same y-value)
     val setOfBrutes: Set[BaseBrute] = Set[BaseBrute]()
     Game.game.map.tiles(y.toInt).map(tile => setOfBrutes ++= tile.bruteList)
-    setOfBrutes.toList.filter(_.isAlive)
+    setOfBrutes.toList.filter( x => x.isAlive && ! x.isClimbingStairs)
   }
 
   override def attack() : List[BaseProjectile]= {
