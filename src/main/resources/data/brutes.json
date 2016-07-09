@@ -41,7 +41,7 @@
     "width": 0.3,
     "height": 0.3,
     "flying": false,
-    "regen": 1,
+    "regen": 0,
     "radius": 2,
     "auraRegen": 1,
     "description": "All brutes within 2 units will regenerate health.\nCome get healed.",
