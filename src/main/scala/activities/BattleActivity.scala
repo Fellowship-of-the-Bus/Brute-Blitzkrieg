@@ -26,6 +26,7 @@ class BattleActivity extends BaseActivity with GameListener {
   var nextLevelButton: SButton = null
   var homeButton: SButton = null
   var retryButton: SButton = null
+  var returnButton: SButton = null
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)
@@ -87,7 +88,12 @@ class BattleActivity extends BaseActivity with GameListener {
                   switchScreen(mapID, maps(mapID))
                 }
               }).<<.wrap.>>
-              retryButton = SButton(R.string.ReturnButton, {
+              retryButton = SButton(R.string.RetryButton, {
+                Game.game.reset()
+                Game.game.startGame
+                popUp.visibility(View.GONE)
+              }).<<.wrap.>>
+              returnButton = SButton(R.string.ReturnButton, {
                                             finish()}).<<.wrap.>>
               homeButton = SButton(R.string.HomeButton,{
                 finish()
@@ -140,7 +146,7 @@ class BattleActivity extends BaseActivity with GameListener {
       }
       import MapID.Factory.ids
       val curIndex = ids.indexOf(Game.game.mapID)
-      if (curIndex == -1 || curIndex >= MapID.Factory.ids.length-1) {
+      if (curIndex == -1 || curIndex >= MapID.Factory.ids.length-1 || numStars <= 0) {
         nextLevelButton.visibility(View.GONE)
       }
       popUp.visibility(View.VISIBLE)

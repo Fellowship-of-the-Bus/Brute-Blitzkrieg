@@ -156,6 +156,8 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
     pauseGame
     map.clear()
     Game.game = new Game(map, mapID, brutes)
+    Game.game.setListener(listener)
+    listener = null
   }
 
   def checkGameOver(): Boolean = {
