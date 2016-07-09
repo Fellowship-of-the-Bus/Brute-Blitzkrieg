@@ -9,6 +9,9 @@
     <string name="ReturnButton">Return</string>
     <string name="NextButton">Next</string>
     <string name="DoneButton">Done</string>
+    <string name="RetryButton">Retry</string>
+    <string name="HomeButton">Home</string>
+    <string name="NextLevelButton">Next Level</string>
 
     <string name="Win">You Win</string>
     <string name="Lose">You Lose</string>
@@ -24,7 +27,7 @@
     <string name="Troll">Troll</string>
 
     <string name="Trapdoor">Trapdoor</string>
-    <string name="ReusableTrapdoor">Reusable Trapdoor</string>
+    <string name="ReusableTrapdoor">Reuse Trapdoor</string>
     <string name="Tar">Tar</string>
     <string name="Poison">Poison</string>
     <string name="Arrow">Arrow</string>

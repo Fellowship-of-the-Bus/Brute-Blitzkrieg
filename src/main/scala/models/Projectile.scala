@@ -86,7 +86,7 @@ class ArrowProjectile(pid: ProjectileID, pcoord: Coordinate, pdamage: Float, val
       (dx/norm, dy/norm)
     }
   }
-  def speed() = 0.2f
+  def speed() = 0.3f
   override def move() = {
     if (!target.isAlive) {
       deactivate

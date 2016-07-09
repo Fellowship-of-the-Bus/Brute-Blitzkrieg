@@ -18,10 +18,13 @@ class BaseActivity extends SActivity {
   override implicit val loggerTag = new LoggerTag("bruteb")
   var layout: android.view.View = null
 
-  def switchScreen[T](`class`: Class[T], b : Boolean) = {
+  def switchScreen[T](`class`: Class[T], b : Boolean, clearStack: Boolean = false) = {
     android.util.Log.e("bruteb", s"Trying to switch to ${`class`}")
     val intent = new Intent(this, `class`)
     intent.putExtra("brute",b)
+    if (clearStack) {
+      intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+    }
     startActivity(intent)
   }
 

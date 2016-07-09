@@ -22,6 +22,10 @@ class BattleActivity extends BaseActivity with GameListener {
   var stars: List[SImageView] = null
   var txt: STextView = null
   var popUp: SRelativeLayout = null
+
+  var nextLevelButton: SButton = null
+  var homeButton: SButton = null
+  var retryButton: SButton = null
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)
@@ -73,8 +77,23 @@ class BattleActivity extends BaseActivity with GameListener {
               stars(1).<<(50,50).>>.here
               stars(2).<<(50,50).>>.here
             }.<<.wrap.below(txt).centerHorizontal.>>.gravity(Gravity.CENTER).here
-            SButton(R.string.ReturnButton, {Game.game.reset()
-                                            finish()}).<<.wrap.below(starsView).centerHorizontal.>>
+            new SLinearLayout {
+              import MapID.Factory.ids
+              nextLevelButton = SButton(R.string.NextLevelButton, {
+                val curIndex = ids.indexOf(Game.game.mapID)
+                if (curIndex != -1 && curIndex < MapID.Factory.ids.length-1) {
+                  finish()
+                  val mapID = ids(curIndex + 1)
+                  switchScreen(mapID, maps(mapID))
+                }
+              }).<<.wrap.>>
+              retryButton = SButton(R.string.ReturnButton, {
+                                            finish()}).<<.wrap.>>
+              homeButton = SButton(R.string.HomeButton,{
+                finish()
+                switchScreen(classOf[MainActivity], true, true)
+              }).<<.wrap.>>
+            }.<<.wrap.below(starsView).>>.gravity(Gravity.CENTER).here
           }.<<.wrap.centerInParent.>>.alpha(1f).backgroundColor(Color.BLACK).gravity(Gravity.CENTER).here
         }.<<.fill.>>.visibility(View.GONE).here
       }
@@ -90,6 +109,10 @@ class BattleActivity extends BaseActivity with GameListener {
     Game.game.reset()
   }
 
+  override def finish() = {
+    Game.game.reset()
+    super.finish()
+  }
   override def gameOver(numStars: Int): Unit = {
     import Game.game
     val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
@@ -114,6 +137,11 @@ class BattleActivity extends BaseActivity with GameListener {
       }
       for (index <- 0 to numStars-1) {
         stars(index).imageDrawable(R.drawable.star)
+      }
+      import MapID.Factory.ids
+      val curIndex = ids.indexOf(Game.game.mapID)
+      if (curIndex == -1 || curIndex >= MapID.Factory.ids.length-1) {
+        nextLevelButton.visibility(View.GONE)
       }
       popUp.visibility(View.VISIBLE)
     })
