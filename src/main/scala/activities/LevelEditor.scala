@@ -193,9 +193,6 @@ class LevelEditor extends BaseActivity {
                   negativeButton("Cancel")
                   positiveButton("Confirm", { file.delete(); () })
                 }.show
-                val map = loadCustom(file)
-                saveAttributes(file.getName, map)
-                game = new Game(map, Custom(file.getName))
               })
               builder.show
             })
