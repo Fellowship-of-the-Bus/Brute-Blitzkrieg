@@ -36,6 +36,7 @@ class LevelEditor extends BaseActivity {
   var startButton: SButton = null
 
   import TrapID.Factory.{ids => trapIDs}
+  val placeableTraps = trapIDs.filter(t => t != LeftArrowID)
 
   case class LevelAttributes(name: String, gold: Int, starOne: Int, starTwo: Int, starThree: Int)
   var attributes: Option[LevelAttributes] = None
@@ -91,16 +92,16 @@ class LevelEditor extends BaseActivity {
           }
 
           new STableLayout {
-            for (range <- 0 until trapIDs.length grouped 2) {
+            for (range <- 0 until placeableTraps.length grouped 2) {
               this += new STableRow {
                 for (i <- range) {
-                  val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.trapImages(trapIDs(i))), {
+                  val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.trapImages(placeableTraps(i))), {
                     // selection clicked
                     selections.foreach(x => deselectButton(x.button))
                     selectButton(selections(i).button)
                     currentSelection = Some(selections(i))
                   }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
-                  selections = selections :+ Selection(newButton, trapIDs(i))
+                  selections = selections :+ Selection(newButton, placeableTraps(i))
                 }
               }
             }

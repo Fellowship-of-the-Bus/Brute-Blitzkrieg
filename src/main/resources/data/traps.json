@@ -27,12 +27,19 @@
     "targetFlying": true,
     "description": "Poisons brutes, dealing damage over time.\nSuffocate"
   },
+  "LeftArrowID": {
+    "damage": 20,
+    "duration": 0,
+    "shotInterval": 10,
+    "targetFlying": true,
+    "description": "Range everything left of it on the floor.\nShoots arrows at things"
+  },
   "ArrowID": {
     "damage": 20,
     "duration": 0,
     "shotInterval": 10,
     "targetFlying": true,
-    "description": "Range is the entire floor.\nShoots arrows at things"
+    "description": "Range everything right of it on the floor.\nShoots arrows at things"
   },
   "LightningID": {
     "damage": 5,

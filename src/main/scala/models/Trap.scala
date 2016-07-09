@@ -57,8 +57,12 @@ case object PoisonID extends WallTrapID {
   def image = R.drawable.poison_vent
   def name = R.string.Poison
 }
-case object ArrowID extends WallTrapID {
+case object LeftArrowID extends WallTrapID {
   def image = R.drawable.arrowtrap
+  def name = R.string.LeftArrow
+}
+case object ArrowID extends WallTrapID {
+  def image = R.drawable.rightarrowtrap
   def name = R.string.Arrow
 }
 case object LightningID extends WallTrapID {
@@ -86,7 +90,7 @@ case object NoTrapID extends TrapID {
 
 object TrapID {
   implicit object Factory extends IDFactory[TrapID] {
-    val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, ArrowID, PoisonID, FlameVentID, LightningID, HighBladeID)
+    val ids = Vector(TrapdoorID, ReuseTrapdoorID, TarID, LeftArrowID, ArrowID, PoisonID, FlameVentID, LightningID, HighBladeID)
     val openIds = Vector(TrapdoorOpenID, ReuseTrapdoorOpenID, TrapdoorWebbedID, HighBlade2ID)
   }
   implicit lazy val extractor = Json.extractor[String].map(x => if (x == "NoTrapID") NoTrapID else Factory.fromString(x))
@@ -296,7 +300,7 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
   }
 }
 
-class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
+class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
   //if cur target is None, then get a target, then fire a projectile
   var curTarget: Option[BaseBrute] = None
   override def getInRangeBrutes: List[BaseBrute] = {
@@ -309,23 +313,22 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
   override def attack() : List[BaseProjectile]= {
     tickOnce()
 
-    //android.util.Log.e("bruteb", s"arrow location $x, $y")
     if (!canAttack) return List[BaseProjectile]()
     curTarget match {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
-        if (!brute.isClimbingStairs && dy == 0 && brute.isAlive) {
-          setCooldown()
-          return List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
+        if (brute.isClimbingStairs || dy == 0 || brute.isAlive) {
+          curTarget = getNewTarget()
         }
       }
-      case _ => ()
+      case _ => {
+        curTarget = getNewTarget()
+      }
     }
-    val target = getNewTarget()
-    target match {
+
+    curTarget match {
       case Some(brute) => {
-        curTarget = Some(brute)
         setCooldown()
         return List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
       }
@@ -342,6 +345,20 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
         // some targeting heuristic
         return Some(listOfBrutes.head)
       }
+  }
+}
+
+class LeftArrow(tCoord: Coordinate) extends Arrow(LeftArrowID, tCoord) {
+  override def getInRangeBrutes: List[BaseBrute] = {
+    val listOfBrutes = super.getInRangeBrutes
+    listOfBrutes.filter( b => b.x < (coord.x + 0.5f))
+  }
+}
+
+class RightArrow(tCoord: Coordinate) extends Arrow(ArrowID, tCoord) {
+  override def getInRangeBrutes: List[BaseBrute] = {
+    val listOfBrutes = super.getInRangeBrutes
+    listOfBrutes.filter( b => b.x > (coord.x + 0.5f))
   }
 }
 
@@ -428,7 +445,8 @@ object Trap {
       case ReuseTrapdoorID => new ReuseTrapdoor(coord)
       case TarID => new Tar(coord)
       case PoisonID => new Poison(coord)
-      case ArrowID => new Arrow(coord)
+      case LeftArrowID => new LeftArrow(coord)
+      case ArrowID => new RightArrow(coord)
       case LightningID => new Lightning(coord)
       case FlameVentID => new FlameVent(coord)
       case HighBladeID => new HighBlade(coord)
