@@ -41,6 +41,31 @@ object BattleCanvas {
   lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
   lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
   lazy val goldImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.gold, decoderOptions)
+  lazy val starImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.star, decoderOptions)
+  lazy val greyStarImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.grey_star, decoderOptions)
+
+  val iconBounds = new Rect(0, 0, 50, 50)
+  lazy val goldImageBox = new ImageBox(goldImage, iconBounds)
+  lazy val starImageBox = new ImageBox(starImage, iconBounds)
+  lazy val greyStarImageBox = new ImageBox(greyStarImage, iconBounds)
+}
+
+
+class ImageBox(val bitmap: Bitmap, val bounds: Rect)
+
+class RowDrawer(canvas: Canvas, paint: Paint, var x: Int, var y: Int) {
+  def drawString(text: String, offsetX: Int = 2): Unit = {
+    val textBounds = new Rect
+    paint.getTextBounds(text, 0, text.length, textBounds)
+    canvas.drawText(text, x, y+textBounds.height+5, paint)
+    x += textBounds.width+offsetX
+  }
+
+  def drawBitmap(img: ImageBox, offsetX: Int = 2): Unit = {
+    img.bounds.offsetTo(x, y)
+    canvas.drawBitmap(img.bitmap, null, img.bounds, paint)
+    x += img.bounds.width+offsetX
+  }
 }
 
 class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context: Context) extends SView {
@@ -61,8 +86,14 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
   lazy val canvasY = getHeight()
   lazy val cellX = (canvasX/MapID.width).toInt
   lazy val cellY = (canvasY/MapID.height).toInt
+
+  val goldImageBounds = new Rect(0, 0, 50, 50)
+
   override def onDraw(canvas: Canvas) = {
     super.onDraw(canvas)
+
+    def normX(x: Float) = (x * cellX).toInt
+    def normY(y: Float) = (y * cellY).toInt
 
     val paint = new Paint()
     paint.setStyle(Paint.Style.FILL)
@@ -75,8 +106,20 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
-    canvas.drawBitmap(goldImage, null, new Rect(0, 0, 50, 50), null)
-    canvas.drawText(Game.game.currentGold.toString, 60, 40, paint)
+
+    val topRow = new RowDrawer(canvas, paint, 0, 0)
+    topRow.drawBitmap(goldImageBox)
+    topRow.drawString(Game.game.currentGold.toString, 20)
+    val score = Game.game.score
+    val (nextStar, starsEarned) = Array((map.oneStar, 0), (map.twoStar, 1), (map.threeStar, 2)).find(_._1 > score).getOrElse((map.threeStar, 3))
+    for (i <- 0 until starsEarned) {
+      topRow.drawBitmap(starImageBox)
+    }
+    for (i <- 0 until 3-starsEarned) {
+      topRow.drawBitmap(greyStarImageBox)
+    }
+    topRow.drawString(s"$score/$nextStar")
+
     canvas.drawBitmap(exitImage, null,
         new Rect(normX(Game.game.map.endTileCoord.x),
             normY(Game.game.map.endTileCoord.y),
@@ -87,7 +130,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
             normY(Game.game.map.startTileCoord.y),
             normX(Game.game.map.startTileCoord.x + 1),
             normY(Game.game.map.startTileCoord.y + 0.75f)), null)
-
 
     for (trap <- Game.game.trapList.reverse) {
       val image = trapImages(trap.id)
@@ -119,8 +161,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
 
     paint.setColor(Color.WHITE);
     //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
-    def normX(x: Float) = (x * cellX).toInt
-    def normY(y: Float) = (y * cellY).toInt
 
     def drawPositioned(image: Bitmap, gameObject: TopLeftCoordinates, flip: Boolean) = {
       var drawX1 = gameObject.x
