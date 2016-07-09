@@ -285,7 +285,7 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
 
       //for each in range, give them the poison debuff
       listOfBrutes.map(brute => {
-          brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects
+          brute.effects = TimedEffect(None, Some(id), (2f*Game.game.msAuraStickiness/Game.game.msPerTick).toInt)::brute.effects
         })
       setCooldown()
       new PoisonProjectile(PoisonProj, coord.copy(), this, null)::List[BaseProjectile]()
@@ -314,9 +314,9 @@ class Arrow(tCoord: Coordinate) extends WallTrap(ArrowID, tCoord) {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
-        if (!brute.isClimbingStairs && dy < 0.5 && brute.isAlive) {
+        if (!brute.isClimbingStairs && dy == 0 && brute.isAlive) {
           setCooldown()
-          return  List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
+          return List[BaseProjectile](new ArrowProjectile(ArrowProj, coord.copy(), attr.damage, this, brute))
         }
       }
       case _ => ()

@@ -9,7 +9,7 @@
     "radius": 0,
     "auraRegen": 0,
     "description": "Slow moving but durable.\nShrek.",
-    "goldCost": 20
+    "goldCost": 15
   },
   "GoblinID": {
     "maxHP": 50,
@@ -36,19 +36,19 @@
     "goldCost": 10
   },
   "GoblinShamanID": {
-    "maxHP": 50,
+    "maxHP": 75,
     "moveSpeed": 0.1,
     "width": 0.3,
     "height": 0.3,
     "flying": false,
-    "regen": 0,
+    "regen": 1,
     "radius": 2,
     "auraRegen": 1,
     "description": "All brutes within 2 units will regenerate health.\nCome get healed.",
     "goldCost": 20
   },
   "SpiderID": {
-    "maxHP": 100,
+    "maxHP": 85,
     "moveSpeed": 0.1,
     "width": 0.5,
     "height": 0.5,
@@ -60,7 +60,7 @@
     "goldCost": 25
   },
   "FlameImpID": {
-    "maxHP": 80,
+    "maxHP": 100,
     "moveSpeed": 0.1,
     "width": 0.4,
     "height": 0.4,
@@ -72,7 +72,7 @@
     "goldCost": 10
   },
   "CageGoblinID": {
-    "maxHP": 50,
+    "maxHP": 75,
     "moveSpeed": 0.1,
     "width": 0.59,
     "height": 0.59,
@@ -81,18 +81,18 @@
     "radius": 2,
     "auraRegen": 0,
     "description": "All lightning targeting brutes within 2 units will be drawn this. Immune to lightning.\nThey have this technology?",
-    "goldCost": 10
+    "goldCost": 20
   },
   "TrollID": {
-    "maxHP": 300,
+    "maxHP": 500,
     "moveSpeed": 0.1,
     "width": 0.6,
     "height": 0.6,
     "flying": false,
-    "regen": 2,
+    "regen": 1,
     "radius": 0,
     "auraRegen": 0,
     "description": "Has life regeneration and high HP.\nA larger Shrek.",
-    "goldCost": 25
+    "goldCost": 50
   }
 }

@@ -37,21 +37,21 @@
   "LightningID": {
     "damage": 5,
     "duration": 0,
-    "shotInterval": 20,
+    "shotInterval": 5,
     "targetFlying": true,
     "description": "Deals lightning damage to all brutes in range.\nYou'll be Shocked"
   },
   "FlameVentID": {
     "damage": 5,
     "duration": 10,
-    "shotInterval": 20,
+    "shotInterval": 40,
     "targetFlying": true,
     "description": "Deals fire damage to all brutes in range.\nHot enough to melt steel"
   },
   "HighBladeID": {
-    "damage": 30,
+    "damage": 15,
     "duration": 0,
-    "shotInterval": 20,
+    "shotInterval": 1,
     "targetFlying": true,
     "description": "Deals heavy damage to all tall brutes in range.\nWhere's Your Head?"
   }

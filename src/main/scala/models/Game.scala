@@ -148,7 +148,8 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
   }
 
   def pauseGame() = {
-    timer.cancel()
+    if (timer != null)
+      timer.cancel()
   }
 
   def reset() = {
