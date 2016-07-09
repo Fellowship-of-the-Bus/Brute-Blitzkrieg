@@ -50,29 +50,39 @@ class BruteSelectActivity extends BaseActivity {
             for (range <- 0 until bruteIDs.length grouped 4) {
               this += new STableRow {
                 for (i <- range) {
-                  val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
-                    // brute button clicked
-                    val cur = if (currentSelection.isEmpty) {
-                      val next = nextSelection
-                      for (sel <- next) {
-                        deselectButton(sel.button)
+                  new SVerticalLayout {
+                    val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
+                      // brute button clicked
+                      val cur = if (currentSelection.isEmpty) {
+                        val next = nextSelection
+                        for (sel <- next) {
+                          deselectButton(sel.button)
+                        }
+                        next
+                      } else {
+                        currentSelection
                       }
-                      next
-                    } else {
-                      currentSelection
-                    }
-                    for (sel <- cur) {
-                      sel.brute = bruteIDs(i)
-                      sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
-                    }
-                    if (currentSelection.isEmpty) {
-                      for (sel <- nextSelection) {
-                        selectButton(sel.button)
+                      for (sel <- cur) {
+                        sel.brute = bruteIDs(i)
+                        sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
                       }
-                    }
-                    enableButtons()
-                  }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
-                  bruteButtons = bruteButtons :+ newButton
+                      if (currentSelection.isEmpty) {
+                        for (sel <- nextSelection) {
+                          selectButton(sel.button)
+                        }
+                      }
+                      enableButtons()
+                    }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
+                    bruteButtons = bruteButtons :+ newButton
+                    // cost display
+                    new SLinearLayout {
+                      SImageView(new BitmapDrawable(getResources(), BattleCanvas.goldImage)).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(20 dip).minimumHeight(20 dip).adjustViewBounds(true).<<.marginTop(4 dip).>>
+                      new STextView {
+                        text = s"${BruteAttributeMap(bruteIDs(i)).goldCost}"
+                        textSize = 20 sp
+                      }.<<.wrap.>>.here
+                    }.<<.wrap.Gravity(Gravity.CENTER_HORIZONTAL).>>.here
+                  }.<<.wrap.>>.here
                 }
               }
             }

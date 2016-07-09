@@ -3,15 +3,14 @@ MainActivity:
 
 leveledit
   delete button on tile
-  level delete button
 
 balance
 	arrow tower facing direction
 
-
 winning screen UI
-
-draw #brutes needed for each stars in prebattle/battle activities
 
 next level, return to main menu, retry buttons
 
+brute select
+	display cost of brutes
+	swap brutes when one is already selected
