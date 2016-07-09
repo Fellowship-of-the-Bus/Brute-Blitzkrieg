@@ -3,6 +3,7 @@ MainActivity:
 
 leveledit
   delete button on tile
+  load level - indicator that row was selected
 
 balance
 	arrow tower facing direction
@@ -10,7 +11,3 @@ balance
 winning screen UI
 
 next level, return to main menu, retry buttons
-
-brute select
-	display cost of brutes
-	swap brutes when one is already selected

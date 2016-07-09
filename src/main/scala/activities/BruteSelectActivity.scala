@@ -6,8 +6,8 @@ import models._
 import org.scaloid.common._
 import android.os.Bundle
 import android.view.{Gravity,View}
-import android.graphics.{Color,ColorMatrix,ColorMatrixColorFilter}
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.{Color,ColorMatrix,ColorMatrixColorFilter,PorterDuff}
+import android.graphics.drawable.{Drawable,BitmapDrawable}
 import android.widget.GridView
 import android.widget.ImageView
 import android.content.Intent
@@ -31,7 +31,9 @@ class BruteSelectActivity extends BaseActivity {
     for (i <- 0 until bruteIDs.length) {
       val button = bruteButtons(i)
       val brute = bruteIDs(i)
-      button.enabled = selections.forall(_.brute != brute)
+      // this sets the buttons so they appear depressed when selected
+      if (selections.forall(_.brute != brute)) button.background.setColorFilter(null)
+      else button.background.setColorFilter(Color.DKGRAY, PorterDuff.Mode.SRC_IN)
     }
   }
 
@@ -43,6 +45,7 @@ class BruteSelectActivity extends BaseActivity {
 
     error("Brute Blitzkrieg brute select activity started")
     super.onCreate(savedState)
+
     setContentView(
       new SRelativeLayout {
         new SLinearLayout {
@@ -51,25 +54,26 @@ class BruteSelectActivity extends BaseActivity {
               this += new STableRow {
                 for (i <- range) {
                   new SVerticalLayout {
-                    val newButton = SImageButton(new BitmapDrawable(getResources(), BattleCanvas.bruteImages(bruteIDs(i)).head), {
+                    val bruteBitmap = BattleCanvas.bruteImages(bruteIDs(i)).head
+                    val newButton = SImageButton(new BitmapDrawable(getResources(), bruteBitmap), {
                       // brute button clicked
-                      val cur = if (currentSelection.isEmpty) {
-                        val next = nextSelection
-                        for (sel <- next) {
-                          deselectButton(sel.button)
+                      for (sel <- currentSelection) {
+                        for (otherSel <- selections.find(_.brute == bruteIDs(i))) {
+                          // another selection has the selected brute, so swap them
+                          otherSel.brute = sel.brute
+                          if (sel.brute == null) {
+                            otherSel.button.imageResource = R.drawable.unknown
+                          } else {
+                            otherSel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
+                          }
                         }
-                        next
-                      } else {
-                        currentSelection
-                      }
-                      for (sel <- cur) {
                         sel.brute = bruteIDs(i)
-                        sel.button.imageBitmap = BattleCanvas.bruteImages(sel.brute).head
+                        sel.button.imageBitmap = bruteBitmap
                       }
-                      if (currentSelection.isEmpty) {
-                        for (sel <- nextSelection) {
-                          selectButton(sel.button)
-                        }
+                      for (sel <- nextSelection) {
+                        selections.foreach(x => deselectButton(x.button))
+                        selectButton(sel.button)
+                        currentSelection = Some(sel)
                       }
                       enableButtons()
                     }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
@@ -116,6 +120,7 @@ class BruteSelectActivity extends BaseActivity {
         }
       }
     )
+    currentSelection = nextSelection
   }
 
   override def onResume(): Unit = {
