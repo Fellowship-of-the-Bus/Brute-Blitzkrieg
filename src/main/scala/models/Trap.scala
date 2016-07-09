@@ -184,30 +184,31 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
           isOpen = true
           id = altid
         }
-      } else {
-        return List[BaseProjectile]()
       }
-      if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
-        isBlockedByWeb = true
-        id = TrapdoorWebbedID
-      } else {
-        listOfBrutes.map(brute => {
-          if (!brute.attr.flying) {
-            Game.game.map.getTile(brute.coord).deregister(brute)
-            brute.coord.y += 1
-            brute.facingRight = !brute.facingRight
-            Game.game.map.getTile(brute.coord).register(brute)
-          }
 
-        })
-        belowBrutes.map(brute => {
-          if (brute.attr.flying) {
-            Game.game.map.getTile(brute.coord).deregister(brute)
-            brute.coord.y -= 1
-            brute.facingRight = !brute.facingRight
-            Game.game.map.getTile(brute.coord).register(brute)
-          }
-        })
+      if (isOpen) {
+        if(listOfBrutes.filter(brute => brute.id == SpiderID).length >= 1) {
+          isBlockedByWeb = true
+          id = TrapdoorWebbedID
+        } else {
+          listOfBrutes.map(brute => {
+            if (!brute.attr.flying) {
+              Game.game.map.getTile(brute.coord).deregister(brute)
+              brute.coord.y += 1
+              brute.facingRight = !brute.facingRight
+              Game.game.map.getTile(brute.coord).register(brute)
+            }
+
+          })
+          belowBrutes.map(brute => {
+            if (brute.attr.flying) {
+              Game.game.map.getTile(brute.coord).deregister(brute)
+              brute.coord.y -= 1
+              brute.facingRight = !brute.facingRight
+              Game.game.map.getTile(brute.coord).register(brute)
+            }
+          })
+        }
       }
     }
     List[BaseProjectile]()
