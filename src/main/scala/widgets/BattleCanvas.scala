@@ -95,73 +95,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     def normX(x: Float) = (x * cellX).toInt
     def normY(y: Float) = (y * cellY).toInt
 
-    val paint = new Paint()
-    paint.setStyle(Paint.Style.FILL)
-    paint.setColor(Color.WHITE)
-    //canvas.drawPaint(paint);
-    // Use Color.parseColor to define HTML colors
-    paint.setColor(Color.parseColor("#000000"))
-    paint.setTextAlign(Paint.Align.LEFT)
-    paint.setTextSize(16 sp)
-    //canvas.drawCircle(x / 2, y / 2, radius, paint);
-
-    canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
-
-    val topRow = new RowDrawer(canvas, paint, 0, 0)
-    topRow.drawBitmap(goldImageBox)
-    topRow.drawString(Game.game.currentGold.toString, 20)
-    val score = Game.game.score
-    val (nextStar, starsEarned) = Array((map.oneStar, 0), (map.twoStar, 1), (map.threeStar, 2)).find(_._1 > score).getOrElse((map.threeStar, 3))
-    for (i <- 0 until starsEarned) {
-      topRow.drawBitmap(starImageBox)
-    }
-    for (i <- 0 until 3-starsEarned) {
-      topRow.drawBitmap(greyStarImageBox)
-    }
-    topRow.drawString(s"$score/$nextStar")
-
-    canvas.drawBitmap(exitImage, null,
-        new Rect(normX(Game.game.map.endTileCoord.x),
-            normY(Game.game.map.endTileCoord.y),
-            normX(Game.game.map.endTileCoord.x + 1),
-            normY(Game.game.map.endTileCoord.y + 0.75f)), null)
-    canvas.drawBitmap(entranceImage, null,
-        new Rect(normX(Game.game.map.startTileCoord.x),
-            normY(Game.game.map.startTileCoord.y),
-            normX(Game.game.map.startTileCoord.x + 1),
-            normY(Game.game.map.startTileCoord.y + 0.75f)), null)
-
-    for (trap <- Game.game.trapList.reverse) {
-      val image = trapImages(trap.id)
-      drawPositioned(image, trap, false)
-    }
-    for (proj <- Game.game.projList.filter(_.isActive)) {
-      val image = projImages(proj.id)(0)
-      //drawPositioned(image, proj, false)
-      drawRotated(image, proj)
-    }
-    for (brute <- Game.game.bruteList.filter(_.isAlive)) {
-      //to do climbing stairs
-      drawLifebar(brute)
-      val image = bruteImages(brute.id)(brute.currentFrame)
-
-      drawPositioned(image, brute, brute.facingRight)
-    }
-    // draw grid for level editor
-    if (drawGrid) {
-      paint.setColor(Color.RED)
-      paint.setStrokeWidth(2 dip)
-      for (row <- 0 to MapID.height) {
-        canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
-      }
-      for (col <- 0 to MapID.width) {
-        canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
-      }
-    }
-
-    paint.setColor(Color.WHITE);
-    //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
-
     def drawPositioned(image: Bitmap, gameObject: TopLeftCoordinates, flip: Boolean) = {
       var drawX1 = gameObject.x
       var drawX2 = drawX1 + gameObject.width
@@ -226,6 +159,76 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
       paint.setColor(Color.RED)
       canvas.drawRect(pos, paint)
     }
+
+    // begin draw
+    val paint = new Paint()
+    paint.setStyle(Paint.Style.FILL)
+    paint.setColor(Color.WHITE)
+    //canvas.drawPaint(paint);
+    // Use Color.parseColor to define HTML colors
+    paint.setColor(Color.parseColor("#000000"))
+    paint.setTextAlign(Paint.Align.LEFT)
+    paint.setTextSize(16 sp)
+    //canvas.drawCircle(x / 2, y / 2, radius, paint);
+
+    canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
+
+    canvas.drawBitmap(exitImage, null,
+        new Rect(normX(Game.game.map.endTileCoord.x),
+            normY(Game.game.map.endTileCoord.y),
+            normX(Game.game.map.endTileCoord.x + 1),
+            normY(Game.game.map.endTileCoord.y + 0.75f)), null)
+    canvas.drawBitmap(entranceImage, null,
+        new Rect(normX(Game.game.map.startTileCoord.x),
+            normY(Game.game.map.startTileCoord.y),
+            normX(Game.game.map.startTileCoord.x + 1),
+            normY(Game.game.map.startTileCoord.y + 0.75f)), null)
+
+    for (trap <- Game.game.trapList.reverse) {
+      val image = trapImages(trap.id)
+      drawPositioned(image, trap, false)
+    }
+    for (proj <- Game.game.projList.filter(_.isActive)) {
+      val image = projImages(proj.id)(0)
+      //drawPositioned(image, proj, false)
+      drawRotated(image, proj)
+    }
+    for (brute <- Game.game.bruteList.filter(_.isAlive)) {
+      //to do climbing stairs
+      drawLifebar(brute)
+      val image = bruteImages(brute.id)(brute.currentFrame)
+
+      drawPositioned(image, brute, brute.facingRight)
+    }
+
+    val topRow = new RowDrawer(canvas, paint, 0, 0)
+    topRow.drawBitmap(goldImageBox)
+    topRow.drawString(Game.game.currentGold.toString, 20)
+    val score = Game.game.score
+    val (nextStar, starsEarned) = Array((map.oneStar, 0), (map.twoStar, 1), (map.threeStar, 2)).find(_._1 > score).getOrElse((map.threeStar, 3))
+    for (i <- 0 until starsEarned) {
+      topRow.drawBitmap(starImageBox)
+    }
+    for (i <- 0 until 3-starsEarned) {
+      topRow.drawBitmap(greyStarImageBox)
+    }
+    topRow.drawString(s"$score/$nextStar")
+
+    // draw grid for level editor
+    if (drawGrid) {
+      paint.setColor(Color.RED)
+      paint.setStrokeWidth(2 dip)
+      for (row <- 0 to MapID.height) {
+        canvas.drawLine(0, row*cellY, canvasX, row*cellY, paint)
+      }
+      for (col <- 0 to MapID.width) {
+        canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
+      }
+    }
+
+    paint.setColor(Color.WHITE);
+    //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
+
     battleHandler.sleep(50)
   }
 }
