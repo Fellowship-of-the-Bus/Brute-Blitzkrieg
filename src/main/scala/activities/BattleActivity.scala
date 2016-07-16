@@ -53,7 +53,7 @@ class BattleActivity extends BaseActivity with GameListener {
                   new STextView {
                     val name: CharSequence = game.brutes(i).name
                     val cost = BruteAttributeMap(game.brutes(i)).goldCost
-                    text = s"${name}"//\n$$${cost}"
+                    text = s"${name}"
                     textSize = 16 sp
                   }.<<.wrap.Gravity(Gravity.CENTER).>>.gravity(Gravity.CENTER).here
                   new SLinearLayout {

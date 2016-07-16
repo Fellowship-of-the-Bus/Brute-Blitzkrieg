@@ -92,7 +92,7 @@ case object BruteAttributeMap extends IDMap[BruteID, BruteAttributes]("data/brut
 
 class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordinates {
   //grab stuff from IDMap
-  val attr = BruteAttributeMap(id) //= new BruteAttributes(10, 0.3, 0.5, 0.5, false, 1)
+  val attr = BruteAttributeMap(id)
   def width = attr.width
   def height = attr.height
   var hp: Float  = attr.maxHP
@@ -161,9 +161,8 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
 
   def move(): Unit = {
     incFrame()
-    //probably do some check on which floor you are on and decide whether to move left, right or climb ladder
-    //tar slows speed
-    //android.util.Log.e("bruteb", s"brute frame $coord")
+    // do some check on which floor you are on and decide whether to move left, right or climb ladder
+    // tar slows speed
 
     if (isClimbingStairs) {
       val progressPerTick = attr.moveSpeed * 0.5f
@@ -241,11 +240,9 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
 
 }
 
-class Ogre(bCoord: Coordinate) extends BaseBrute(OgreID, bCoord) {
-}
+class Ogre(bCoord: Coordinate) extends BaseBrute(OgreID, bCoord)
 
-class Goblin(bCoord: Coordinate) extends BaseBrute(GoblinID, bCoord){
-}
+class Goblin(bCoord: Coordinate) extends BaseBrute(GoblinID, bCoord)
 
 class VampireBat(bCoord: Coordinate) extends BaseBrute(VampireBatID, bCoord){
   override def flyingHeight = 0.249f
@@ -260,11 +257,9 @@ class VampireBat(bCoord: Coordinate) extends BaseBrute(VampireBatID, bCoord){
   }
 }
 
-class GoblinShaman(bCoord: Coordinate) extends BaseBrute(GoblinShamanID, bCoord){
-}
+class GoblinShaman(bCoord: Coordinate) extends BaseBrute(GoblinShamanID, bCoord)
 
-class Spider(bCoord: Coordinate) extends BaseBrute(SpiderID, bCoord) {
-}
+class Spider(bCoord: Coordinate) extends BaseBrute(SpiderID, bCoord)
 
 class FlameImp(bCoord: Coordinate) extends BaseBrute(FlameImpID, bCoord) {
   override def hit(source: BaseTrap, damage: Float) = {
@@ -275,11 +270,9 @@ class FlameImp(bCoord: Coordinate) extends BaseBrute(FlameImpID, bCoord) {
   }
 }
 
-class CageGoblin(bCoord: Coordinate) extends BaseBrute(CageGoblinID, bCoord) {
-}
+class CageGoblin(bCoord: Coordinate) extends BaseBrute(CageGoblinID, bCoord)
 
-class Troll(bCoord: Coordinate) extends BaseBrute(TrollID, bCoord){
-}
+class Troll(bCoord: Coordinate) extends BaseBrute(TrollID, bCoord)
 
 //factory for brutes
 object Brute {
@@ -297,7 +290,6 @@ object Brute {
     }
     brute.coord.y += (1-brute.height - 1/4f)
     brute.coord.x += (1-brute.width)
-    //android.util.Log.e("bruteb", "making brute at "+ brute.x.toString +" " +brute.y.toString)
     brute
   }
 }

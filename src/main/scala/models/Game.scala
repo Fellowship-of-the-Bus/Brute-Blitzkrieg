@@ -30,7 +30,7 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
   var trapList: List[BaseTrap] = List[BaseTrap]()
   var projList: List[BaseProjectile] = List[BaseProjectile]()
 
-  var timer: Timer = null//new Timer()
+  var timer: Timer = null
 
   var currentGold = map.startingGold
   var score = 0
@@ -141,10 +141,6 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
         updateAuras()
       }
     }, 0, Game.msAuraStickiness)
-
-    //for now send some brutes
-    //sendBrute(OgreID)
-
   }
 
   def pauseGame() = {

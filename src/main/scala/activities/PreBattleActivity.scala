@@ -4,7 +4,6 @@ import models._
 
 import org.scaloid.common._
 
-// import android.app.Activity
 import android.os.Bundle
 import android.view.{Gravity, View}
 import android.graphics.Color

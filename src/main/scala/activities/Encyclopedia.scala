@@ -2,7 +2,6 @@ package com.github.fellowship_of_the_bus.bruteb
 
 import models._
 
-// import android.app.Activity
 import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
@@ -91,7 +90,7 @@ class Encyclopedia extends BaseActivity {
             }.<<.wrap.>>.here
           }.<<(0,WRAP_CONTENT).Weight(1).>>.here
         }.<<.fill.>>.here
-        if (Game.Options.firstGame) {
+        if (Game.Options.firstGame) { // tutorial
           new SRelativeLayout {
             new SVerticalLayout {
               val text = new STextView {
@@ -109,8 +108,9 @@ class Encyclopedia extends BaseActivity {
                 }).<<.fw
               } else {
                 SButton(R.string.NextButton, {
+                  // go to first level
                   finish()
-                  switchScreen(Level1, maps(Level1))
+                  switchScreen(MapID.Factory.ids(0), maps(MapID.Factory.ids(0)))
                 }).<<.fw
               }
 

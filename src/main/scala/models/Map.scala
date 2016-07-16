@@ -38,10 +38,7 @@ case class MapInfo(
 
   def height = tiles.length
   def width = tiles(0).length
-  def getTile(coord: Coordinate) = {
-    //android.util.Log.e("bruteb", s"${coord.y}, ${coord.x}, $height, $width")
-    tiles(coord.y.toInt)(coord.x.toInt)
-  }
+  def getTile(coord: Coordinate) = tiles(coord.y.toInt)(coord.x.toInt)
 
   def clear() = {
     for (row <- tiles) {
@@ -97,18 +94,6 @@ object MapID {
 }
 
 case object maps extends IDMap[MapID, MapInfo]("data/maps.json")
-
-// tiles have coordinates with bottom left = (0,0)
-// class LevelMap() {
-//   def apply(num: Int) = levelMap(num)
-//   val levelMap = collection.immutable.HashMap(1 ->
-//   MapInfo(List(List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0)),
-//                List(Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0), Tile(0,0))
-//                ),
-//           Coordinate(0,4), Coordinate(1,4)
-//           )
-//   )
-// }
 
 class GameMap(num : MapID) {
   val brute = Brute(OgreID, Coordinate(0,0))

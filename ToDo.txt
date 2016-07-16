@@ -2,7 +2,6 @@ MainActivity:
 	design more levels
 
 leveledit
-  load level - indicator that row was selected
 
 balance
 

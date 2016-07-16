@@ -5,7 +5,6 @@ import models._
 
 import org.scaloid.common._
 
-// import android.app.Activity
 import android.os.Bundle
 import android.view.{Gravity, View}
 import android.widget.{GridView, ImageView, AdapterView, AbsListView}
@@ -52,7 +51,7 @@ class LevelEditor extends BaseActivity {
   def trapEq(t1: TrapID, t2: TrapID) = (isArrow(t1) && isArrow(t2)) || t1 == t2
 
   def placeTrap(tile: Tile, trap: TrapID, coord: Coordinate, unconditional: Boolean = false) = {
-    val Coordinate(x, y) = coord
+    val Coordinate(x, _) = coord
     if (x < MapID.width) {
       val placed = trap match {
         case _: models.WallTrapID =>
@@ -61,7 +60,7 @@ class LevelEditor extends BaseActivity {
             tile.wallTrapID = trap
             true
           } else false
-        case _: models.FloorTrapID if ((trap != TrapdoorID && trap != ReuseTrapdoorID) || y < MapID.height-1) =>
+        case _: models.FloorTrapID =>
           if (unconditional || ! trapEq(tile.floorTrapID, trap)) {
             tile.floorTrapID = trap
             true
@@ -251,8 +250,6 @@ class LevelEditor extends BaseActivity {
             placeTrap(tile, flip(tile.wallTrapID), coord, true)
          }
         }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.INVISIBLE)
-
-
       }
     )
   }

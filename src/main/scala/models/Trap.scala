@@ -181,7 +181,8 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
       return List[BaseProjectile]()
     } else {
       val listOfBrutes = getInRangeBrutes
-      val belowBrutes = Game.game.map.getTile(belowCoord).bruteList.toList.filter(_.isAlive)
+      error(s"$y")(new org.scaloid.common.LoggerTag("bruteb"))
+      val belowBrutes = if (y.toInt == MapID.height-1) List() else Game.game.map.getTile(belowCoord).bruteList.toList.filter(_.isAlive)
       //check if any is in range. If so, open the trap
       if (listOfBrutes.filter(!_.attr.flying).length != 0) {
         if (isOpen == false) {
@@ -200,7 +201,7 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
               Game.game.map.getTile(brute.coord).deregister(brute)
               brute.coord.y += 1
               brute.facingRight = !brute.facingRight
-              Game.game.map.getTile(brute.coord).register(brute)
+              if (brute.coord.y.toInt == MapID.height) brute.hp = -1 else Game.game.map.getTile(brute.coord).register(brute)
             }
 
           })
@@ -376,17 +377,15 @@ class Lightning(tCoord: Coordinate) extends WallTrap(LightningID, tCoord) {
   }
 
   override def getInRangeBrutes: List[BaseBrute] = {
-    val leftCoord = coord.copy()
-    leftCoord.x = leftCoord.x - 1
-    val rightCoord = coord.copy()
-    rightCoord.x = rightCoord.x + 1
+    val leftCoord = coord.copy(x=coord.x-1)
+    val rightCoord = coord.copy(x=coord.x+1)
 
     (Game.game.map.getTile(coord).bruteList.toList.filter(_.isAlive)
     :::Game.game.map.getTile(leftCoord).bruteList.toList.filter(_.isAlive)
     :::Game.game.map.getTile(rightCoord).bruteList.toList.filter(_.isAlive))
   }
 
-  override def fireProjectiles(targets: List[BaseBrute]) : List[BaseProjectile] = {
+  override def fireProjectiles(targets:  List[BaseBrute]) : List[BaseProjectile] = {
     var projList: List[BaseProjectile] = List[BaseProjectile]()
     for (brute <- targets) {
       val proj = fireProjectile(brute)

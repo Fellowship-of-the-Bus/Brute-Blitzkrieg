@@ -3,7 +3,6 @@ package bruteb
 
 import models._
 
-// import android.app.Activity
 import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
@@ -39,10 +38,6 @@ class BaseActivity extends SActivity {
 	override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
     getActionBar().hide()
-
-    //setContentView(
-    //  layout
-    //)
 	}
 
   override def setContentView (v : View) {

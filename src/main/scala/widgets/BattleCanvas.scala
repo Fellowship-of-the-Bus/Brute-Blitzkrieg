@@ -14,7 +14,6 @@ import android.graphics.Rect;
 
 import org.scaloid.common._
 
-//import lib.game.TopLeftCoordinates
 import lib.game.{IDMap, IDFactory, TopLeftCoordinates}
 
 import android.os.{Handler, Message}
@@ -49,7 +48,6 @@ object BattleCanvas {
   lazy val starImageBox = new ImageBox(starImage, iconBounds)
   lazy val greyStarImageBox = new ImageBox(greyStarImage, iconBounds)
 }
-
 
 class ImageBox(val bitmap: Bitmap, val bounds: Rect)
 
@@ -164,12 +162,10 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     val paint = new Paint()
     paint.setStyle(Paint.Style.FILL)
     paint.setColor(Color.WHITE)
-    //canvas.drawPaint(paint);
     // Use Color.parseColor to define HTML colors
     paint.setColor(Color.parseColor("#000000"))
     paint.setTextAlign(Paint.Align.LEFT)
     paint.setTextSize(16 sp)
-    //canvas.drawCircle(x / 2, y / 2, radius, paint);
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
 
@@ -190,7 +186,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     }
     for (proj <- Game.game.projList.filter(_.isActive)) {
       val image = projImages(proj.id)(0)
-      //drawPositioned(image, proj, false)
       drawRotated(image, proj)
     }
     for (brute <- Game.game.bruteList.filter(_.isAlive)) {
@@ -225,9 +220,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
         canvas.drawLine(col*cellX, 0, col*cellX, canvasY, paint)
       }
     }
-
-    paint.setColor(Color.WHITE);
-    //canvas.drawRect(0,0, getWidth(), 2*getHeight()/3,paint);
 
     battleHandler.sleep(50)
   }
