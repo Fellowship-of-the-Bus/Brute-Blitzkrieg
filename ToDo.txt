@@ -2,12 +2,8 @@ MainActivity:
 	design more levels
 
 leveledit
-  delete button on tile
   load level - indicator that row was selected
 
 balance
-	arrow tower facing direction
 
 winning screen UI
-
-next level, return to main menu, retry buttons

@@ -8,10 +8,10 @@ import org.scaloid.common._
 // import android.app.Activity
 import android.os.Bundle
 import android.view.{Gravity, View}
-import android.widget.{GridView, ImageView, AdapterView}
+import android.widget.{GridView, ImageView, AdapterView, AbsListView}
 import android.content.{Intent, Context}
 import android.graphics.{Color, Canvas}
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.{BitmapDrawable, ColorDrawable}
 import android.text.{InputType,InputFilter,Spanned}
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -109,7 +109,8 @@ class LevelEditor extends BaseActivity {
                   placeTrap(map.tiles(y)(x), sel.trap, Coordinate(x, y))
                 }
                 val curWallTrap = map.tiles(y)(x).wallTrapID
-                flipButton.setVisibility(if (curWallTrap == ArrowID || curWallTrap == LeftArrowID) View.VISIBLE else View.INVISIBLE)
+                flipButton.visibility(if (curWallTrap == ArrowID || curWallTrap == LeftArrowID) View.VISIBLE else View.INVISIBLE)
+                deleteButton.visibility(View.VISIBLE)
               }
             }
             true
@@ -201,6 +202,8 @@ class LevelEditor extends BaseActivity {
               val files = customMapFiles
               var index = -1
               val listView = new SListView
+              listView.choiceMode(AbsListView.CHOICE_MODE_SINGLE)
+              listView.setSelector(new ColorDrawable(0xff345678))
               listView.adapter = SArrayAdapter(files.map{ _.getName })
               listView.onItemClick((parent: AdapterView[_], item: View, idx: Int, id: Long) => index = idx)
 
@@ -222,18 +225,6 @@ class LevelEditor extends BaseActivity {
               builder.show
             })
           }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.RIGHT).here
-
-          // object ContextMenu extends SView {
-          //   // var tilex: Int = 0
-          //   // var tiley: Int = 0
-
-          //   override def onDraw(canvas: Canvas) = {
-          //     button.setX(tilex*battleCanvas.cellX)
-          //     button.setY(tiley*battleCanvas.cellY)
-          //     button.draw(canvas)
-          //   }
-          // }
-          // ContextMenu.visibility(View.INVISIBLE).here
         }.here
         val deleteButton: SImageButton = SImageButton(R.drawable.delete, {
           val x = deleteButton.getX
@@ -247,7 +238,7 @@ class LevelEditor extends BaseActivity {
             tile.floorTrapID = NoTrapID
             tile.wallTrapID = NoTrapID
           }
-        }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.VISIBLE)
+        }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.INVISIBLE)
 
         val flipButton: SImageButton = SImageButton(R.drawable.swap, {
           val x = flipButton.getX
