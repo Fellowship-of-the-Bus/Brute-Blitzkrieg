@@ -32,7 +32,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Can fly over many traps.\nProbably a vampire transformed into a bat.",
+    "description": "Can fly over many traps.\nFlies up through open trapdoors.\nProbably a vampire transformed into a bat.",
     "goldCost": 10
   },
   "GoblinShamanID": {
