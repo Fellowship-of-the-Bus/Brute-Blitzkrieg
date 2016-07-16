@@ -14,6 +14,10 @@ object Game {
   object Options{
     var firstGame = false
   }
+  val ticksPerSecond = 20
+  val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
+  val msPerCleanup = msPerTick*40     //cleanup every 2 secs
+  val msAuraStickiness = msPerTick*10  //update auras every 10 ticks
 }
 
 trait GameListener {
@@ -21,11 +25,7 @@ trait GameListener {
 }
 
 class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vector[BruteID](null, null, null, null)) {
-  val ticksPerSecond = 20
   val levelName = mapID.id
-  val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
-  val msPerCleanup = msPerTick*40     //cleanup every 2 secs
-  val msAuraStickiness = msPerTick*10  //update auras every 10 ticks
   var bruteList: List[BaseBrute] = List[BaseBrute]()
   var trapList: List[BaseTrap] = List[BaseTrap]()
   var projList: List[BaseProjectile] = List[BaseProjectile]()
@@ -130,17 +130,17 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
       override def run() = {
         tick()
       }
-    }, 0, msPerTick)
+    }, 0, Game.msPerTick)
     timer.scheduleAtFixedRate(new TimerTask() {
       override def run() = {
         cleanup()
       }
-    }, 0, msPerCleanup)
+    }, 0, Game.msPerCleanup)
     timer.scheduleAtFixedRate(new TimerTask() {
       override def run() = {
         updateAuras()
       }
-    }, 0, msAuraStickiness)
+    }, 0, Game.msAuraStickiness)
 
     //for now send some brutes
     //sendBrute(OgreID)
