@@ -44,6 +44,37 @@ class LevelEditor extends BaseActivity {
     attributes = Some(LevelAttributes(name, map.startingGold, map.oneStar, map.twoStar, map.threeStar))
   }
 
+  def isArrow(trap: TrapID) = trap == ArrowID || trap == LeftArrowID
+  def flip(trap: TrapID) =
+    if (trap == ArrowID) LeftArrowID
+    else if (trap == LeftArrowID) ArrowID
+    else trap
+  def trapEq(t1: TrapID, t2: TrapID) = (isArrow(t1) && isArrow(t2)) || t1 == t2
+
+  def placeTrap(tile: Tile, trap: TrapID, coord: Coordinate, unconditional: Boolean = false) = {
+    val Coordinate(x, y) = coord
+    if (x < MapID.width) {
+      val placed = trap match {
+        case _: models.WallTrapID =>
+          if (unconditional || ! trapEq(tile.wallTrapID, trap)) {
+            // don't replace tower if it's the same
+            tile.wallTrapID = trap
+            true
+          } else false
+        case _: models.FloorTrapID if ((trap != TrapdoorID && trap != ReuseTrapdoorID) || y < MapID.height-1) =>
+          if (unconditional || ! trapEq(tile.floorTrapID, trap)) {
+            tile.floorTrapID = trap
+            true
+          } else false
+        case _ => false
+      }
+      if (placed) {
+        game.removeTrap(trap, coord)
+        game.addTrapFromID(trap, coord)
+      }
+    }
+  }
+
   override def onCreate(savedState: Bundle): Unit = {
     var currentSelection: Option[Selection] = None
     android.util.Log.e("bruteb", "Brute Blitzkrieg level editor started")
@@ -69,23 +100,16 @@ class LevelEditor extends BaseActivity {
               if (x > 0 && x < MapID.width-1 && y >= 0 && y < MapID.height) {
                 deleteButton.setX(x*canvas.cellX)
                 deleteButton.setY(y*canvas.cellY)
+                flipButton.setX(x*canvas.cellX+deleteButton.width)
+                flipButton.setY(y*canvas.cellY)
+                flipButton.setVisibility(View.INVISIBLE)
                 // can't put anything on far edges of the map
-                for (sel <- currentSelection; if (x < MapID.width)) {
+                for (sel <- currentSelection) {
                   error(s"$x $y ${sel.trap}")
-                  val trapAdded = sel.trap match {
-                    case id: models.FloorTrapID if ((id != TrapdoorID && id != ReuseTrapdoorID) || y < MapID.height-1) =>
-                      map.tiles(y)(x).floorTrapID = sel.trap
-                      true
-                    case _: models.WallTrapID =>
-                      map.tiles(y)(x).wallTrapID = sel.trap
-                      true
-                    case _ => false
-                  }
-                  if (trapAdded) {
-                    game.removeTrap(sel.trap, Coordinate(x, y))
-                    game.addTrapFromID(sel.trap, Coordinate(x, y))
-                  }
+                  placeTrap(map.tiles(y)(x), sel.trap, Coordinate(x, y))
                 }
+                val curWallTrap = map.tiles(y)(x).wallTrapID
+                flipButton.setVisibility(if (curWallTrap == ArrowID || curWallTrap == LeftArrowID) View.VISIBLE else View.INVISIBLE)
               }
             }
             true
@@ -217,15 +241,26 @@ class LevelEditor extends BaseActivity {
           val tilex = (x/battleCanvas.cellX).toInt
           val tiley = (y/battleCanvas.cellY).toInt
           for (sel <- currentSelection; if (tilex < MapID.width)) {
-            sel.trap match {
-              case _: models.FloorTrapID => map.tiles(tiley)(tilex).floorTrapID = NoTrapID
-              case _: models.WallTrapID => map.tiles(tiley)(tilex).wallTrapID = NoTrapID
-              case _ => ()
-            }
-            error(s"delete ${sel.trap} $tilex $tiley $x $y")
-            game.removeTrap(sel.trap, Coordinate(tilex, tiley))
+            val tile = map.tiles(tiley)(tilex)
+            game.removeTrap(tile.floorTrapID, Coordinate(tilex, tiley))
+            game.removeTrap(tile.wallTrapID, Coordinate(tilex, tiley))
+            tile.floorTrapID = NoTrapID
+            tile.wallTrapID = NoTrapID
           }
         }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.VISIBLE)
+
+        val flipButton: SImageButton = SImageButton(R.drawable.swap, {
+          val x = flipButton.getX
+          val y = flipButton.getY
+          val tilex = (x/battleCanvas.cellX).toInt
+          val tiley = (y/battleCanvas.cellY).toInt
+          for (sel <- currentSelection; if (tilex < MapID.width)) {
+            val tile = map.tiles(tiley)(tilex)
+            val coord = Coordinate(tilex, tiley)
+            placeTrap(tile, flip(tile.wallTrapID), coord, true)
+         }
+        }).scaleType(ImageView.ScaleType.CENTER_INSIDE).padding(6 dip).adjustViewBounds(true).<<(25 dip, 25 dip).>>.visibility(View.INVISIBLE)
+
 
       }
     )
