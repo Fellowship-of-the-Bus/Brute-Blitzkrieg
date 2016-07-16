@@ -318,11 +318,11 @@ class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
-        if (brute.isClimbingStairs || dy == 0 || brute.isAlive) {
+        if (brute.isClimbingStairs || dy != 0 || !brute.isAlive) {
           curTarget = getNewTarget()
         }
       }
-      case _ => {
+      case None => {
         curTarget = getNewTarget()
       }
     }
@@ -337,14 +337,17 @@ class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
   }
 
   def getNewTarget(): Option[BaseBrute] = {
-    //android.util.Log.e("bruteb", s"Getting target from arrow tower $coord.y")
     val listOfBrutes = getInRangeBrutes
-      if (listOfBrutes.length == 0) {
-        return None
+    if (listOfBrutes.length == 0) {
+      return None
+    } else {
+      // Closest to end
+      if (coord.y % 2  == 0) {
+        return Some(listOfBrutes.maxBy(_.x))
       } else {
-        // some targeting heuristic
-        return Some(listOfBrutes.head)
+        return Some(listOfBrutes.minBy(_.x))
       }
+    }
   }
 }
 
