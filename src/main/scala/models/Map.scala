@@ -59,6 +59,18 @@ sealed trait MapID {
 case object Level1 extends MapID {
   val id = "Level1"
 }
+case object Level3 extends MapID {
+  val id = "Level3"
+}
+case object Level4 extends MapID {
+  val id = "Level4"
+}
+case object Level12 extends MapID {
+  val id = "Level12"
+}
+case object Level15 extends MapID {
+  val id = "Level15"
+}
 object Custom {
   val prefix = "Custom_"
 }
@@ -71,7 +83,7 @@ object MapID {
   val width = 8
 
   implicit object Factory extends IDFactory[MapID] {
-    val ids = Vector(Level1)
+    val ids = Vector(Level1,Level3,Level4,Level12,Level15)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(x => if (Factory.fromString.isDefinedAt(x)) Factory.fromString(x) else Custom(x))
