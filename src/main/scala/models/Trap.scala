@@ -220,9 +220,9 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
 
   override def getInRangeBrutes: List[BaseBrute] = {
     Game.game.map.getTile(coord).bruteList.toList.filter(b => {
-      val progress = b.x % 1
+      val progress = b.x - b.x.toInt
       if (b.facingRight) {
-        (progress - b.width) > 0
+        true
       } else {
         (1 - progress) > b.width
       }
@@ -252,17 +252,6 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
       }
     }
     List[BaseProjectile]()
-  }
-
-  override def getInRangeBrutes: List[BaseBrute] = {
-    Game.game.map.getTile(coord).bruteList.toList.filter(b => {
-      val progress = b.x - b.x.toInt
-      if (b.facingRight) {
-        true
-      } else {
-        1 - progress > b.width
-      }
-    })
   }
 }
 
