@@ -224,7 +224,7 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
       if (b.facingRight) {
         (progress - b.width) > 0
       } else {
-        (b.width - progress) > 0
+        (1 - progress) > b.width
       }
     })
   }
@@ -256,11 +256,11 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
 
   override def getInRangeBrutes: List[BaseBrute] = {
     Game.game.map.getTile(coord).bruteList.toList.filter(b => {
-      val progress = b.x % 1
+      val progress = b.x - b.x.toInt
       if (b.facingRight) {
-        (progress - b.width) > 0
+        true
       } else {
-        (b.width - progress) > 0
+        1 - progress > b.width
       }
     })
   }
@@ -274,7 +274,7 @@ class Tar(tCoord: Coordinate) extends FloorTrap(TarID, tCoord) {
     if (canAttack && listOfBrutes.length != 0) {
 
       //for each in range, attack
-      listOfBrutes.filter(b => !b.isFlying).map(brute => brute.effects = TimedEffect(None, Some(id), Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
+      listOfBrutes.filter(b => !b.isFlying).map(brute => brute.effects = TimedEffect(None, Some(id), Game.msAuraStickiness/Game.msPerTick)::brute.effects)
       setCooldown()
     }
     List[BaseProjectile]()
@@ -290,7 +290,7 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
 
       //for each in range, give them the poison debuff
       listOfBrutes.map(brute => {
-          brute.effects = TimedEffect(None, Some(id), (2f*Game.game.msAuraStickiness/Game.game.msPerTick).toInt)::brute.effects
+          brute.effects = TimedEffect(None, Some(id), (2f*Game.msAuraStickiness/Game.msPerTick).toInt)::brute.effects
         })
       setCooldown()
       new PoisonProjectile(PoisonProj, coord.copy(), this, null)::List[BaseProjectile]()

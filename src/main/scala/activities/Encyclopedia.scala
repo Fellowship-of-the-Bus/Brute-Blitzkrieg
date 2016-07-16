@@ -18,12 +18,13 @@ class Encyclopedia extends BaseActivity {
 
   override def onCreate(savedState: Bundle) {
     super.onCreate(savedState)
+    val doBrute = getIntent().getBooleanExtra("brute", true)
     val txt = new STextView {
-      text = "Select a monster for more information."
+      text = if (doBrute) "Select a monster for more information." else "Select a trap for more information."
       textSize = 16 sp
     }
     val nametxt = new STextView {
-      text = "Monster Encyclopedia"
+      text = if (doBrute) "Monster Encyclopedia" else "Trap Encyclopedia"
       textSize = 20 sp
     }
     val valuetxt = new STextView {
@@ -34,7 +35,6 @@ class Encyclopedia extends BaseActivity {
     val img = new SImageView {
       imageResource=R.drawable.unknown
     }.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(100 dip).adjustViewBounds(true)
-    val doBrute = getIntent().getBooleanExtra("brute", true)
     val ids = if (doBrute) bruteIDs else trapIDs
     setContentView(
       new SRelativeLayout {
@@ -60,7 +60,10 @@ class Encyclopedia extends BaseActivity {
                 val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
                 val values = if (doBrute) {
                   val brute = BruteAttributeMap(bruteIDs(i))
-                  val baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed}\nCost:${brute.goldCost}"
+                  var baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed * Game.ticksPerSecond} tiles per second\nCost:${brute.goldCost}"
+                  if (brute.regen != 0) baseValues += s"\nRegen: ${brute.regen * Game.ticksPerSecond} per second"
+                  if (brute.radius != 0) baseValues += s"\nRange: ${brute.radius} tiles"
+                  if (brute.auraRegen != 0) baseValues += s"\nAura Regen: ${brute.auraRegen * Game.ticksPerSecond} per second"
                   if (brute.flying) {
                     baseValues + "\nFlying"
                   } else {
@@ -73,7 +76,7 @@ class Encyclopedia extends BaseActivity {
                     stats = stats + s"Damage: ${trap.damage}\n"
                   }
                   if (trap.duration != 0) {
-                    stats = stats + s"Active Duration: ${trap.duration}\n"
+                    stats = stats + f"Active Duration: ${trap.duration / Game.ticksPerSecond.toFloat}%.1f seconds\n"
                   }
                   val shotPerSec = 20.0f / trap.shotInterval
                   stats + f"Shots per Second: $shotPerSec%2.2f"

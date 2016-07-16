@@ -146,7 +146,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   def isFlying = attr.flying
   def applyAura(brutes: List[BaseBrute]) = {
     val inRadius = brutes.filter(brute => distance(brute) <= attr.radius)
-    inRadius.map(brute => brute.effects = TimedEffect(Some(id), None, Game.game.msAuraStickiness/Game.game.msPerTick)::brute.effects)
+    inRadius.map(brute => brute.effects = TimedEffect(Some(id), None, Game.msAuraStickiness/Game.msPerTick)::brute.effects)
   }
   var effects = List[TimedEffect]()
 
