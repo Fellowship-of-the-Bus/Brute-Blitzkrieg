@@ -2,7 +2,7 @@
   "TrapdoorID": {
     "damage": 0,
     "duration": 0,
-    "shotInterval": 20,
+    "shotInterval": 0,
     "targetFlying": false,
     "description": "Sends all non-flying brutes down a floor. Once opened, stays open unless blocked by a spider.\nHave a Fall"
   },
@@ -16,7 +16,7 @@
   "TarID": {
     "damage": 0,
     "duration": 0,
-    "shotInterval": 5,
+    "shotInterval": 0,
     "targetFlying": false,
     "description": "Slows all non-flying brutes by 50%.\nWalk, don't run."
   },
