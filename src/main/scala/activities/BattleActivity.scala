@@ -146,7 +146,6 @@ class BattleActivity extends BaseActivity with GameListener {
       }
       import MapID.Factory.ids
       val curIndex = ids.indexOf(Game.game.mapID)
-      android.util.Log.e("bruteb", curIndex.toString +" "+ numStars.toString)
       if (curIndex == -1 || curIndex >= MapID.Factory.ids.length-1 || numStars <= 0) {
         nextLevelButton.visibility(View.GONE)
       } else {
