@@ -59,10 +59,10 @@ class Encyclopedia extends BaseActivity {
                 val description = if (doBrute) BruteAttributeMap(bruteIDs(i)).description else TrapAttributeMap(trapIDs(i)).description
                 val values = if (doBrute) {
                   val brute = BruteAttributeMap(bruteIDs(i))
-                  var baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${brute.moveSpeed * Game.ticksPerSecond} tiles per second\nCost:${brute.goldCost}"
-                  if (brute.regen != 0) baseValues += s"\nRegen: ${brute.regen * Game.ticksPerSecond} per second"
-                  if (brute.radius != 0) baseValues += s"\nRange: ${brute.radius} tiles"
-                  if (brute.auraRegen != 0) baseValues += s"\nAura Regen: ${brute.auraRegen * Game.ticksPerSecond} per second"
+                  var baseValues = s"Hp: ${brute.maxHP}\nSpeed: ${(brute.moveSpeed * Game.ticksPerSecond).toInt} tiles per second\nCost:${brute.goldCost}"
+                  if (brute.regen != 0) baseValues += s"\nRegen: ${(brute.regen * Game.ticksPerSecond).toInt} per second"
+                  if (brute.radius != 0) baseValues += s"\nRange: ${(brute.radius).toInt} tiles"
+                  if (brute.auraRegen != 0) baseValues += s"\nAura Regen: ${(brute.auraRegen * Game.ticksPerSecond).toInt} per second"
                   if (brute.flying) {
                     baseValues + "\nFlying"
                   } else {
@@ -72,13 +72,16 @@ class Encyclopedia extends BaseActivity {
                   val trap = TrapAttributeMap(trapIDs(i))
                   var stats = ""
                   if (trap.damage != 0) {
-                    stats = stats + s"Damage: ${trap.damage}\n"
+                    stats = stats + s"Damage: ${trap.damage.toInt}\n"
                   }
                   if (trap.duration != 0) {
                     stats = stats + f"Active Duration: ${trap.duration / Game.ticksPerSecond.toFloat}%.1f seconds\n"
                   }
-                  val shotPerSec = 20.0f / trap.shotInterval
-                  stats + f"Shots per Second: $shotPerSec%2.2f"
+                  if (trap.shotInterval != 0) {
+                    val shotPerSec = Game.ticksPerSecond / trap.shotInterval
+                    if (trapIDs(i) == ReuseTrapdoorID || trapIDs(i) == FlameVentID) stats = stats + s"Can activate every ${trap.shotInterval / Game.ticksPerSecond} seconds" else stats = stats + s"Shots per Second: $shotPerSec"
+                  }
+                  stats
                 }
                 SButton(name, {
                   txt.text = s"${description}"
