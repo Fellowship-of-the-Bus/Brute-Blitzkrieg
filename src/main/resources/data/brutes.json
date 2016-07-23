@@ -8,7 +8,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Slow moving but durable.\nShrek.",
+    "description": "Tougher than most other brutes.\n\n",
     "goldCost": 15
   },
   "GoblinID": {
@@ -20,7 +20,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0.1,
-    "description": "Small fast.\nLikes shiny things.",
+    "description": "Weaker than other brutes, but inexpensive.\n\nLikes shiny things",
     "goldCost": 5
   },
   "VampireBatID": {
@@ -32,7 +32,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Can fly over many traps.\nFlies up through open trapdoors.\nProbably a vampire transformed into a bat.",
+    "description": "Bats fly over tar pits and trapdoors below them and can even fly up through open trap doors.\n\nProbably a vampire transformed into a bat.",
     "goldCost": 10
   },
   "GoblinShamanID": {
@@ -44,7 +44,7 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 1,
-    "description": "All brutes within the radius will regenerate health.\nCome get healed.",
+    "description": "All brutes within the radius will regenerate health.\n\nHe found a shiny thing so he put it on a stick.",
     "goldCost": 20
   },
   "SpiderID": {
@@ -56,7 +56,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Spins webs to disable trapdoors permanently.\nDo you have arachnophobia.",
+    "description": "Spins webs to disable trapdoors permanently.\n\nHe kind of liked it in the dungeon but was running out of flies.",
     "goldCost": 25
   },
   "FlameImpID": {
@@ -68,7 +68,7 @@
     "regen": 0,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Immune to fire.\nA lesser demon from hell.",
+    "description": "Immune to fire.\n\nA lesser demon. He longs to bathe in the lava pits of his home again",
     "goldCost": 10
   },
   "CageGoblinID": {
@@ -80,7 +80,7 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 0,
-    "description": "All lightning targeting brutes within the radius will be drawn to this. Immune to lightning.\nThey have this technology?",
+    "description": "All lightning targeting brutes within the radius will be drawn to this. Immune to lightning.\n\nHe couldn't figure out how to get out of his cage so he uses it like a hamster ball",
     "goldCost": 20
   },
   "TrollID": {
@@ -92,7 +92,7 @@
     "regen": 1,
     "radius": 0,
     "auraRegen": 0,
-    "description": "Has life regeneration and high HP.\nA larger Shrek.",
+    "description": "The ultimate brute in terms of raw strength. Regenerates hitpoints.\n\n",
     "goldCost": 50
   }
 }
