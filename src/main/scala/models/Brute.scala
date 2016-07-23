@@ -217,7 +217,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     }
     //changed tiles, register/deregister
     val curX = if (movingRight) coord.x + this.width else coord.x
-    var compareTo = if (movingRight) newX + this.width else newX
+    val compareTo = if (movingRight) newX + this.width else newX
     if (curX.toInt != compareTo.toInt) {
       Game.game.map.getTile(coord).deregister(this)
       coord.x = compareTo

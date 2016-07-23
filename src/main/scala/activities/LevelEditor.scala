@@ -6,12 +6,15 @@ import models._
 import org.scaloid.common._
 
 import android.os.Bundle
-import android.view.{Gravity, View}
-import android.widget.{GridView, ImageView, AdapterView, AbsListView}
+import android.view.{Gravity, View, KeyEvent}
+import android.view.inputmethod.EditorInfo
+import android.widget.{GridView, ImageView, AdapterView, AbsListView, TextView}
 import android.content.{Intent, Context}
 import android.graphics.{Color, Canvas}
 import android.graphics.drawable.{BitmapDrawable, ColorDrawable}
 import android.text.{InputType,InputFilter,Spanned}
+import android.app.AlertDialog
+import android.content.DialogInterface
 
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.Arrays
@@ -133,6 +136,7 @@ class LevelEditor extends BaseActivity {
               val numeric = InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL
 
               var doneFunction = () => ()
+              var fields = List[SEditText]()
 
               // open dialog
               val builder = new AlertDialogBuilder("Save the Map")
@@ -145,6 +149,9 @@ class LevelEditor extends BaseActivity {
                 val starOne = SEditText().hint("One Star Value").inputType(numeric).filters(numfilts)
                 val starTwo = SEditText().hint("Two Star Value").inputType(numeric).filters(numfilts)
                 val starThree = SEditText().hint("Three Star Value").inputType(numeric).filters(numfilts)
+
+                fields = List(name, gold, starOne, starTwo, starThree)
+
                 for (attr <- attributes) {
                   // set defaults based on the currently loaded map
                   name.text(attr.name)
@@ -195,7 +202,21 @@ class LevelEditor extends BaseActivity {
                 }
               })
               builder.positiveButton("Done", doneFunction())
-              builder.show
+
+              val dialog = builder.show
+              def setPositiveButtonStatus() = dialog.getButton(DialogInterface.BUTTON_POSITIVE).enabled(fields.forall(_.str != ""))
+
+              setPositiveButtonStatus()
+
+              for (f <- fields) {
+                f.onEditorAction((view: TextView, actionId: Int, event: KeyEvent) => {
+                  if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL || actionId == EditorInfo.IME_ACTION_NEXT) {
+                    error("enter pressed")
+                    setPositiveButtonStatus()
+                  }
+                  false
+                })
+              }
             }).<<.fw.>>
             SButton(R.string.LoadButton, {
               val files = customMapFiles
@@ -230,7 +251,7 @@ class LevelEditor extends BaseActivity {
           val y = deleteButton.getY
           val tilex = (x/battleCanvas.cellX).toInt
           val tiley = (y/battleCanvas.cellY).toInt
-          for (sel <- currentSelection; if (tilex < MapID.width)) {
+          if (tilex < MapID.width) {
             val tile = map.tiles(tiley)(tilex)
             game.removeTrap(tile.floorTrapID, Coordinate(tilex, tiley))
             game.removeTrap(tile.wallTrapID, Coordinate(tilex, tiley))
