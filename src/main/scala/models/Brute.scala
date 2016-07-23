@@ -216,10 +216,13 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       stairProgress = 0
     }
     //changed tiles, register/deregister
-    if (coord.x.toInt != newX.toInt) {
+    val curX = if (movingRight) coord.x + this.width else coord.x
+    var compareTo = if (movingRight) newX + this.width else newX
+    if (curX.toInt != compareTo.toInt) {
       Game.game.map.getTile(coord).deregister(this)
-      coord.x = newX
+      coord.x = compareTo
       Game.game.map.getTile(coord).register(this)
+      coord.x = newX
     } else {
       coord.x = newX
     }
