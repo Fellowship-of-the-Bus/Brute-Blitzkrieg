@@ -291,6 +291,9 @@ class Poison(tCoord: Coordinate) extends WallTrap(PoisonID, tCoord) {
 }
 
 class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
+  def onTargetedSide(b: BaseBrute) = {
+    true
+  }
   //if cur target is None, then get a target, then fire a projectile
   var curTarget: Option[BaseBrute] = None
   override def getInRangeBrutes: List[BaseBrute] = {
@@ -308,7 +311,7 @@ class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
       case Some(brute) => {
         val dy = y.toInt - brute.y.toInt
         //check not climbing stairs and on same floor
-        if (brute.isClimbingStairs || dy != 0 || !brute.isAlive) {
+        if (brute.isClimbingStairs || dy != 0 || !brute.isAlive || !onTargetedSide(brute)) {
           curTarget = getNewTarget()
         }
       }
@@ -342,16 +345,24 @@ class Arrow(tid: WallTrapID, tCoord: Coordinate) extends WallTrap(tid, tCoord) {
 }
 
 class LeftArrow(tCoord: Coordinate) extends Arrow(LeftArrowID, tCoord) {
+  override def onTargetedSide(b: BaseBrute) = {
+    b.x < (coord.x + 0.5f)
+  }
+
   override def getInRangeBrutes: List[BaseBrute] = {
     val listOfBrutes = super.getInRangeBrutes
-    listOfBrutes.filter( b => b.x < (coord.x + 0.5f))
+    listOfBrutes.filter( b => onTargetedSide(b))
   }
 }
 
 class RightArrow(tCoord: Coordinate) extends Arrow(ArrowID, tCoord) {
+  override def onTargetedSide(b: BaseBrute) = {
+    b.x > (coord.x + 0.5f)
+  }
+
   override def getInRangeBrutes: List[BaseBrute] = {
     val listOfBrutes = super.getInRangeBrutes
-    listOfBrutes.filter( b => b.x > (coord.x + 0.5f))
+    listOfBrutes.filter( b => onTargetedSide(b))
   }
 }
 
