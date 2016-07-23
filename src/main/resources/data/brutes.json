@@ -44,7 +44,7 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 1,
-    "description": "All brutes within the radius will regenerate health.\n\nHe found a shiny thing so he put it on a stick.",
+    "description": "All brutes within the radius will regenerate health. This regeneration does not stack with other goblin shamans.\n\nHe found a shiny thing so he put it on a stick.",
     "goldCost": 20
   },
   "SpiderID": {
