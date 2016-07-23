@@ -181,7 +181,6 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
       return List[BaseProjectile]()
     } else {
       val listOfBrutes = getInRangeBrutes
-      error(s"$y")(new org.scaloid.common.LoggerTag("bruteb"))
       val belowBrutes = if (y.toInt == MapID.height-1) List() else Game.game.map.getTile(belowCoord).bruteList.toList.filter(_.isAlive)
       //check if any is in range. If so, open the trap
       if (listOfBrutes.filter(!_.attr.flying).length != 0) {
