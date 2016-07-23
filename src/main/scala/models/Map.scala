@@ -84,7 +84,7 @@ case object LevelBullshit extends MapID {
   val id = "LevelBullshit"
 }
 case object LevelTiming extends MapID {
-  val id = "LevelTiming"
+  val id = "LevelTiming1"
 }
 case object LevelPoisonHealing extends MapID {
   val id = "LevelPoisonHealing"
