@@ -116,14 +116,3 @@ object MapID {
 
 case object maps extends IDMap[MapID, MapInfo]("data/maps.json")
 
-class GameMap(num : MapID) {
-  val brute = Brute(OgreID, Coordinate(0,0))
-  val info = maps(num)
-  val tiles = info.tiles
-  val startTileCoord = info.startTileCoord
-  val endTileCoord = info.endTileCoord
-
-  def getTile(coord: Coordinate) = {
-    tiles(coord.y.toInt)(coord.x.toInt)
-  }
-}
