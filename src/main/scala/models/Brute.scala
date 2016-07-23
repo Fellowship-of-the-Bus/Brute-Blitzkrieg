@@ -81,7 +81,7 @@ case object TrollID extends BruteID {
 
 object BruteID {
   implicit object Factory extends IDFactory[BruteID] {
-    val ids = Vector(OgreID, GoblinID, VampireBatID, GoblinShamanID, SpiderID, FlameImpID, CageGoblinID, TrollID)
+    val ids = Vector(GoblinID, VampireBatID, FlameImpID, OgreID, GoblinShamanID, CageGoblinID, SpiderID, TrollID)
   }
   implicit lazy val extractor =
       Json.extractor[String].map(Factory.fromString(_))
@@ -216,10 +216,13 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       stairProgress = 0
     }
     //changed tiles, register/deregister
-    if (coord.x.toInt != newX.toInt) {
+    val curX = if (movingRight) coord.x + this.width else coord.x
+    val compareTo = if (movingRight) newX + this.width else newX
+    if (curX.toInt != compareTo.toInt) {
       Game.game.map.getTile(coord).deregister(this)
-      coord.x = newX
+      coord.x = compareTo
       Game.game.map.getTile(coord).register(this)
+      coord.x = newX
     } else {
       coord.x = newX
     }

@@ -59,8 +59,14 @@ case object Level1 extends MapID {
 case object LevelIntroBat extends MapID {
   val id = "LevelIntroBat"
 }
+case object LevelEasy extends MapID {
+  val id = "LevelEasy"
+}
 case object LevelTrapdoor extends MapID {
   val id = "LevelTrapdoor"
+}
+case object LevelLightning extends MapID {
+  val id = "LevelLightning"
 }
 case object LevelPoisonLightning extends MapID {
   val id = "LevelPoisonLightning"
@@ -89,7 +95,7 @@ object MapID {
   val width = 8
 
   implicit object Factory extends IDFactory[MapID] {
-    val ids = Vector(Level1, LevelIntroBat, LevelTrapdoor, LevelPoisonLightning,LevelFire,LevelGambit,LevelBullshit,LevelTiming)
+    val ids = Vector(Level1, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning,LevelFire,LevelGambit,LevelBullshit,LevelTiming)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(x => if (Factory.fromString.isDefinedAt(x)) Factory.fromString(x) else Custom(x))
