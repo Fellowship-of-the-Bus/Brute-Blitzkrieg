@@ -102,7 +102,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var facingRight = false
   var currentFrame = 0
   var frameCounter = 0
-  val sizeOfMap = 8
+  var tile : Tile = Game.map.getTile(Game.map.startTileCoord)
 
   def isAlive = hp > 0
 
@@ -180,9 +180,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       //done climbing stairs
       if (stairProgress >= 1) {
         facingRight = movingRight
-        Game.game.map.getTile(Coordinate(coord.x, coord.y+1)).deregister(this)
-
-        Game.game.map.getTile(coord).register(this)
+        Game.game.map.getTile(if (movingRight) coord.copy(x = x + this.width) else coord).register(this)
         isClimbingStairs = false
         stairProgress = 0
         coord.y = (coord.y).toInt + 0.75f - height - flyingHeight
@@ -211,7 +209,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
       isClimbingStairs = true
       stairProgress = 0
     }
-    if ((newX + width) > sizeOfMap - 1 && movingRight && coord.y.toInt != 0) {
+    if ((newX + width) > Game.map.width - 1 && movingRight && coord.y.toInt != 0) {
       isClimbingStairs = true
       stairProgress = 0
     }
@@ -219,9 +217,7 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
     val curX = if (movingRight) coord.x + this.width else coord.x
     val compareTo = if (movingRight) newX + this.width else newX
     if (curX.toInt != compareTo.toInt) {
-      Game.game.map.getTile(coord).deregister(this)
-      coord.x = compareTo
-      Game.game.map.getTile(coord).register(this)
+      Game.game.map.getTile(coord.copy(x = compareTo)).register(this)
       coord.x = newX
     } else {
       coord.x = newX
@@ -252,7 +248,7 @@ class VampireBat(bCoord: Coordinate) extends BaseBrute(VampireBatID, bCoord){
   coord.y -= flyingHeight
   override def movingRight: Boolean = {
     //special case for stairs climbing
-    if (x < 1 || x > sizeOfMap - 1) {
+    if (x < 1 || x > Game.map.width - 1) {
       (this.bottomRightCoord._2 + 0.249f + flyingHeight).toInt % 2 == 0
     } else {
       (this.bottomRightCoord._2 + 0.249f).toInt % 2 == 0

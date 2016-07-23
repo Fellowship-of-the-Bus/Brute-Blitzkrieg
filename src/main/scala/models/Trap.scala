@@ -197,19 +197,17 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
         } else {
           listOfBrutes.map(brute => {
             if (!brute.attr.flying) {
-              Game.game.map.getTile(brute.coord).deregister(brute)
               brute.coord.y += 1
               brute.facingRight = !brute.facingRight
-              if (brute.coord.y.toInt == MapID.height) brute.hp = -1 else Game.game.map.getTile(brute.coord).register(brute)
+              if (brute.coord.y.toInt == MapID.height) brute.hp = -1 else Game.game.map.getTile(belowCoord).register(brute)
             }
 
           })
           belowBrutes.map(brute => {
             if (brute.attr.flying) {
-              Game.game.map.getTile(brute.coord).deregister(brute)
               brute.coord.y -= 1
               brute.facingRight = !brute.facingRight
-              Game.game.map.getTile(brute.coord).register(brute)
+              Game.game.map.getTile(tCoord).register(brute)
             }
           })
         }
@@ -220,9 +218,10 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
 
   override def getInRangeBrutes: List[BaseBrute] = {
     Game.game.map.getTile(coord).bruteList.toList.filter(b => {
-      val progress = b.x - b.x.toInt
+      val progress = b.x - tCoord.x.toInt
+      android.util.Log.e("bruteb", s"${progress}, ${b.width}")
       if (b.facingRight) {
-        true
+        progress > 0
       } else {
         (1 - progress) > b.width
       }

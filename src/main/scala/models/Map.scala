@@ -13,6 +13,8 @@ case class Tile(var floorTrapID: TrapID, var wallTrapID: TrapID) {
   val bruteList: Set[BaseBrute] = Set[BaseBrute]()
 
   def register(e: BaseBrute): Unit = {
+    e.tile.deregister(e)
+    e.tile = this
     bruteList += e
     ()
   }
