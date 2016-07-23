@@ -81,7 +81,7 @@ case object TrollID extends BruteID {
 
 object BruteID {
   implicit object Factory extends IDFactory[BruteID] {
-    val ids = Vector(OgreID, GoblinID, VampireBatID, GoblinShamanID, SpiderID, FlameImpID, CageGoblinID, TrollID)
+    val ids = Vector(GoblinID, VampireBatID, FlameImpID, OgreID, GoblinShamanID, CageGoblinID, SpiderID, TrollID)
   }
   implicit lazy val extractor =
       Json.extractor[String].map(Factory.fromString(_))
