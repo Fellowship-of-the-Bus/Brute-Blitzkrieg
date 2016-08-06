@@ -18,7 +18,7 @@ import scala.language.postfixOps
 class PreBattleActivity extends BaseActivity {
   import Game.game
   var startButton: SButton = null
-  var popUp: SRelativeLayout = null
+  var popUp: SLinearLayout = null
 
 
   override def onCreate(savedState: Bundle): Unit = {
@@ -48,14 +48,15 @@ class PreBattleActivity extends BaseActivity {
           }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
         }.<<.fill.>>.here
         if (Game.Options.firstGame) {
-          popUp = new SRelativeLayout {
-            new SVerticalLayout {
+          popUp = new SLinearLayout {
+            new SView().<<(0, MATCH_PARENT).Weight(3).>>.here
+            new SRelativeLayout {
               val text = new STextView {
                 text = "after selecting the level, you need to select 4 brutes to use in the level.\n On the top Left, you have the amount of gold available in the level"
                 textSize = 20 sp
-              }.<<.wrap.>>.here
-              val button = SButton(R.string.NextButton, switchScreen(classOf[BruteSelectActivity],true)).<<.fw
-            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+              }.<<.wrap.alignParentTop.>>.here
+              val button = SButton(R.string.NextButton, switchScreen(classOf[BruteSelectActivity],true)).<<.fw.alignParentBottom
+            }.<<(0, MATCH_PARENT).Weight(1).>>.backgroundColor(Color.GRAY).here
           }.<<.fill.>>.here
         }
       }

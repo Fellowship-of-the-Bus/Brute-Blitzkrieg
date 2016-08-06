@@ -105,7 +105,7 @@ class MainActivity extends BaseActivity {
                 textSize = 20 sp
               }.<<.wrap.>>.here
               val button = SButton(R.string.NextButton, switchScreen(classOf[Encyclopedia],true)).<<.fw
-            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
           }.<<.fill.>>.here
         }
       }

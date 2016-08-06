@@ -110,10 +110,10 @@ class BruteSelectActivity extends BaseActivity {
         popUp = new SRelativeLayout {
           new SVerticalLayout {
             val text = new STextView {
-              text = "You may only take four brutes with you to each level. Look at the traps and choose wisely. When you are done, press confirm and then start game."
+              text = "Select 4 Brutes. When you are done press confirm."
               textSize = 20 sp
             }.<<.wrap.>>.here
-          }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+          }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
         }.<<.fill.>>.visibility(View.GONE).here
         if (Game.Options.firstGame) {
           popUp.visibility(View.VISIBLE)

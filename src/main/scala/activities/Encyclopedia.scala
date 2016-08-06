@@ -117,7 +117,7 @@ class Encyclopedia extends BaseActivity {
                 }).<<.fw
               }
 
-            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.here
+            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
           }.<<.fill.>>.here
         }
       }
