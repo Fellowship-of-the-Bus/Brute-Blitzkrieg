@@ -140,7 +140,7 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
       override def run() = {
         updateAuras()
       }
-    }, 0, Game.msAuraStickiness)
+    }, 0, Game.msAuraStickiness/2)
   }
 
   def pauseGame() = {
