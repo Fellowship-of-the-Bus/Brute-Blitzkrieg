@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="MinionButton">Minions</string>
+    <string name="BruteButton">Brutes</string>
     <string name="TrapButton">Traps</string>
     <string name="LevelEditorButton">Level Editor</string>
     <string name="SaveButton">Save...</string>

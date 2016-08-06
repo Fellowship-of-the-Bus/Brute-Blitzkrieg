@@ -84,7 +84,7 @@ class MainActivity extends BaseActivity {
           }.<<(0, MATCH_PARENT).Weight(4).>>.here
           new STableLayout {
             new STableRow {
-              SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
+              SButton(R.string.BruteButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
             }.<<.wrap.>>.here
             new STableRow {
               SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>

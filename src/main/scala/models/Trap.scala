@@ -199,7 +199,10 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             if (!brute.attr.flying) {
               brute.coord.y += 1
               brute.facingRight = !brute.facingRight
-              if (brute.coord.y.toInt == MapID.height) brute.hp = -1 else Game.game.map.getTile(belowCoord).register(brute)
+              if (brute.coord.y.toInt == MapID.height) {
+                brute.hp = -1
+                Game.game.map.getTile(tCoord).deregister(brute)
+              } else Game.game.map.getTile(belowCoord).register(brute)
             }
 
           })
@@ -207,7 +210,7 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             if (brute.attr.flying) {
               brute.coord.y -= 1
               brute.facingRight = !brute.facingRight
-              Game.game.map.getTile(tCoord).register(brute)
+              Game.game.map.getTile(brute.coord.copy(x = if (y % 2 == 0) x + width else x)).register(brute)
             }
           })
         }
@@ -219,12 +222,11 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
   override def getInRangeBrutes: List[BaseBrute] = {
     Game.game.map.getTile(coord).bruteList.toList.filter(b => {
       val progress = b.x - tCoord.x.toInt
-      android.util.Log.e("bruteb", s"${progress}, ${b.width}")
       if (b.facingRight) {
         progress > 0
       } else {
         (1 - progress) > b.width
-      }
+      } && b.isAlive
     })
   }
 }
@@ -242,7 +244,7 @@ class ReuseTrapdoor(tCoord: Coordinate) extends Trapdoor(ReuseTrapdoorID, tCoord
       val wasOpen = isOpen
       super.attack()
       if (!wasOpen && isOpen) {
-        this += new TickTimer(10, () => {
+        this += new TickTimer(attr.duration, () => {
             isOpen = false
             if (!isBlockedByWeb)
               id = ReuseTrapdoorID
