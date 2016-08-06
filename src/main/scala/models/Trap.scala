@@ -210,7 +210,7 @@ class Trapdoor(tid: FloorTrapID, tCoord: Coordinate) extends FloorTrap(tid, tCoo
             if (brute.attr.flying) {
               brute.coord.y -= 1
               brute.facingRight = !brute.facingRight
-              Game.game.map.getTile(brute.coord.copy(x = if (y % 2 == 0) x + width else x)).register(brute)
+              Game.game.map.getTile(brute.coord.copy(x = if (brute.facingRight) brute.coord.x + brute.width else brute.coord.x)).register(brute)
             }
           })
         }
