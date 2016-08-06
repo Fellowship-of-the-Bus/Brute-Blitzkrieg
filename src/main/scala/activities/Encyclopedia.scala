@@ -98,9 +98,9 @@ class Encyclopedia extends BaseActivity {
             new SVerticalLayout {
               val text = new STextView {
                 if (getIntent().getBooleanExtra("brute", true)) {
-                  text = "Here you can view stats of each of the brutes"
+                  text = "Here you can view stats of each of the brutes."
                 } else {
-                  text = "Here you can view stats of each of the traps"
+                  text = "Here you can view stats of each of the traps."
                 }
                 textSize = 20 sp
               }.<<.wrap.>>.here

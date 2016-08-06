@@ -52,7 +52,7 @@ class PreBattleActivity extends BaseActivity {
             new SView().<<(0, MATCH_PARENT).Weight(3).>>.here
             new SRelativeLayout {
               val text = new STextView {
-                text = "after selecting the level, you need to select 4 brutes to use in the level.\n On the top Left, you have the amount of gold available in the level"
+                text = "After selecting the level, you need to select 4 brutes to use in the level.\nOn the top Left, you have the amount of gold available in the level."
                 textSize = 20 sp
               }.<<.wrap.alignParentTop.>>.here
               val button = SButton(R.string.NextButton, switchScreen(classOf[BruteSelectActivity],true)).<<.fw.alignParentBottom

@@ -101,7 +101,7 @@ class MainActivity extends BaseActivity {
           new SRelativeLayout {
             new SVerticalLayout {
               val text = new STextView {
-                text = "Select the level to play on the left, view brute/trap information on the right"
+                text = "Select the level to play on the left, view brute/trap information on the right."
                 textSize = 20 sp
               }.<<.wrap.>>.here
               val button = SButton(R.string.NextButton, switchScreen(classOf[Encyclopedia],true)).<<.fw
