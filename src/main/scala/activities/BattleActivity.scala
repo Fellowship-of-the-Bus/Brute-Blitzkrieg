@@ -42,29 +42,37 @@ class BattleActivity extends BaseActivity with GameListener {
       new SRelativeLayout{
         new SLinearLayout {
           (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
-
           new SVerticalLayout {
-            for (i <- 0 until 4) {
+            // make a button and text label for each selected brute
+            // filter to put all selected brutes together at the top
+            val brutes = game.brutes.filter(_ != null)
+            for (i <- 0 until brutes.length) {
               new SLinearLayout {
-                SImageButton(game.brutes(i).image, {
-                  game.sendBrute(game.brutes(i))
-                }).<<(0,MATCH_PARENT).Weight(1).marginBottom(if (i == 3) 0 dip else 5 dip).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true).backgroundColor(Color.GRAY)
+                SImageButton(brutes(i).image, {
+                  game.sendBrute(brutes(i))
+                }).<<(0,MATCH_PARENT).Weight(1).marginBottom(if (i == game.brutes.length-1) 0 dip else 5 dip).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true).backgroundColor(Color.GRAY)
                 new SVerticalLayout {
                   new STextView {
-                    val name: CharSequence = game.brutes(i).name
-                    val cost = BruteAttributeMap(game.brutes(i)).goldCost
+                    val name: CharSequence = brutes(i).name
+                    val cost = BruteAttributeMap(brutes(i)).goldCost
                     text = s"${name}"
                     textSize = 16 sp
                   }.<<.wrap.Gravity(Gravity.CENTER).>>.gravity(Gravity.CENTER).here
                   new SLinearLayout {
                     SImageView(R.drawable.gold).<<(40,40)
                     new STextView {
-                      val cost = BruteAttributeMap(game.brutes(i)).goldCost
+                      val cost = BruteAttributeMap(brutes(i)).goldCost
                       text = cost.toString
                       textSize = 16 sp
                     }.<<.wrap.Gravity(Gravity.CENTER).>>.here
                   }.<<.fw.Gravity(Gravity.CENTER).>>.gravity(Gravity.CENTER).here
                 }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER).here
+              }.<<(MATCH_PARENT,0).Weight(1).>>.gravity(Gravity.CENTER).here
+            }
+            // make a button for each unselected brute and make it invisible to keep the spacing consistent
+            for (i <- 0 until game.brutes.length - brutes.length) {
+              new SVerticalLayout {
+                SImageButton(brutes(0).image).<<(0,MATCH_PARENT).Weight(1).marginBottom(if (i+brutes.length == game.brutes.length) 0 dip else 5 dip).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).adjustViewBounds(true).visibility(View.INVISIBLE)
               }.<<(MATCH_PARENT,0).Weight(1).>>.gravity(Gravity.CENTER).here
             }
           }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.LEFT).here

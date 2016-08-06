@@ -158,7 +158,7 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
 
   def checkGameOver(): Boolean = {
     if (score >= map.threeStar) return true
-    for (brute <- brutes) {
+    for (brute <- brutes; if (brute != null)) {
       if (BruteAttributeMap(brute).goldCost <= currentGold) {
         return false
       }

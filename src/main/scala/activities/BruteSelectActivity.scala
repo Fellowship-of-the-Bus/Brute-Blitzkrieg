@@ -26,8 +26,8 @@ class BruteSelectActivity extends BaseActivity {
   var popUp: SRelativeLayout = null
 
   def enableButtons(): Unit = {
-    // must make a selection in each button before confirming
-    confirmButton.enabled = selections.forall(_.brute != null)
+    // must make at least one selection before confirming
+    confirmButton.enabled = selections.exists(_.brute != null)
     for (i <- 0 until bruteIDs.length) {
       val button = bruteButtons(i)
       val brute = bruteIDs(i)

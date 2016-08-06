@@ -73,7 +73,7 @@ class PreBattleActivity extends BaseActivity {
 
   override def onResume(): Unit = {
     super.onResume()
-    startButton.enabled = game.brutes.forall(_ != null)
+    startButton.enabled = game.brutes.exists(_ != null)
     ()
   }
 }
