@@ -76,7 +76,7 @@ class BruteSelectActivity extends BaseActivity {
                         currentSelection = Some(sel)
                       }
                       enableButtons()
-                    }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true)
+                    }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true).enabled(BruteAttributeMap(bruteIDs(i)).goldCost <= Game.game.map.startingGold)
                     bruteButtons = bruteButtons :+ newButton
                     // cost display
                     new SLinearLayout {
