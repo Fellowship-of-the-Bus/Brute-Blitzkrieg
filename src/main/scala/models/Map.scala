@@ -112,6 +112,9 @@ case object LevelManyArrows extends MapID {
 case object LevelVariarity extends MapID {
   val id = "LevelVariarity"
 }
+case object LevelFireArrow extends MapID {
+  val id = "LevelFireArrow"
+}
 object Custom {
   val prefix = "Custom_"
 }
@@ -127,7 +130,7 @@ object MapID {
   val randomPostHintList = Vector("Reusable Trapdoors have a long recharge time between openings.") ++ Vector(LevelTrapdoor).map(_.postHint) ++ Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
 
   implicit object Factory extends IDFactory[MapID] {
-    val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelManyArrows, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelVariarity,LevelTiming)
+    val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelManyArrows, LevelFireArrow, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelVariarity,LevelTiming)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(x => if (Factory.fromString.isDefinedAt(x)) Factory.fromString(x) else Custom(x))
