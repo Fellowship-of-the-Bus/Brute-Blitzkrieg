@@ -8,7 +8,7 @@ import org.scaloid.common._
 // import android.app.Activity
 import android.os.Bundle
 import android.view.Gravity
-import android.graphics.Color
+import android.graphics.{Color, Point}
 import android.widget.GridView
 import android.widget.ImageView
 import android.content.{Intent, Context}
@@ -92,11 +92,13 @@ class BattleActivity extends BaseActivity with GameListener {
               stars(1).<<(50,50).>>.here
               stars(2).<<(50,50).>>.here
             }.<<.wrap.below(txt).centerHorizontal.>>.gravity(Gravity.CENTER).here
+            val point = new Point()
+            getWindowManager().getDefaultDisplay().getSize(point)
             hint = new STextView{
               text = "hi"
               textSize = 32
-            }.<<.wrap.below(starsView).centerHorizontal.>>.here
-            new SLinearLayout {
+            }.<<(point.x/2,WRAP_CONTENT).below(starsView).centerHorizontal.>>.here
+            val buttons = new SLinearLayout {
               import MapID.Factory.ids
               nextLevelButton = SButton(R.string.NextLevelButton, {
                 val curIndex = ids.indexOf(Game.game.mapID)
@@ -117,8 +119,8 @@ class BattleActivity extends BaseActivity with GameListener {
                 finish()
                 switchScreen(classOf[MainActivity], true, true)
               }).<<.wrap.>>
-            }.<<.wrap.below(hint).>>.gravity(Gravity.CENTER).here
-          }.<<.wrap.centerInParent.>>.alpha(1f).backgroundColor(Color.BLACK).gravity(Gravity.CENTER).here
+            }.<<.wrap.below(hint).centerInParent.>>.gravity(Gravity.CENTER_HORIZONTAL).here
+          }.<<.wrap.centerInParent.>>.backgroundColor(Color.BLACK).gravity(Gravity.CENTER_HORIZONTAL).here
         }.<<.fill.>>.visibility(View.GONE).here
       }
     )
