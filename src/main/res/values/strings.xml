@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="MinionButton">Minions</string>
+    <string name="BruteButton">Brutes</string>
     <string name="TrapButton">Traps</string>
     <string name="LevelEditorButton">Level Editor</string>
     <string name="SaveButton">Save...</string>
     <string name="LoadButton">Load...</string>
     <string name="QuitButton">Quit</string>
     <string name="ReturnButton">Return</string>
+    <string name="OptionButton">Options</string>
     <string name="NextButton">Next</string>
     <string name="DoneButton">Done</string>
     <string name="RetryButton">Retry</string>

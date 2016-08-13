@@ -19,11 +19,11 @@ class Encyclopedia extends BaseActivity {
     super.onCreate(savedState)
     val doBrute = getIntent().getBooleanExtra("brute", true)
     val txt = new STextView {
-      text = if (doBrute) "Select a monster for more information." else "Select a trap for more information."
+      text = if (doBrute) "Select a brute for more information." else "Select a trap for more information."
       textSize = 16 sp
     }
     val nametxt = new STextView {
-      text = if (doBrute) "Monster Encyclopedia" else "Trap Encyclopedia"
+      text = if (doBrute) "Brute Encyclopedia" else "Trap Encyclopedia"
       textSize = 20 sp
     }
     val valuetxt = new STextView {

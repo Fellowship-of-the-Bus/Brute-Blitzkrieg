@@ -28,9 +28,7 @@ class MainActivity extends BaseActivity {
     Game.res = getResources
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
     val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
-    if (options.getInt("FirstGame", 0) == 0) {
-      Game.Options.firstGame = true
-    }
+    Game.Options.firstGame = options.getBoolean("ViewTutorial", true)
     setContentView(
 
       // number of stars earned in level i
@@ -84,13 +82,16 @@ class MainActivity extends BaseActivity {
           }.<<(0, MATCH_PARENT).Weight(4).>>.here
           new STableLayout {
             new STableRow {
-              SButton(R.string.MinionButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
+              SButton(R.string.BruteButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
             }.<<.wrap.>>.here
             new STableRow {
               SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
             }.<<.wrap.>>.here
             new STableRow {
               SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
+            }.<<.wrap.>>.here
+            new STableRow {
+              SButton(R.string.OptionButton, switchScreen(classOf[OptionActivity],false)).<<.fw.>>
             }.<<.wrap.>>.here
             new STableRow {
               SButton(R.string.QuitButton, finish()).<<.fw.>>

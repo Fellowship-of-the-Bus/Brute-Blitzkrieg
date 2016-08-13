@@ -34,7 +34,7 @@ class PreBattleActivity extends BaseActivity {
           (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
 
           new SRelativeLayout {
-            SButton("Pick Minions", {
+            SButton("Pick Brutes", {
               val intent = new Intent(PreBattleActivity.this, classOf[BruteSelectActivity])
               startActivity(intent)
             }).<<.wrap.alignParentTop.>>
