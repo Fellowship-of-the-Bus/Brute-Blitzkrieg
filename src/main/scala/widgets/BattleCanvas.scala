@@ -68,7 +68,9 @@ class RowDrawer(canvas: Canvas, paint: Paint, var x: Int, var y: Int) {
   }
 }
 
-class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context: Context) extends SView {
+class BattleCanvas(drawGrid: Boolean = false)(implicit context: Context) extends SView {
+  import Game.game
+  def map = game.map
   import BattleCanvas._
   canvas = this
   val battleHandler = new BattleHandler()
@@ -173,23 +175,31 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
 
     val score = Game.game.score
     val (curStar, nextStar, starsEarned) = Array((0, map.oneStar, 0), (map.oneStar, map.twoStar, 1), (map.twoStar, map.threeStar, 2)).find(_._2 > score).getOrElse((map.threeStar, map.threeStar, 3))
+    if (drawGrid) {
+      canvas.drawBitmap(exitImages(0), null,
+          new Rect(normX(Game.game.map.endTileCoord.x),
+              normY(Game.game.map.endTileCoord.y),
+              normX(Game.game.map.endTileCoord.x + 1),
+              normY(Game.game.map.endTileCoord.y + 0.75f)), null)
 
-    val alpha = if (nextStar-curStar == 0) 0 else (255*(nextStar-score))/(nextStar-curStar)
-    val exitTransition = new Paint()
+    } else {
+      val alpha = if (nextStar-curStar == 0) 0 else (255*(nextStar-score))/(nextStar-curStar)
+      val exitTransition = new Paint()
 
-    exitTransition.setAlpha(alpha)
-    canvas.drawBitmap(exitImages(starsEarned), null,
-        new Rect(normX(Game.game.map.endTileCoord.x),
-            normY(Game.game.map.endTileCoord.y),
-            normX(Game.game.map.endTileCoord.x + 1),
-            normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
+      exitTransition.setAlpha(alpha)
+      canvas.drawBitmap(exitImages(starsEarned), null,
+          new Rect(normX(Game.game.map.endTileCoord.x),
+              normY(Game.game.map.endTileCoord.y),
+              normX(Game.game.map.endTileCoord.x + 1),
+              normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
 
-    exitTransition.setAlpha(255-alpha)
-    canvas.drawBitmap(exitImages(starsEarned+1), null,
-        new Rect(normX(Game.game.map.endTileCoord.x),
-            normY(Game.game.map.endTileCoord.y),
-            normX(Game.game.map.endTileCoord.x + 1),
-            normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
+      exitTransition.setAlpha(255-alpha)
+      canvas.drawBitmap(exitImages(starsEarned+1), null,
+          new Rect(normX(Game.game.map.endTileCoord.x),
+              normY(Game.game.map.endTileCoord.y),
+              normX(Game.game.map.endTileCoord.x + 1),
+              normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
+    }
 
     canvas.drawBitmap(entranceImage, null,
         new Rect(normX(Game.game.map.startTileCoord.x),

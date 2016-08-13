@@ -47,7 +47,7 @@ class BattleActivity extends BaseActivity with GameListener {
     setContentView(
       new SRelativeLayout{
         new SLinearLayout {
-          (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
+          (new BattleCanvas()).<<(0,MATCH_PARENT).Weight(3).>>.here
           new SVerticalLayout {
             // make a button and text label for each selected brute
             // filter to put all selected brutes together at the top
@@ -139,6 +139,7 @@ class BattleActivity extends BaseActivity with GameListener {
     Game.game.reset()
     super.finish()
   }
+
   override def gameOver(numStars: Int): Unit = {
     import Game.game
     val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)

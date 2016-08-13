@@ -26,11 +26,10 @@ class PreBattleActivity extends BaseActivity {
 
     game = new Game(Game.map.copy(), Game.mapId)
 
-
     setContentView(
       new SRelativeLayout{
         new SLinearLayout {
-          (new BattleCanvas(game.map)).<<(0,MATCH_PARENT).Weight(3).>>.here
+          (new BattleCanvas()).<<(0,MATCH_PARENT).Weight(3).>>.here
 
           new SRelativeLayout {
             SButton("Pick Brutes", {
@@ -58,6 +57,7 @@ class PreBattleActivity extends BaseActivity {
   override def onResume(): Unit = {
     super.onResume()
     startButton.enabled = game.brutes.exists(_ != null)
+
     ()
   }
 }

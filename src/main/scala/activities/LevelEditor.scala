@@ -90,7 +90,9 @@ class LevelEditor extends BaseActivity {
     )
     def map = game.map
 
-    val battleCanvas = new BattleCanvas(map, true)
+    Game.game = game
+
+    val battleCanvas = new BattleCanvas(true)
 
     setContentView(
       new SRelativeLayout {
