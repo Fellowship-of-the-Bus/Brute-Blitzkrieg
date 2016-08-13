@@ -73,7 +73,7 @@ case object LevelIntroBat extends MapID {
 case object LevelEasy extends MapID {
   val id = "LevelEasy"
   override val preHint = "Spiders can seal trapdoors permanently."
-  override val postHint = "Try using a goblin before the spider to keep it alive long enough."
+  override val postHint = "Try using a goblin before a spider to keep it alive long enough."
 }
 case object LevelTrapdoor extends MapID {
   val id = "LevelTrapdoor"
@@ -83,7 +83,7 @@ case object LevelTrapdoor extends MapID {
 case object LevelLightning extends MapID {
   val id = "LevelLightning"
   override val preHint = "Cage goblins protect nearby brutes from lighting."
-  override val postHint = "Flame Imp can survive the poison trap."
+  override val postHint = "A Flame Imp can survive the poison trap."
 }
 case object LevelPoisonLightning extends MapID {
   val id = "LevelPoisonLightning"
@@ -126,8 +126,21 @@ object MapID {
   val height = 4
   val width = 8
 
-  val randomPreHintList = Vector("Trolls have regeneration, so they can soak up a lot of damage.") ++ Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
-  val randomPostHintList = Vector("Reusable Trapdoors have a long recharge time between openings.") ++ Vector(LevelTrapdoor).map(_.postHint) ++ Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
+  val genericHintList = 
+    Vector("Trolls have regeneration, so they can soak up a lot of damage.",
+           "The Brute and Trap encyclopediae have detailed information and are accessible from the main menu",
+           "The numbers by the stars tell you how many brutes have escaped and how many need to for the next star.",
+           "The goblin shaman heals all nearby brutes, even Trolls",
+           "A brute can only be healed by one goblin shaman at a time",
+           "Reusable Trapdoors have a long recharge time between openings.")
+
+  val randomPreHintList =
+    genericHintList ++
+    Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
+  val randomPostHintList = 
+    genericHintList ++
+    Vector(LevelTrapdoor).map(_.postHint) ++
+    Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
 
   implicit object Factory extends IDFactory[MapID] {
     val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelManyArrows, LevelFireArrow, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelVariarity,LevelTiming)
