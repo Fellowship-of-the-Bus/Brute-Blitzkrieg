@@ -251,6 +251,7 @@ class LevelEditor extends BaseActivity {
           val y = deleteButton.getY
           val tilex = (x/battleCanvas.cellX).toInt
           val tiley = (y/battleCanvas.cellY).toInt
+          flipButton.setVisibility(View.INVISIBLE)
           if (tilex < MapID.width) {
             val tile = map.tiles(tiley)(tilex)
             game.removeTrap(tile.floorTrapID, Coordinate(tilex, tiley))
