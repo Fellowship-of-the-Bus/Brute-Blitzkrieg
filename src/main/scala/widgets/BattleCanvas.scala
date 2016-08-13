@@ -37,8 +37,10 @@ object BattleCanvas {
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
   lazy val projImages: Map[ProjectileID, List[Bitmap]] =  (for (x <- ProjIds.ids) yield
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
-  lazy val exitImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door, decoderOptions)
-  lazy val entranceImage =  BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
+  lazy val exitImages = List(R.drawable.door, R.drawable.darkest_door, R.drawable.darkest_door, R.drawable.darkest_door, R.drawable.darkest_door).map {
+    x => BitmapFactory.decodeResource(canvas.getResources(), x, decoderOptions)
+  }
+  lazy val entranceImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
   lazy val goldImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.gold, decoderOptions)
   lazy val starImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.star, decoderOptions)
   lazy val greyStarImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.grey_star, decoderOptions)
@@ -169,11 +171,26 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
 
     canvas.drawBitmap(backgroundImage, null, new Rect(0, 0, canvasX , canvasY), null)
 
-    canvas.drawBitmap(exitImage, null,
+    val score = Game.game.score
+    val (curStar, nextStar, starsEarned) = Array((0, map.oneStar, 0), (map.oneStar, map.twoStar, 1), (map.twoStar, map.threeStar, 2)).find(_._2 > score).getOrElse((map.threeStar, map.threeStar, 3))
+
+    val alpha = if (nextStar == 0) 0 else (255*(nextStar-curStar))/nextStar
+    val exitTransition = new Paint()
+
+    exitTransition.setAlpha(alpha)
+    canvas.drawBitmap(exitImages(starsEarned), null,
         new Rect(normX(Game.game.map.endTileCoord.x),
             normY(Game.game.map.endTileCoord.y),
             normX(Game.game.map.endTileCoord.x + 1),
-            normY(Game.game.map.endTileCoord.y + 0.75f)), null)
+            normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
+
+    exitTransition.setAlpha(255-alpha)
+    canvas.drawBitmap(exitImages(starsEarned+1), null,
+        new Rect(normX(Game.game.map.endTileCoord.x),
+            normY(Game.game.map.endTileCoord.y),
+            normX(Game.game.map.endTileCoord.x + 1),
+            normY(Game.game.map.endTileCoord.y + 0.75f)), exitTransition)
+
     canvas.drawBitmap(entranceImage, null,
         new Rect(normX(Game.game.map.startTileCoord.x),
             normY(Game.game.map.startTileCoord.y),
@@ -199,8 +216,6 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     val topRow = new RowDrawer(canvas, paint, 0, 0)
     topRow.drawBitmap(goldImageBox)
     topRow.drawString(Game.game.currentGold.toString, 20)
-    val score = Game.game.score
-    val (nextStar, starsEarned) = Array((map.oneStar, 0), (map.twoStar, 1), (map.threeStar, 2)).find(_._1 > score).getOrElse((map.threeStar, 3))
     for (i <- 0 until starsEarned) {
       topRow.drawBitmap(starImageBox)
     }
