@@ -28,7 +28,7 @@ class MainActivity extends BaseActivity {
     Game.res = getResources
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
     val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
-    Game.Options.firstGame = options.getBoolean("ViewTutorial", true)
+    Game.Options.tutorial = options.getBoolean("ViewTutorial", true)
     setContentView(
 
       // number of stars earned in level i
@@ -98,17 +98,6 @@ class MainActivity extends BaseActivity {
             }.<<.wrap.>>.here
           }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
         }.<<.fill.>>.here
-        if (Game.Options.firstGame) {
-          new SRelativeLayout {
-            new SVerticalLayout {
-              val text = new STextView {
-                text = "Select the level to play on the left, view brute/trap information on the right."
-                textSize = 20 sp
-              }.<<.wrap.>>.here
-              val button = SButton(R.string.NextButton, switchScreen(classOf[Encyclopedia],true)).<<.fw
-            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
-          }.<<.fill.>>.here
-        }
       }
     )
   }

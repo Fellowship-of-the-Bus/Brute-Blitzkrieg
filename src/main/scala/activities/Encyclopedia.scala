@@ -93,33 +93,6 @@ class Encyclopedia extends BaseActivity {
             }.<<.wrap.>>.here
           }.<<(0,WRAP_CONTENT).Weight(1).>>.here
         }.<<.fill.>>.here
-        if (Game.Options.firstGame) { // tutorial
-          new SRelativeLayout {
-            new SVerticalLayout {
-              val text = new STextView {
-                if (getIntent().getBooleanExtra("brute", true)) {
-                  text = "Here you can view stats of each of the brutes."
-                } else {
-                  text = "Here you can view stats of each of the traps."
-                }
-                textSize = 20 sp
-              }.<<.wrap.>>.here
-              if (getIntent().getBooleanExtra("brute", true)) {
-                SButton(R.string.NextButton, {
-                  finish()
-                  switchScreen(classOf[Encyclopedia],false)
-                }).<<.fw
-              } else {
-                SButton(R.string.NextButton, {
-                  // go to first level
-                  finish()
-                  switchScreen(MapID.Factory.ids(0), maps(MapID.Factory.ids(0)))
-                }).<<.fw
-              }
-
-            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
-          }.<<.fill.>>.here
-        }
       }
     )
   }

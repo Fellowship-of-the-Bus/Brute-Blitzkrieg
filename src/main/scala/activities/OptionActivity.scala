@@ -27,10 +27,10 @@ class OptionActivity extends BaseActivity {
       new SRelativeLayout {
         new SVerticalLayout {
           val tutorialBox: SCheckBox = new SCheckBox("View Tutorial", {
-            editor.putBoolean("tutorial", tutorialBox.checked)
+            editor.putBoolean("ViewTutorial", tutorialBox.checked)
             editor.commit()
-            Game.Options.firstGame = tutorialBox.checked
-          }).<<.wrap.>>.checked(options.getBoolean("tutorial", true)).here
+            Game.Options.tutorial = tutorialBox.checked
+          }).<<.wrap.>>.checked(options.getBoolean("ViewTutorial", true)).here
         }.<<.fill.>>.gravity(Gravity.CENTER).here
       }
     )

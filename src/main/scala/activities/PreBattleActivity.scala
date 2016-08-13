@@ -18,7 +18,6 @@ import scala.language.postfixOps
 class PreBattleActivity extends BaseActivity {
   import Game.game
   var startButton: SButton = null
-  var popUp: SLinearLayout = null
 
 
   override def onCreate(savedState: Bundle): Unit = {
@@ -47,27 +46,12 @@ class PreBattleActivity extends BaseActivity {
             }).<<.wrap.alignParentBottom.>>
           }.<<(0, MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
         }.<<.fill.>>.here
-        if (Game.Options.firstGame) {
-          popUp = new SLinearLayout {
-            new SView().<<(0, MATCH_PARENT).Weight(3).>>.here
-            new SRelativeLayout {
-              val text = new STextView {
-                text = "After selecting the level, you need to select 4 brutes to use in the level.\nOn the top Left, you have the amount of gold available in the level."
-                textSize = 20 sp
-              }.<<.wrap.alignParentTop.>>.here
-              val button = SButton(R.string.NextButton, switchScreen(classOf[BruteSelectActivity],true)).<<.fw.alignParentBottom
-            }.<<(0, MATCH_PARENT).Weight(1).>>.backgroundColor(Color.GRAY).here
-          }.<<.fill.>>.here
-        }
       }
     )
   }
 
   override def onRestart(): Unit = {
     super.onRestart()
-    if (popUp != null) {
-      popUp.visibility(View.GONE)
-    }
     ()
   }
 

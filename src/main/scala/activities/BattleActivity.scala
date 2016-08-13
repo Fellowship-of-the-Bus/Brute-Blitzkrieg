@@ -1,4 +1,5 @@
-package com.github.fellowship_of_the_bus.bruteb
+package com.github.fellowship_of_the_bus
+package bruteb
 
 import models._
 
@@ -18,15 +19,20 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
+
+import lib.util.rand
+
 class BattleActivity extends BaseActivity with GameListener {
   var stars: List[SImageView] = null
   var txt: STextView = null
+  var hint: STextView = null
   var popUp: SRelativeLayout = null
 
   var nextLevelButton: SButton = null
   var homeButton: SButton = null
   var retryButton: SButton = null
   var returnButton: SButton = null
+
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg battle activity started")
     super.onCreate(savedState)
@@ -86,6 +92,10 @@ class BattleActivity extends BaseActivity with GameListener {
               stars(1).<<(50,50).>>.here
               stars(2).<<(50,50).>>.here
             }.<<.wrap.below(txt).centerHorizontal.>>.gravity(Gravity.CENTER).here
+            hint = new STextView{
+              text = "hi"
+              textSize = 32
+            }.<<.wrap.below(starsView).centerHorizontal.>>.here
             new SLinearLayout {
               import MapID.Factory.ids
               nextLevelButton = SButton(R.string.NextLevelButton, {
@@ -107,7 +117,7 @@ class BattleActivity extends BaseActivity with GameListener {
                 finish()
                 switchScreen(classOf[MainActivity], true, true)
               }).<<.wrap.>>
-            }.<<.wrap.below(starsView).>>.gravity(Gravity.CENTER).here
+            }.<<.wrap.below(hint).>>.gravity(Gravity.CENTER).here
           }.<<.wrap.centerInParent.>>.alpha(1f).backgroundColor(Color.BLACK).gravity(Gravity.CENTER).here
         }.<<.fill.>>.visibility(View.GONE).here
       }
@@ -139,9 +149,11 @@ class BattleActivity extends BaseActivity with GameListener {
     }
 
     val optionsEditor = options.edit()
-    optionsEditor.putInt("FirstGame",1)
-    optionsEditor.commit()
-    Game.Options.firstGame = false
+    if (checkTutorialOver()) {
+      optionsEditor.putBoolean("ViewTutorial", false)
+      optionsEditor.commit()
+      Game.Options.tutorial = false
+    }
 
     this.runOnUiThread(() => {
       if (numStars > 0) {
@@ -159,8 +171,42 @@ class BattleActivity extends BaseActivity with GameListener {
       } else {
         nextLevelButton.visibility(View.VISIBLE)
       }
+
+      // 3 star win, give no hint
+      if (numStars == 3 || !Game.Options.tutorial) {
+        hint.visibility(View.GONE)
+      } else {
+        updateHint()
+        hint.visibility(View.VISIBLE)
+      }
       popUp.visibility(View.VISIBLE)
     })
     ()
+  }
+
+  def checkTutorialOver(): Boolean = {
+    val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
+
+    if (!options.getBoolean("ViewTutorial", true)) {
+      return true
+    }
+    val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+
+    for (level <- 0 until Game.tutorialLevels ) {
+      if (data.getInt(MapID.Factory.ids(level).id, 0) == 0) {
+        return false
+      }
+    }
+    return true
+  }
+
+  def updateHint() = {
+    import MapID.Factory.ids
+    val curIndex = ids.indexOf(Game.game.mapID)
+    if (curIndex == -1 || curIndex >= Game.tutorialLevels) {
+      hint.text = rand(MapID.randomPostHintList)
+    } else {
+      hint.text = Game.game.mapID.postHint
+    }
   }
 }

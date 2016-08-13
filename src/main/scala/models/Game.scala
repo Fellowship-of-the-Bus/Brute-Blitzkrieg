@@ -12,8 +12,9 @@ object Game {
   var map: MapInfo = null
   var mapId: MapID = null
   object Options{
-    var firstGame = false
+    var tutorial = false
   }
+  val tutorialLevels = 5
   val ticksPerSecond = 20
   val msPerTick = 1000/ticksPerSecond          //20 ticks/sec
   val msPerCleanup = msPerTick*40     //cleanup every 2 secs

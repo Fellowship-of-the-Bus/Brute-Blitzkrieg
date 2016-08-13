@@ -1,4 +1,5 @@
-package com.github.fellowship_of_the_bus.bruteb
+package com.github.fellowship_of_the_bus
+package bruteb
 
 import models._
 
@@ -15,6 +16,8 @@ import android.content.Intent
 import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
+
+import lib.util.rand
 
 class BruteSelectActivity extends BaseActivity {
   import BruteID.Factory.{ids => bruteIDs}
@@ -107,16 +110,24 @@ class BruteSelectActivity extends BaseActivity {
             }).enabled = false
           }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
         }.<<.fill.>>.here
+        val level = MapID.Factory.ids.indexOf(Game.game.mapID)
         popUp = new SRelativeLayout {
-          new SVerticalLayout {
+          new SLinearLayout {
             val text = new STextView {
-              text = "Select 4 Brutes. When you are done press confirm."
+              text = if (level == -1 || level >= Game.tutorialLevels) {
+                rand(MapID.randomPreHintList)
+              } else {
+                Game.game.mapID.preHint
+              }
               textSize = 20 sp
-            }.<<.wrap.>>.here
-          }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
+            }.<<(0,WRAP_CONTENT).Weight(3).>>.backgroundColor(Color.GRAY).here
+            new SView().<<(0,5).Weight(1).>>.here
+          }.<<.wrap.alignParentBottom.alignParentLeft.>>.here
         }.<<.fill.>>.visibility(View.GONE).here
-        if (Game.Options.firstGame) {
+        if (Game.Options.tutorial) {
           popUp.visibility(View.VISIBLE)
+        } else {
+          popUp.visibility(View.GONE)
         }
       }
     )

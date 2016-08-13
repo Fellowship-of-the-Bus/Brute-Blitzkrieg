@@ -54,24 +54,36 @@ case class MapInfo(
 
 sealed trait MapID {
   val id: String
+  val preHint: String = ""
+  val postHint: String = ""
 }
 case object Level1 extends MapID {
   val id = "Level1"
 }
 case object LevelArrow extends MapID {
   val id = "LevelArrow"
+  override val preHint = "Sending brutes as a group reduces the amount of time arrow traps fire."
+  override val postHint = "Try sending an Ogre before as many goblins as possible."
 }
 case object LevelIntroBat extends MapID {
   val id = "LevelIntroBat"
+  override val preHint = "Bats can fly up through open trapdoors."
+  override val postHint = "Use a goblin to open the trapdoor for the bats."
 }
 case object LevelEasy extends MapID {
   val id = "LevelEasy"
+  override val preHint = "By not sending brutes in a group, they won't all fall through a reusable trapdoor."
+  override val postHint = "Experiment with timings until you get it right."
 }
 case object LevelTrapdoor extends MapID {
   val id = "LevelTrapdoor"
+  override val preHint = "Cage goblins protect nearby brutes from lighting."
+  override val postHint = "Flame Imp can survive the poison trap."
 }
 case object LevelLightning extends MapID {
   val id = "LevelLightning"
+  override val preHint = "Spiders can seal trapdoors permanently."
+  override val postHint = "Try using a goblin before the spider to keep it alive long enough."
 }
 case object LevelPoisonLightning extends MapID {
   val id = "LevelPoisonLightning"
@@ -104,6 +116,9 @@ case class Custom(val name: String) extends MapID {
 object MapID {
   val height = 4
   val width = 8
+
+  val randomPreHintList = Vector("Test")
+  val randomPostHintList = Vector("test")
 
   implicit object Factory extends IDFactory[MapID] {
     val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelTiming)
