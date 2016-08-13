@@ -123,8 +123,8 @@ object MapID {
   val height = 4
   val width = 8
 
-  val randomPreHintList = Vector("Test")
-  val randomPostHintList = Vector("test")
+  val randomPreHintList = Vector("Play with good brutes.") ++ Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor, LevelLightning).map(_.preHint)
+  val randomPostHintList = Vector("You're bad. Be better.") ++ Vector(LevelArrow, LevelIntroBat, LevelEasy, LevelTrapdoor).map(_.postHint)
 
   implicit object Factory extends IDFactory[MapID] {
     val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelManyArrows, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelVariarity,LevelTiming)

@@ -26,7 +26,7 @@ class OptionActivity extends BaseActivity {
     setContentView(
       new SRelativeLayout {
         new SVerticalLayout {
-          val tutorialBox: SCheckBox = new SCheckBox("View Tutorial", {
+          val tutorialBox: SCheckBox = new SCheckBox("View Hints", {
             editor.putBoolean("ViewTutorial", tutorialBox.checked)
             editor.commit()
             Game.Options.tutorial = tutorialBox.checked
