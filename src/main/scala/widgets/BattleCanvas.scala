@@ -37,7 +37,7 @@ object BattleCanvas {
     (x, BitmapFactory.decodeResource(canvas.getResources(), x.image, trapDecoderOptions))).toMap
   lazy val projImages: Map[ProjectileID, List[Bitmap]] =  (for (x <- ProjIds.ids) yield
     (x, x.imageList.map(y => BitmapFactory.decodeResource(canvas.getResources(), y, decoderOptions)))).toMap
-  lazy val exitImages = List(R.drawable.door, R.drawable.darkest_door, R.drawable.darkest_door, R.drawable.darkest_door, R.drawable.darkest_door).map {
+  lazy val exitImages = List(R.drawable.door, R.drawable.dark_door, R.drawable.darker_door, R.drawable.darkest_door, R.drawable.darkest_door).map {
     x => BitmapFactory.decodeResource(canvas.getResources(), x, decoderOptions)
   }
   lazy val entranceImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.door2, decoderOptions)
@@ -174,7 +174,7 @@ class BattleCanvas(val map: MapInfo, drawGrid: Boolean = false)(implicit context
     val score = Game.game.score
     val (curStar, nextStar, starsEarned) = Array((0, map.oneStar, 0), (map.oneStar, map.twoStar, 1), (map.twoStar, map.threeStar, 2)).find(_._2 > score).getOrElse((map.threeStar, map.threeStar, 3))
 
-    val alpha = if (nextStar == 0) 0 else (255*(nextStar-curStar))/nextStar
+    val alpha = if (nextStar-curStar == 0) 0 else (255*(nextStar-score))/(nextStar-curStar)
     val exitTransition = new Paint()
 
     exitTransition.setAlpha(alpha)
