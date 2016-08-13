@@ -72,18 +72,18 @@ case object LevelIntroBat extends MapID {
 }
 case object LevelEasy extends MapID {
   val id = "LevelEasy"
-  override val preHint = "By not sending brutes in a group, they won't all fall through a reusable trapdoor."
-  override val postHint = "Experiment with timings until you get it right."
+  override val preHint = "Spiders can seal trapdoors permanently."
+  override val postHint = "Try using a goblin before the spider to keep it alive long enough."
 }
 case object LevelTrapdoor extends MapID {
   val id = "LevelTrapdoor"
-  override val preHint = "Cage goblins protect nearby brutes from lighting."
-  override val postHint = "Flame Imp can survive the poison trap."
+  override val preHint = "By not sending brutes in a group, they won't all fall through a reusable trapdoor."
+  override val postHint = "Experiment with timings until you get it right."
 }
 case object LevelLightning extends MapID {
   val id = "LevelLightning"
-  override val preHint = "Spiders can seal trapdoors permanently."
-  override val postHint = "Try using a goblin before the spider to keep it alive long enough."
+  override val preHint = "Cage goblins protect nearby brutes from lighting."
+  override val postHint = "Flame Imp can survive the poison trap."
 }
 case object LevelPoisonLightning extends MapID {
   val id = "LevelPoisonLightning"
@@ -106,6 +106,12 @@ case object LevelPoisonHealing extends MapID {
 case object LevelArrowsAndDoors extends MapID {
   val id = "LevelArrowsAndDoors"
 }
+case object LevelManyArrows extends MapID {
+  val id = "LevelManyArrows"
+}
+case object LevelVariarity extends MapID {
+  val id = "LevelVariarity"
+}
 object Custom {
   val prefix = "Custom_"
 }
@@ -121,7 +127,7 @@ object MapID {
   val randomPostHintList = Vector("test")
 
   implicit object Factory extends IDFactory[MapID] {
-    val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelTiming)
+    val ids = Vector(LevelArrow, LevelIntroBat, LevelTrapdoor, LevelLightning, LevelEasy, LevelPoisonLightning, LevelManyArrows, LevelPoisonHealing,LevelFire,LevelArrowsAndDoors,LevelGambit,LevelBullshit,LevelVariarity,LevelTiming)
   }
   implicit lazy val extractor =
     Json.extractor[String].map(x => if (Factory.fromString.isDefinedAt(x)) Factory.fromString(x) else Custom(x))

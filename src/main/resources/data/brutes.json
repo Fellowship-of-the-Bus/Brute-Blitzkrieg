@@ -44,7 +44,7 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 1,
-    "description": "All brutes within the radius will regenerate health. This regeneration does not stack with other goblin shamans.\n\nHe found a shiny thing so he put it on a stick.",
+    "description": "All brutes within range will regenerate health. This regeneration does not stack with other goblin shamans.\n\nHe found a shiny thing so he put it on a stick.",
     "goldCost": 20
   },
   "SpiderID": {
@@ -80,7 +80,7 @@
     "regen": 0,
     "radius": 2,
     "auraRegen": 0,
-    "description": "All lightning targeting brutes within the radius will be drawn to this. Immune to lightning.\n\nHe couldn't figure out how to get out of his cage so he uses it like a hamster ball",
+    "description": "All lightning targeting brutes within range will be drawn to this. Immune to lightning.\n\nHe couldn't figure out how to get out of his cage so he uses it like a hamster ball",
     "goldCost": 20
   },
   "TrollID": {
