@@ -11,6 +11,7 @@ import android.graphics.drawable.{Drawable,BitmapDrawable}
 import android.widget.GridView
 import android.widget.ImageView
 import android.content.Intent
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -47,11 +48,37 @@ class BruteSelectActivity extends BaseActivity {
     super.onCreate(savedState)
 
     setContentView(
-      new SRelativeLayout {
+      new SVerticalLayout {
         new SLinearLayout {
-          new STableLayout {
+          // map gold
+          new SLinearLayout {
+            SImageView(new BitmapDrawable(getResources(), BattleCanvas.goldImage)).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(20 dip).minimumHeight(20 dip).adjustViewBounds(true).<<.wrap.marginTop(4 dip).>>
+            new STextView {
+              text = s"${Game.game.map.startingGold}"
+              textSize = 20 sp
+            }.<<.wrap.>>.here
+          }.<<(0,MATCH_PARENT).Weight(1).>>.here
+
+
+          // tutorial
+          popUp = new SRelativeLayout {
+            new SVerticalLayout {
+              val text = new STextView {
+                text = "Select 4 Brutes. When you are done press confirm."
+                textSize = 20 sp
+              }.<<.wrap.>>.here
+            }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
+          }.<<.fill.>>.visibility(View.INVISIBLE).here
+          if (Game.Options.firstGame) {
+            popUp.visibility(View.VISIBLE)
+          }
+        }.<<(MATCH_PARENT, 0).Weight(1).>>.here
+
+        // buttons
+        new SLinearLayout {
+          new SVerticalLayout {
             for (range <- 0 until bruteIDs.length grouped 4) {
-              this += new STableRow {
+              this += new SLinearLayout {
                 for (i <- range) {
                   new SVerticalLayout {
                     val bruteBitmap = BattleCanvas.bruteImages(bruteIDs(i)).head
@@ -76,21 +103,21 @@ class BruteSelectActivity extends BaseActivity {
                         currentSelection = Some(sel)
                       }
                       enableButtons()
-                    }).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true).enabled(BruteAttributeMap(bruteIDs(i)).goldCost <= Game.game.map.startingGold)
+                    }).<<(MATCH_PARENT, 0).Weight(4).>>.scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(150 dip).minimumHeight(150 dip).adjustViewBounds(true).enabled(BruteAttributeMap(bruteIDs(i)).goldCost <= Game.game.map.startingGold)
                     bruteButtons = bruteButtons :+ newButton
                     // cost display
                     new SLinearLayout {
-                      SImageView(new BitmapDrawable(getResources(), BattleCanvas.goldImage)).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(20 dip).minimumHeight(20 dip).adjustViewBounds(true).<<.marginTop(4 dip).>>
+                      SImageView(new BitmapDrawable(getResources(), BattleCanvas.goldImage)).scaleType(ImageView.ScaleType.CENTER_INSIDE).maxHeight(20 dip).minimumHeight(20 dip).adjustViewBounds(true).<<.wrap.marginTop(4 dip).>>
                       new STextView {
                         text = s"${BruteAttributeMap(bruteIDs(i)).goldCost}"
                         textSize = 20 sp
                       }.<<.wrap.>>.here
-                    }.<<.wrap.Gravity(Gravity.CENTER_HORIZONTAL).>>.here
+                    }.<<(MATCH_PARENT,0).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
                   }.<<.wrap.>>.here
                 }
-              }
+              }.<<(MATCH_PARENT,0).Weight(1).>>
             }
-          }.<<(0,WRAP_CONTENT).Weight(3).>>.here
+          }.<<(0,MATCH_PARENT).Weight(6).>>.here
           new SVerticalLayout {
             for (i <- 0 until 4) {
               val newButton = SImageButton(R.drawable.unknown, {
@@ -106,18 +133,7 @@ class BruteSelectActivity extends BaseActivity {
               finish()
             }).enabled = false
           }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.RIGHT).here
-        }.<<.fill.>>.here
-        popUp = new SRelativeLayout {
-          new SVerticalLayout {
-            val text = new STextView {
-              text = "Select 4 Brutes. When you are done press confirm."
-              textSize = 20 sp
-            }.<<.wrap.>>.here
-          }.<<(500, WRAP_CONTENT).alignParentBottom.centerHorizontal.>>.backgroundColor(Color.GRAY).here
-        }.<<.fill.>>.visibility(View.GONE).here
-        if (Game.Options.firstGame) {
-          popUp.visibility(View.VISIBLE)
-        }
+        }.<<(MATCH_PARENT, 0).Weight(4).>>.here
       }
     )
     currentSelection = nextSelection
