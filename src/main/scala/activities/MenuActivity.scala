@@ -36,25 +36,26 @@ class MenuActivity extends BaseActivity {
           new SVerticalLayout {
             SImageView(R.drawable.brute_blitzkrieg).<<(point.x/2,WRAP_CONTENT).>>.adjustViewBounds(true)
             new SLinearLayout {
-              new SView{}.<<(0,WRAP_CONTENT).Weight(4).>>.here
+              //new SView{}.<<(0,WRAP_CONTENT).Weight(1).>>.here
+              //new STableLayout {
+
+              //}.<<(0,MATCH_PARENT).Weight(2).>>.here
+              //new SView{}.<<(0,WRAP_CONTENT).Weight(2).>>.here
               new STableLayout {
                 new STableRow {
-                  SButton(R.string.LevelSelectButton, switchScreen(classOf[MainActivity],false)).<<.fw.>>
+                  SButton(R.string.LevelSelectButton, switchScreen(classOf[MainActivity],false)).<<.wrap.>>
                 }.<<.wrap.>>.here
                 new STableRow {
-                  SButton(R.string.OptionButton, switchScreen(classOf[OptionActivity],false)).<<.fw.>>
+                  SButton(R.string.OptionButton, switchScreen(classOf[OptionActivity],false)).<<.wrap.>>
                 }.<<.wrap.>>.here
                 new STableRow {
-                  SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
+                  SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.wrap.>>
                 }.<<.wrap.>>.here
                 new STableRow {
-                  SButton(R.string.BruteButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
+                  SButton(R.string.EncyclopediaButton, switchScreen(classOf[Encyclopedia],false)).<<.wrap.>>
                 }.<<.wrap.>>.here
-                new STableRow {
-                  SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
-                }.<<.wrap.>>.here
-              }.<<(0,WRAP_CONTENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
-              new SView{}.<<(0,WRAP_CONTENT).Weight(1).>>.here
+              }.<<.fill.>>.gravity(Gravity.CENTER_HORIZONTAL).here
+              //new SView{}.<<(0,WRAP_CONTENT).Weight(1).>>.here
             }.here
           }.<<.fill.marginTop(10 dip).>>.gravity(Gravity.CENTER_HORIZONTAL).here
       }.background(R.drawable.mainsplash)
