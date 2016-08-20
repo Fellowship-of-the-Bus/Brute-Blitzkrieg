@@ -45,7 +45,7 @@ object BattleCanvas {
   lazy val starImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.star, decoderOptions)
   lazy val greyStarImage = BitmapFactory.decodeResource(canvas.getResources(), R.drawable.grey_star, decoderOptions)
 
-  val iconBounds = new Rect(0, 0, 50, 50)
+  var iconBounds: Rect = null
   lazy val goldImageBox = new ImageBox(goldImage, iconBounds)
   lazy val starImageBox = new ImageBox(starImage, iconBounds)
   lazy val greyStarImageBox = new ImageBox(greyStarImage, iconBounds)
@@ -84,12 +84,12 @@ class BattleCanvas(drawGrid: Boolean = false)(implicit context: Context) extends
     }
   }
 
+  iconBounds = new Rect(0, 0, 20 dip, 20 dip)
+
   lazy val canvasX = getWidth()
   lazy val canvasY = getHeight()
   lazy val cellX = (canvasX/MapID.width).toInt
   lazy val cellY = (canvasY/MapID.height).toInt
-
-  val goldImageBounds = new Rect(0, 0, 50, 50)
 
   override def onDraw(canvas: Canvas) = {
     super.onDraw(canvas)

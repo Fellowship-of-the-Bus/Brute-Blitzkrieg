@@ -97,7 +97,7 @@ class BattleActivity extends BaseActivity with GameListener {
             hint = new STextView{
               text = "hi"
               textSize = 32
-            }.<<(point.x/2,WRAP_CONTENT).below(starsView).centerHorizontal.>>.here
+            }.<<(point.x/2,WRAP_CONTENT).below(starsView).centerHorizontal.>>.gravity(Gravity.CENTER).padding(15 sp).here
             val buttons = new SLinearLayout {
               import MapID.Factory.ids
               nextLevelButton = SButton(R.string.NextLevelButton, {
