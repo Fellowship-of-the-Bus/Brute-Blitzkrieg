@@ -30,17 +30,23 @@ class OptionActivity extends BaseActivity {
     editor = options.edit()
     setContentView(
       new SRelativeLayout {
-        new SVerticalLayout {
-          val tutorialBox: SCheckBox = new SCheckBox("View Hints", {
-            editor.putBoolean(OptionKeys.tutorial, tutorialBox.checked)
-            editor.commit()
-            Game.Options.tutorial = tutorialBox.checked
-          }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.tutorial, true)).here
-          val danceBox: SCheckBox = new SCheckBox("Dancing", {
-            editor.putBoolean(OptionKeys.dancing, danceBox.checked)
-            editor.commit()
-            Game.Options.dancing = danceBox.checked
-          }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.dancing, false)).here
+        new SLinearLayout {
+          new STableLayout {
+            new STableRow {
+              val tutorialBox: SCheckBox = new SCheckBox("View Hints", {
+                editor.putBoolean(OptionKeys.tutorial, tutorialBox.checked)
+                editor.commit()
+                Game.Options.tutorial = tutorialBox.checked
+              }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.tutorial, true)).here
+            }.<<.wrap.>>.here
+            new STableRow {
+              val danceBox: SCheckBox = new SCheckBox("Dancing", {
+                editor.putBoolean(OptionKeys.dancing, danceBox.checked)
+                editor.commit()
+                Game.Options.dancing = danceBox.checked
+              }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.dancing, false)).here
+            }.<<.wrap.>>.here
+          }.<<.fw.>>.gravity(Gravity.CENTER).here
         }.<<.fill.>>.gravity(Gravity.CENTER).here
       }
     )
