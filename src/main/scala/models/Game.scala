@@ -127,6 +127,7 @@ class Game(val map: MapInfo, var mapID: MapID, var brutes: Vector[BruteID] = Vec
 
   //start timers also call for resume
   def startGame () = {
+    pauseGame
     timer = new Timer()
     timer.scheduleAtFixedRate(new TimerTask() {
       override def run() = {

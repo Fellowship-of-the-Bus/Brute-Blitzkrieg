@@ -126,8 +126,13 @@ class BattleActivity extends BaseActivity with GameListener {
     )
   }
   override def onResume() = {
-    Game.game.startGame
     super.onResume()
+    Game.game.startGame
+  }
+
+  override def onPause() = {
+    super.onPause()
+    Game.game.pauseGame
   }
 
   override def onBackPressed() = {

@@ -20,12 +20,15 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.Arrays
 
 import scala.language.postfixOps
+import TrapID.Factory.{ids => trapIDs}
 
 object LevelEditor {
   implicit class RichEditText(val view: SEditText) extends AnyVal {
     def int() = view.text.toString.toInt
     def str() = view.text.toString
   }
+
+  lazy val placeableTraps = trapIDs.filter(t => t != LeftArrowID)
 }
 import LevelEditor._
 
@@ -37,8 +40,6 @@ class LevelEditor extends BaseActivity {
   import Game.game
   var startButton: SButton = null
 
-  import TrapID.Factory.{ids => trapIDs}
-  val placeableTraps = trapIDs.filter(t => t != LeftArrowID)
 
   case class LevelAttributes(name: String, gold: Int, starOne: Int, starTwo: Int, starThree: Int)
   var attributes: Option[LevelAttributes] = None

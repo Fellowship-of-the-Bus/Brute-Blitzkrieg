@@ -106,12 +106,12 @@ class Encyclopedia extends BaseActivity {
               }.<<.fill.>>.here
               trapList = new SScrollView {
                 new SVerticalLayout {
-                  for(i <- 0 until trapIDs.length) {
-                    val image = trapIDs(i).image
-                    val name = trapIDs(i).name
-                    val description = TrapAttributeMap(trapIDs(i)).description
+                  for(i <- 0 until LevelEditor.placeableTraps.length) {
+                    val image = LevelEditor.placeableTraps(i).image
+                    val name = LevelEditor.placeableTraps(i).name
+                    val description = TrapAttributeMap(LevelEditor.placeableTraps(i)).description
                     val values = {
-                      val trap = TrapAttributeMap(trapIDs(i))
+                      val trap = TrapAttributeMap(LevelEditor.placeableTraps(i))
                       var stats = ""
                       if (trap.damage != 0) {
                         stats = stats + s"Damage: ${trap.damage.toInt}\n"
@@ -121,7 +121,7 @@ class Encyclopedia extends BaseActivity {
                       }
                       if (trap.shotInterval != 0) {
                         val shotPerSec = Game.ticksPerSecond / trap.shotInterval
-                        if (trapIDs(i) == ReuseTrapdoorID || trapIDs(i) == FlameVentID) stats = stats + s"Can activate every ${trap.shotInterval / Game.ticksPerSecond} seconds" else stats = stats + s"Shots per Second: $shotPerSec"
+                        if (LevelEditor.placeableTraps(i) == ReuseTrapdoorID || LevelEditor.placeableTraps(i) == FlameVentID) stats = stats + s"Can activate every ${trap.shotInterval / Game.ticksPerSecond} seconds" else stats = stats + s"Shots per Second: $shotPerSec"
                       }
                       stats
                     }
