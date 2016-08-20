@@ -22,14 +22,19 @@ class MainActivity extends BaseActivity {
     startActivity(getIntent());
   }
 
+  def setOptions() = {
+    val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
+    Game.Options.tutorial = options.getBoolean(OptionKeys.tutorial, true)
+    Game.Options.dancing = options.getBoolean(OptionKeys.dancing, false)
+  }
+
 
   override def onCreate(savedState: Bundle) {
     android.util.Log.e("bruteb", "Brute Blitzkrieg main activity started")
     super.onCreate(savedState)
     Game.res = getResources
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
-    val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
-    Game.Options.tutorial = options.getBoolean("ViewTutorial", true)
+    setOptions()
 
     setContentView(
 

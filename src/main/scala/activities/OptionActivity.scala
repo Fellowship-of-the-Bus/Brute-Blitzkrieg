@@ -12,6 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import scala.language.postfixOps
 
+object OptionKeys {
+  val tutorial = "ViewTutorial"
+  val dancing = "Dancing"
+}
+
 class OptionActivity extends BaseActivity {
   import BruteID.Factory.{ids => bruteIDs}
   import TrapID.Factory.{ids => trapIDs}
@@ -27,10 +32,15 @@ class OptionActivity extends BaseActivity {
       new SRelativeLayout {
         new SVerticalLayout {
           val tutorialBox: SCheckBox = new SCheckBox("View Hints", {
-            editor.putBoolean("ViewTutorial", tutorialBox.checked)
+            editor.putBoolean(OptionKeys.tutorial, tutorialBox.checked)
             editor.commit()
             Game.Options.tutorial = tutorialBox.checked
-          }).<<.wrap.>>.checked(options.getBoolean("ViewTutorial", true)).here
+          }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.tutorial, true)).here
+          val danceBox: SCheckBox = new SCheckBox("Dancing", {
+            editor.putBoolean(OptionKeys.dancing, danceBox.checked)
+            editor.commit()
+            Game.Options.dancing = danceBox.checked
+          }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.dancing, false)).here
         }.<<.fill.>>.gravity(Gravity.CENTER).here
       }
     )

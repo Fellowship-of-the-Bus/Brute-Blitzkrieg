@@ -153,7 +153,7 @@ class BattleActivity extends BaseActivity with GameListener {
 
     val optionsEditor = options.edit()
     if (checkTutorialOver()) {
-      optionsEditor.putBoolean("ViewTutorial", false)
+      optionsEditor.putBoolean(OptionKeys.tutorial, false)
       optionsEditor.commit()
       Game.Options.tutorial = false
     }
@@ -190,7 +190,7 @@ class BattleActivity extends BaseActivity with GameListener {
   def checkTutorialOver(): Boolean = {
     val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
 
-    if (!options.getBoolean("ViewTutorial", true)) {
+    if (!options.getBoolean(OptionKeys.tutorial, true)) {
       return true
     }
     val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)

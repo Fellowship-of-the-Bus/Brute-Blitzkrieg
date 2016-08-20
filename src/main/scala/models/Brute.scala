@@ -104,6 +104,8 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
   var frameCounter = 0
   var tile : Tile = Game.map.getTile(Game.map.startTileCoord)
 
+  var danceTicker: Boolean = false
+
   def isAlive = hp > 0
 
   def flyingHeight = 0f
@@ -185,8 +187,14 @@ class BaseBrute (val id: BruteID, val coord: Coordinate) extends TopLeftCoordina
         stairProgress = 0
         coord.y = (coord.y).toInt + 0.75f - height - flyingHeight
       }
+      //if gameoption dancing is set do some flipping
+      if (Game.Options.dancing && danceTicker) {
+        facingRight = !facingRight
+      }
+      danceTicker = !danceTicker
       return
     }
+    facingRight = movingRight
     var speed: Float = 0
     if (effects.filter( x => {
       x.debuffId match {

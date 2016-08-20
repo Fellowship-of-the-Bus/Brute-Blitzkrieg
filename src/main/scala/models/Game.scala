@@ -13,6 +13,7 @@ object Game {
   var mapId: MapID = null
   object Options{
     var tutorial = false
+    var dancing = false
   }
   val tutorialLevels = 5
   val ticksPerSecond = 20
