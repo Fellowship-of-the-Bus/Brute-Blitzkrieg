@@ -115,7 +115,7 @@ class BattleActivity extends BaseActivity with GameListener {
               }).<<.wrap.>>
               returnButton = SButton(R.string.ReturnButton, {
                                             finish()}).<<.wrap.>>
-              homeButton = SButton(R.string.HomeButton,{
+              homeButton = SButton(R.string.LevelSelectButton,{
                 finish()
                 switchScreen(classOf[MainActivity], true, true)
               }).<<.wrap.>>

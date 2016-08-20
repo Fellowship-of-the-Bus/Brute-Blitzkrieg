@@ -13,6 +13,7 @@
     <string name="RetryButton">Retry</string>
     <string name="HomeButton">Home</string>
     <string name="NextLevelButton">Next Level</string>
+    <string name="LevelSelectButton">Level Select</string>
 
     <string name="Win">You Win</string>
     <string name="Lose">You Lose</string>

@@ -7,6 +7,7 @@ import org.scaloid.common._
 import android.os.Bundle
 import android.view.Gravity
 import android.graphics.Color
+import android.graphics.drawable.{Drawable,BitmapDrawable, LayerDrawable}
 import android.widget.GridView
 import android.content.{Intent, Context}
 import java.util.concurrent.atomic.AtomicInteger
@@ -29,6 +30,7 @@ class MainActivity extends BaseActivity {
     val prefs = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
     val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
     Game.Options.tutorial = options.getBoolean("ViewTutorial", true)
+
     setContentView(
 
       // number of stars earned in level i
@@ -39,7 +41,7 @@ class MainActivity extends BaseActivity {
               import MapID.Factory.ids
               def stars(i: Int): Int = stars(ids.lift(i-1).map(_.id).getOrElse("No Key"))
               def stars(key: String): Int = prefs.getInt(key, 0)
-              for (range <- 1 to ids.length grouped 3) {
+              for (range <- 1 to ids.length grouped 4) {
                 this += new STableRow {
                   for (i <- range) {
                     val mapid: MapID = ids(i-1)
@@ -59,7 +61,7 @@ class MainActivity extends BaseActivity {
               }
               // load custom maps
               val filenames = customMapFiles.map { _.getName }
-              for (range <- 1 to filenames.length grouped 3) {
+              for (range <- 1 to filenames.length grouped 4) {
                 this += new STableRow {
                   for (i <- range) {
                     new SVerticalLayout {
@@ -79,25 +81,8 @@ class MainActivity extends BaseActivity {
                 }
               }
             }.<<.fill.>>.here
-          }.<<(0, MATCH_PARENT).Weight(4).>>.here
-          new STableLayout {
-            new STableRow {
-              SButton(R.string.BruteButton, switchScreen(classOf[Encyclopedia],true)).<<.fw.>>
-            }.<<.wrap.>>.here
-            new STableRow {
-              SButton(R.string.TrapButton, switchScreen(classOf[Encyclopedia],false)).<<.fw.>>
-            }.<<.wrap.>>.here
-            new STableRow {
-              SButton(R.string.LevelEditorButton, switchScreen(classOf[LevelEditor],false)).<<.fw.>>
-            }.<<.wrap.>>.here
-            new STableRow {
-              SButton(R.string.OptionButton, switchScreen(classOf[OptionActivity],false)).<<.fw.>>
-            }.<<.wrap.>>.here
-            new STableRow {
-              SButton(R.string.QuitButton, finish()).<<.fw.>>
-            }.<<.wrap.>>.here
-          }.<<(0,MATCH_PARENT).Weight(1).>>.gravity(Gravity.CENTER_HORIZONTAL).here
-        }.<<.fill.>>.here
+          }.<<.fill.>>.here
+        }.<<.fill.>>.here.background(R.drawable.mainsplash)
       }
     )
   }
