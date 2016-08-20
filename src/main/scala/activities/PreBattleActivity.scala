@@ -24,8 +24,6 @@ class PreBattleActivity extends BaseActivity {
     android.util.Log.e("bruteb", "Brute Blitzkrieg pre battle activity started")
     super.onCreate(savedState)
 
-    game = new Game(Game.map.copy(), Game.mapId)
-
     setContentView(
       new SRelativeLayout{
         new SLinearLayout {
