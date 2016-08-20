@@ -41,8 +41,30 @@ class OptionActivity extends BaseActivity {
             editor.commit()
             Game.Options.dancing = danceBox.checked
           }).<<.wrap.>>.checked(options.getBoolean(OptionKeys.dancing, false)).here
+          val resetButton = SButton("Reset Progress", {
+            val builder = new AlertDialogBuilder("Confirm Reset") {
+              negativeButton("Cancel")
+              positiveButton("Confirm", resetProgress())
+            }
+            builder.setView({
+              new STextView() {
+                text = "Erase all progress in the preset levels?\n(This does not erase progress in user created levels.)"
+                textSize = 16 sp
+              }.<<.wrap.>>.padding(15 sp).gravity(Gravity.CENTER)
+            })  
+            builder.show
+          }).<<.wrap.>>
         }.<<.fill.>>.gravity(Gravity.CENTER).here
       }
     )
+  }
+  def resetProgress(): Unit = {            
+    val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+    val dataEditor = data.edit()
+    for (level <- MapID.Factory.ids) {
+      dataEditor.putInt(level.id, 0)
+    }
+    dataEditor.commit()
+    ()
   }
 }
