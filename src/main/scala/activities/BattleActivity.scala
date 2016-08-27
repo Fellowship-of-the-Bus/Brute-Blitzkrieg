@@ -193,19 +193,20 @@ class BattleActivity extends BaseActivity with GameListener {
   }
 
   def checkTutorialOver(): Boolean = {
-    val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
+    false
+    // val options = getSharedPreferences("Options", Context.MODE_PRIVATE)
 
-    if (!options.getBoolean(OptionKeys.tutorial, true)) {
-      return true
-    }
-    val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
+    // if (!options.getBoolean(OptionKeys.tutorial, true)) {
+    //   return true
+    // }
+    // val data = getSharedPreferences("UserProgress", Context.MODE_PRIVATE)
 
-    for (level <- 0 until Game.tutorialLevels ) {
-      if (data.getInt(MapID.Factory.ids(level).id, 0) == 0) {
-        return false
-      }
-    }
-    return true
+    // for (level <- 0 until Game.tutorialLevels ) {
+    //   if (data.getInt(MapID.Factory.ids(level).id, 0) == 0) {
+    //     return false
+    //   }
+    // }
+    // return true
   }
 
   def updateHint() = {
