@@ -57,7 +57,7 @@ class BaseActivity extends SActivity {
     )
   }
 
-  def customMapFiles = getFilesDir.listFiles
+  def customMapFiles = fileList.map { new java.io.File(_) }
 
   def loadCustom(file: java.io.File): MapInfo = {
     import models.MapInfo._
